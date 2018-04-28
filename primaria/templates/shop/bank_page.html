@@ -19,7 +19,7 @@
   Be careful with your points, anything could happen. It's probably in your best interest to open up an account with us. You will earn an interest on your balance.
 </p>
 
-{% if not bank_account %}
+{% if bank_account == None %}
 <a href="{% url 'open_bank_account_page' %}"><button>Open Account</button></a>
 
 <div class="mt10">

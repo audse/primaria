@@ -407,18 +407,21 @@ def bank_page(request):
         bank_account = BankAccount.objects.filter(user=request.user).first()
         interest = DailyClaim.objects.filter(user=request.user, daily_type="interest", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day).first()
         
-        if bank_account.level == 1:
-            rate = 0.1
-        elif bank_account.level == 2:
-            rate = 0.13
-        elif bank_account.level == 3:
-            rate = 0.15
-        elif bank_account.level == 4:
-            rate = 0.16
+        if bank_account != None:
+            if bank_account.level == 1:
+                rate = 0.1
+            elif bank_account.level == 2:
+                rate = 0.13
+            elif bank_account.level == 3:
+                rate = 0.15
+            elif bank_account.level == 4:
+                rate = 0.16
+            else:
+                rate = 0.17
+            interest_amount = compound_interest(bank_account.balance, rate, 365, 1)
+            interest_amount = int((interest_amount - bank_account.balance) / 365)
         else:
-            rate = 0.17
-        interest_amount = compound_interest(bank_account.balance, rate, 365, 1)
-        interest_amount = int((interest_amount - bank_account.balance) / 365)
+            interest_amount = 0
         return render(request, 'shop/bank_page.html', {'bank_account':bank_account, 'interest':interest, 'interest_amount':interest_amount})
     else:
         request.session['error'] = "You must be logged in to view this page."
