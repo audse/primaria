@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<h1>Open Shop</h1>
+<p>Your user shop is where you can put items up for sale that other users can find and buy. You can only list a certain amount of items for sale before you have to upgrade, however.</p>
+
+<form action="{% url 'open_shop' %}" method="POST">
+	{% csrf_token %}
+	<label>Name of Shop</label>
+	<div class="input-group">
+		<i class="fa fa-bank"></i>
+		<input type="text" name="shop_name" />
+	</div>
+
+	<small class="gray">This can be whatever you want, at a maximum of 140 characters.</small>
+	<p>A <b>deposit of 500 points</b> is required for a 5-space shop. Additional costs may be needed upon expansion of the shop.</p>
+	<button type="submit">Open shop</button></a>
+</form>
+
+{% endblock %}

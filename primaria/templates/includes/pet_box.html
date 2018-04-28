@@ -1,0 +1,80 @@
+{% load staticfiles %}
+{% load get_pet %}
+
+<div class="content-box">
+  {% if request.user|get_pet != None %}
+    {% with request.user|get_pet as pet %}
+
+    <div class="content-box-header">
+      <span class="lightblue">Your Pet</span> <span class="semibold">{{ pet.name }}</span>
+    </div>
+    <div class="content-box-body center">
+      <img src="{% static 'img/'%}{{ pet.animal.name }}/{{ pet.color }}.png" width="100%" style="max-width: 50vw;" />
+    </div>
+    <div class="content-box-body border-top-gray">
+      <span class="gray">Animal</span> <span class="semibold" style="float:right;">{{ pet.animal.name|title }}</span>
+    </div>
+    <div class="content-box-body border-top-gray">
+      <span class="gray">Hunger</span> <span class="semibold" style="float:right;">
+        {% if pet.hunger <= 1 %}
+          Dying
+        {% elif pet.hunger == 2 %}
+          Hungry
+        {% elif pet.hunger == 3 %}
+          Fine
+        {% elif pet.hunger == 4 %}
+          Full
+        {% elif pet.hunger >= 5 %}
+          Stuffed
+        {% endif %}
+      </span>
+    </div>
+    <div class="content-box-body border-top-gray">
+      <span class="gray">Wellness</span> <span class="semibold" style="float:right;">
+        {% if pet.wellness <= 1 %}
+          Very sick
+        {% elif pet.wellness == 2 %}
+          Sick
+        {% elif pet.wellness == 3 %}
+          Under the weather
+        {% elif pet.wellness == 4 %}
+          Fine
+        {% elif pet.wellness >= 5 %}
+          Great
+        {% endif %}
+      </span>
+    </div>
+    <div class="content-box-body border-top-gray">
+      <span class="gray">Happiness</span> <span class="semibold" style="float:right;">
+        {% if pet.happiness <= 1 %}
+          Unhappy
+        {% elif pet.happiness == 2 %}
+          Bored
+        {% elif pet.happiness == 3 %}
+          Fine
+        {% elif pet.happiness == 4 %}
+          Happy
+        {% elif pet.happiness >= 5 %}
+          Overjoyed
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="content-box-body border-top-gray">
+      <a href="{% url 'change_pet_page' %}">Change Pet</a>
+    </div>
+
+    {% endwith %}
+
+  {% else %}
+  <div class="content-box-header">
+    You don't have a pet!
+  </div>
+  <div class="content-box-body">
+
+    Head on over to the Create a Pet page to get your first one!
+    <a href="{% url 'create_pet_step_1' %}"><button class="mt10">Create a Pet</button></a>
+  </div>
+
+  {% endif %}
+</div>

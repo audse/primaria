@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content-box-image %}
+<div class="content-box-image">
+  <img src="{% static 'img/shop/' %}{{ shop.url }}.png" />
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% if shop.location == "city" %}
+  {% include 'includes/city_links.html' %}
+{% elif shop.location == "suburbs" %}
+  {% include 'includes/suburb_links.html' %}
+{% elif shop.location == "reservoir" %}
+  {% include 'includes/reservoir_links.html' %}
+{% elif shop.location == "caves" %}
+  {% include 'includes/caves_links.html' %}
+{% elif shop.location == "beach" %}
+  {% include 'includes/beach_links.html' %}
+{% endif %}
+
+<h1>{{ shop.name }}</h1>
+<p>
+  {{ shop.description }}
+</p>
+
+<div class="flex-wrap">
+
+{% for item, value in shop_items %}
+  <div class="inventory-box mr10 mt10">
+  {% if request.user.is_authenticated %}<a data-remodal-target="modal-{{ item.url }}"> {% endif %}
+
+    <img src="{% static 'img/items/' %}{{ item.category.name }}/{{ item.url }}.png" width="60%" />
+    <br /><small class="red semibold">{{ value.1 }} in stock</small>
+    <br /><small class="semibold">{{ item.name }}</small>
+    <br /><small>{{ value.0|intcomma }} points</small>
+  {% if request.user.is_authenticated %}</a>{% endif %}
+  <div class="remodal" data-remodal-id="modal-{{ item.url }}">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Purchase {{ item.name }} for {{ value.0|intcomma }} points?
+    </div>
+    <div class="remodal-body">
+      <p>
+        This item will be sent to your inventory.
+      </p>
+    </div>
+    <div class="remodal-body border-top-gray">
+      <form action="{% url 'purchase_item' shop_url=shop.url %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="item" value="{{ item.pk }}" />
+        <!-- <input type="hidden" name="price" value="{{ value.0 }}" /> -->
+
+        <div class="right mb10">
+          <button data-remodal-action="cancel">Cancel</button>
+          <button type="submit" class="primary">OK</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% empty %}
+<p>
+  Oh no! The shop is currently empty. Maybe check back in a little while.
+</p>
+{% endfor %}
+</div>
+
+{% if mystery_card %}
+
+</div>
+<div class="content-box-body border-top-gray">
+  <h2 class="gray">Alchemist's Office</h2>
+  <p>You want me to activate your card? Well, my office doesn't have the technology to update for the new systems they are using. That said, I can make your card less conspicuous so as to draw less attention... People have been watching you.</p>
+
+  <p>It'll cost you any big-size crystal piece for me to update this for you.</p>
+
+  <div class="flex-wrap m10">
+  {% for key, value in inventory.items %}
+    <div class="inventory-box mr10">
+        <img src="{% static 'img/items/crystal/big-' %}{{ key }}-crystal-piece.png" width="60%" />
+        <br /><small class="semibold">You have {{ value }}</small><br />
+        {% if value >= 1 %}<a href="{% url 'update_card' crystal=key %}"><button>Give 1</button></a>{% endif %}
+      </div>
+  {% endfor %}
+  </div>
+
+{% endif %}
+
+{% if bank_card %}
+</div>
+<div class="content-box-body border-top-gray">
+  <h2 class="gray">Alchemist's Office</h2>
+  <p>Alright, it looks just like a regular bank card now, but it's still deactivated. I'm sure you can find some way to activate it somewhere else. Good luck, kid...</p>
+
+{% endif %}
+
+{% endblock %}

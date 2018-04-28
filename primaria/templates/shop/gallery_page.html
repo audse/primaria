@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+
+{% if gallery != None %}
+  <h1>{% if gallery.name != None and gallery.name != "" %}Your Gallery: <small>{{ gallery.name }} {% else %}Your Gallery <small>
+  {% endif %}({{total_items_in_gallery}}/{{gallery.space}})</small></h1>
+  <p><a href="#" data-remodal-target="rename-modal">Rename?</a></p>
+  <p>
+    This is where you can see all the collectibles you have stored for safe keeping.
+  </p>
+
+</div>
+<div class="content-box-body border-top-gray">
+  <div class="flex">
+    <div class="flex-shrink m10">
+      <h2 class="gray">Plush ({{gallery.plush.count}}/{{total_plush}})</h2>
+    </div>
+    <div class="flex-grow">
+      <button data-remodal-target="add-plush">Add Plush</button>
+    </div>
+  </div>
+
+  <div class="flex-wrap">
+    {% for item in gallery_plush %}
+      <div class="inventory-box m10">
+        <img src="{% static 'img/items/' %}{{ item.category.name }}/{{ item.url }}.png" width="60%" />
+        <br /><small class="semibold">{{ item.name }}</small>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="remodal" data-remodal-id="add-plush">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Add Plush
+    </div>
+    <div class="remodal-body">
+      <form action="{% url 'add_gallery_item' %}" method="POST">
+        {% csrf_token %}
+        <div class="flex-wrap">
+          {% for item in user_plush %}
+            <div class="inventory-box m10" style="width: 20%">
+              <label for="{{ item.pk }}" style="opacity: 1"><img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+              <br /><small class="semibold">{{ item.item.name }}</small></label>
+              <input id="{{ item.pk }}" type="radio" name="item" value="{{ item.pk }}" />
+            </div>
+          {% empty %}
+          <p>You do not currently have any plush.</p>
+          {% endfor %}
+          <p class="gray">Remember, this is permanent and items cannot be removed from the gallery.</p>
+        </div>
+      </div>
+      <div class="remodal-body border-top-gray">
+          <div class="right mb10">
+            <button data-remodal-action="cancel">Cancel</button>
+            {% if user_plush %}<button type="submit" class="primary">Add</button>{% endif %}
+          </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+<div class="content-box-body border-top-gray">
+  <div class="flex">
+    <div class="flex-shrink m10">
+      <h2 class="gray">Playing Cards ({{gallery.cards.count}}/{{total_cards}})</h2>
+    </div>
+    <div class="flex-grow">
+      <button data-remodal-target="add-card">Add Playing Card</button>
+    </div>
+  </div>
+
+  <div class="flex-wrap">
+    {% for item in gallery_cards %}
+      <div class="inventory-box m10">
+        <img src="{% static 'img/items/' %}{{ item.category.name }}/{{ item.url }}.png" width="60%" />
+        <br /><small class="semibold">{{ item.name }}</small>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="remodal" data-remodal-id="add-card">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Add Playing Card
+    </div>
+    <div class="remodal-body">
+      <form action="{% url 'add_gallery_item' %}" method="POST">
+        {% csrf_token %}
+        <div class="flex-wrap">
+          {% for item in user_cards %}
+            <div class="inventory-box m10" style="width: 20%">
+              <label for="{{ item.pk }}" style="opacity: 1"><img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+              <br /><small class="semibold">{{ item.item.name }}</small></label>
+              <input id="{{ item.pk }}" type="radio" name="item" value="{{ item.pk }}" />
+            </div>
+          {% empty %}
+          <p>You do not currently have any cards.</p>
+          {% endfor %}
+          <p class="gray">Remember, this is permanent and items cannot be removed from the gallery.</p>
+        </div>
+      </div>
+      <div class="remodal-body border-top-gray">
+          <div class="right mb10">
+            <button data-remodal-action="cancel">Cancel</button>
+            {% if user_cards %}<button type="submit" class="primary">Add</button>{% endif %}
+          </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+<div class="content-box-body border-top-gray">
+
+  <p>Your gallery is currently size {{ gallery.space }}. To get more space, you will need to upgrade. Your next upgrade will cost {{ gallery.upgrade_cost }} points and give you 5 more spaces.</p>
+  <a href="{% url 'upgrade_gallery' %}"><button>Upgrade</button></a>
+
+  <div class="remodal" data-remodal-id="rename-modal">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Rename Gallery
+    </div>
+    <form action="{% url 'rename_gallery' %}" method="POST">
+      {% csrf_token %}
+      <div class="remodal-body">
+        <label>New Name</label>
+        <input type="text" name="new_gallery_name" value="{{ gallery.name }}" />
+        <small class="gray">This can be whatever you want, at a maximum of 140 characters.</small>
+      </div>
+      <div class="remodal-body border-top-gray">
+        <div class="right mb10">
+          <button data-remodal-action="cancel">Cancel</button>
+          <button type="submit" class="primary">Rename</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% else %}
+  <h1>Your Gallery</h1>
+  <p>
+    This is where you can see all the collectibles you have stored for safe keeping.
+  </p>
+
+  <p>You do not appear to have a gallery yet. Would you like to create one?</p>
+  <a href="{% url 'open_gallery_page' %}"><button>Open Gallery</button></a>
+
+{% endif %}
+
+{% endblock %}

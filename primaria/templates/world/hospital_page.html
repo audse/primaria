@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content-box-image %}
+<div class="content-box-image">
+  <img src="{% static 'img/place/hospital.png' %}" />
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% include 'includes/city_links.html' %}
+
+<h1>Primaria Hospital</h1>
+<p>If your pets are <b>Sick</b> or <b>Very Sick</b>, for a nominal fee we are able to prescribe medicine guarenteed to fully treat their symptoms here. As we are extremely busy at the hospital, please do not bring pets that are only <b>Under the Weather</b>.</p>
+<p>Placing an appointment will cost 500 points without insurance. Your prescribed medicine will also cost 250 points.</p>
+
+</div>
+<div class="content-box-body border-top-gray">
+{% if pet %}
+	{% if medicine %}
+		<center>
+			<img src="{% static 'img/items/medicine/' %}{{ medicine.item.url }}.png" width="10%" />
+			<p>You have been prescribed {{ medicine.item.name }}. Picking it up will cost 250 points.</p>
+		</center>
+		{% if request.user.profile.points >= 250 %}
+			<a href="{% url 'pickup_hospital_medicine' %}"><button>Pick up {{ medicine.item.name }}</button></a>
+		{% else %}
+			<p>You do not have enough points to pick up your medication.</p>
+		{% endif %}
+	{% else %}
+		{% if pet.wellness < 3 %}
+			{% if request.user.profile.points >= 500 %}
+				<a href="{% url 'make_hospital_appointment' %}"><button>Make an appointment</button></a>
+			{% else %}
+				<p>You do not have enough points to make an appointment.</p>
+			{% endif %}
+		{% else %}
+			<p>Your pet is not sick enough right now to be treated at the hospital.</p>
+		{% endif %}
+	{% endif %}
+{% else %}
+	<p>You do not currently have a pet to treat.</p>
+{% endif %}
+
+{% endblock %}

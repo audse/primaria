@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<h1>Shop Search Results <small class="gray">for "{{ keyword }}"</small></h1>
+
+<br />
+<table>
+<tr>
+	<th class="left">Shop Name</th>
+	<th>Item</th>
+	<th class="t-right">Price</th>
+</tr>
+
+{% for result in shops_with_keyword %}
+<tr class='clickable-row' data-href='{% url "user_shop_page" username=result.0.user.username %}'>
+	<td class="blue">
+		{% if result.0.name != None and result.0.name != "" %}
+			{{ result.0.name }}
+		{% else %}
+			{{ result.0.user.username }}'s Shop
+		{% endif %}
+	</td>
+	<td class="blue center">{{ result.1.name }}</td>
+	<td class="blue t-right">{{ result.2 }}</td>
+</tr>
+{% empty %}
+<tr>
+	<td colspan="3">No results returned.</td>
+</tr>
+{% endfor %}
+
+<script>
+	jQuery(document).ready(function($) {
+	    $(".clickable-row").click(function() {
+	        window.location = $(this).data("href");
+	    });
+	});
+</script>
+
+</table>
+
+{% endblock %}

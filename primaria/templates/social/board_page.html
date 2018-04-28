@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load humanize %}
+
+<h1>{{ board.name }}</h1>
+<p>{{ board.description }}</p>
+
+<span class="right">
+	{% if board.staff %}
+		{% if request.user.is_staff %}
+			<a href="#" data-remodal-target="modal-topic">Post Topic</a><br /><br />
+		{% else %}
+			<span class="gray">
+				Only staff may post topics in {{ board.name }}.
+			</span><br /><br />
+		{% endif %}
+	{% else %}
+		{% if request.user.is_authenticated %}
+			<a href="#" data-remodal-target="modal-topic">Post Topic</a><br /><br />
+		{% endif %}
+	{% endif %}
+</span>
+<table>
+	<tr class="no-highlight">
+		<th><i class="fa fa-lock"></i>
+		<th class="left">User</th>
+		<th>Title</th>
+		<th>Replies</th>
+		<th class="t-right">Last Post</th>
+	</tr>
+	{% for topic in sticky_topics %}
+		<tr class="no-highlight">
+			<td class="center sticky">{% if topic.locked %}<i class="fa fa-lock"></i>{% endif %}</td>
+			<td><a href="{% url 'profile_page' username=topic.user.username %}">
+					{{ topic.user.username}}
+			</a></td>
+			<td class="center sticky"><a href="{% url 'topic_page' topic=topic.slug %}">(Sticky) {{ topic.title }}</a></td>
+			<td class="center sticky">{{ topic.replies }}</td>
+			<td class="t-right sticky">{{ topic.last_reply|naturaltime }}</td>
+		</tr>
+	{% endfor %}
+	{% for topic in topics %}
+		<tr class="no-highlight">
+			<td class="center">{% if topic.locked %}<i class="fa fa-lock"></i>{% endif %}</td>
+			<td><a href="{% url 'profile_page' username=topic.user.username %}">
+					{{ topic.user.username}}
+			</a></td>
+			<td class="center"><a href="{% url 'topic_page' topic=topic.slug %}">{{ topic.title }}</a></td>
+			<td class="center">{{ topic.replies }}</td>
+			<td class="t-right">{{ topic.last_reply|naturaltime }}</td>
+		</tr>
+	{% endfor %}
+</table>
+</div>
+<div class="content-box-body border-top-gray gray center">
+
+{% if topics.has_previous %}
+	<a href="?page=1">First</a>
+	<a href="?page={{ topics.previous_page_number }}">Prev</a>
+{% else %}
+	First Prev
+{% endif %}
+{{ topics.number }} of {{ topics.paginator.num_pages }}
+
+{% if topics.has_next %}
+	<a href="?page={{ topics.next_page_number }}">Next</a>
+	<a href="?page={{ topics.paginator.num_pages }}">Last</a>
+{% else %}
+	Next Last
+{% endif %}
+
+{% if board.staff and request.user.is_staff or board.staff == False and request.user.is_authenticated %}
+<div class="remodal" data-remodal-id="modal-topic">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Create Topic
+  </div>
+  <div class="remodal-body">
+  	<form action="{% url 'post_topic' %}" method="POST">
+  		{% csrf_token %}
+  		<input type="hidden" name="board" value="{{ board.pk }}" />
+  		<label>Title</label>
+  		<input type="text" name="title" />
+  		<small class="gray">The title must be 140 characters or less.</small>
+  		<label>Message</label>
+  		<textarea name="message" rows="6"></textarea>
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">Cancel</button>
+        <button type="submit" class="primary">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+{% include 'includes/beach_links.html' %}
+
+<h1>Fishing</h1>
+
+<p>Take your pets fishing and get a chance to catch a rare fish! These fish can be eaten or traded in to the fishing hut for points. Once per hour, come here to test your skills and try to get a fish.</p>
+<p>Your current fishing skill is <b>{{ request.user.profile.fishing_skill }}</b>. Catch <b>{{ request.user.profile.fishing_skill }}0</b> fish to upgrade ({{ request.user.profile.fishing_skill_progress }}/{{ request.user.profile.fishing_skill }}0).</p>
+
+{% if request.user.profile.fishing_rod != 0 %}
+{% if fish_claim == None %}
+<div class="flex" style="width:50%;margin: 0 auto;">
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-01.png' %}" width="100%" />
+		</a>
+	</div>
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-02.png' %}" width="100%" />
+		</a>
+	</div>
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-03.png' %}" width="100%" />
+		</a>
+	</div>
+</div>
+<div class="flex" style="width:50%;margin: 0 auto;">
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-04.png' %}" width="100%" />
+		</a>
+	</div>
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-05.png' %}" width="100%" />
+		</a>
+	</div>
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-06.png' %}" width="100%" />
+		</a>
+	</div>
+</div>
+<div class="flex" style="width:50%;margin: 0 auto;">
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-07.png' %}" width="100%" />
+		</a>
+	</div>
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-08.png' %}" width="100%" />
+		</a>
+	</div>
+	<div class="flex-split" style="margin: 2px;">
+		<a href="{% url 'fish' %}">
+			<img src="{% static 'img/place/fishing/ocean-09.png' %}" width="100%" />
+		</a>
+	</div>
+</div>
+<div class="flex" style="width:50%;margin: 0 auto;">
+<p class="gray">Click an area to try for a fish.</p>
+</div>
+{% else %}
+<p class="gray">{{ fish_claim.message }} Please come back next hour to try again.</p>
+{% endif %}
+{% endif %}
+
+{% if request.user.profile.fishing_rod == 0 %}
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Buy Rod</h2>
+<p>You currently do not have a fishing rod. You may purchase one for 5,000 points. This will not count towards your total inventory count.</p>
+<div class="flex-wrap mt10" style="justify-content: center;">
+  <div class="inventory-box">
+    <img src="{% static 'img/place/fishing/basic-rod.png' %}" width="100%" />
+    <br /><small class="semibold">Basic Rod</small>
+  </div>
+ </div>
+ <br />
+</div>
+<a href="{% url 'purchase_rod' %}"><button>Buy Basic Rod for 5,000 Points</button></a>
+
+{% elif request.user.profile.fishing_rod == 1 %}
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Upgrade Rod</h2>
+	<p>A higher quality fishing rod will give you a better chance of having luck when fishing. It will cost you 10,000 points to upgrade from a Basic Rod to a Better Rod.</p>
+	<div class="flex-wrap mt10" style="justify-content: center;">
+	  <div class="inventory-box mr10">
+	    <img src="{% static 'img/place/fishing/basic-rod.png' %}" width="100%" />
+	    <br /><small class="semibold">You have a Basic Rod.</small>
+	  </div>
+	  <div class="inventory-box mr10">
+	    <br /><br /><small class="semibold">Upgrade to...</small>
+	  </div>
+	  <div class="inventory-box mr10">
+	    <img src="{% static 'img/place/fishing/better-rod.png' %}" width="100%" />
+	    <br /><small class="semibold">A Better Rod.</small>
+	  </div>
+	 </div>
+	 <br />
+	 <a href="{% url 'upgrade_rod' %}"><button>Upgrade to Better Rod for 10,000 Points</button></a>
+
+{% elif request.user.profile.fishing_rod == 2 %}
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Upgrade Rod</h2>
+	<p>A higher quality fishing rod will give you a better chance of having luck when fishing. It will cost you 25,000 points to upgrade from a Better Rod to a Best Rod.</p>
+	<div class="flex-wrap mt10" style="justify-content: center;">
+	  <div class="inventory-box mr10">
+	    <img src="{% static 'img/place/fishing/better-rod.png' %}" width="100%" />
+	    <br /><small class="semibold">You have a Better Rod.</small>
+	  </div>
+	  <div class="inventory-box mr10">
+	    <br /><br /><small class="semibold">Upgrade to...</small>
+	  </div>
+	  <div class="inventory-box mr10">
+	    <img src="{% static 'img/place/fishing/best-rod.png' %}" width="100%" />
+	    <br /><small class="semibold">A Best Rod.</small>
+	  </div>
+	 </div>
+	 <br />
+	 <a href="{% url 'upgrade_rod' %}"><button>Upgrade to Best Rod for 25,000 Points</button></a>
+
+{% elif request.user.profile.fishing_rod == 3 %}
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Your Rod</h2>
+	<p>You have a very high quality fishing rod that will give you a better chance of having luck when fishing.</p>
+	<div class="flex-wrap mt10" style="justify-content: center;">
+	  <div class="inventory-box mr10">
+	    <img src="{% static 'img/place/fishing/best-rod.png' %}" width="100%" />
+	    <br /><small class="semibold">You have a Best Rod.</small>
+	  </div>
+	</div>
+{% endif %}
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Buy Bait</h2>
+	<p>You will need one bait for every attempt at catching a fish. These do not count towards your total inventory count. Each bait costs 50 points.</p>
+	<!-- <p>You currently have {{ request.user.profile.fishing_bait }} bait.</p> -->
+	<div class="flex-wrap mt10" style="justify-content: center;">
+	  <div class="inventory-box">
+	    <img src="{% static 'img/place/fishing/bait.png' %}" width="100%" />
+	    <br /><small class="semibold">You currently have {{ request.user.profile.fishing_bait }} bait.</small>
+	  </div>
+	 </div>
+	 <br />
+
+	<form action="{% url 'purchase_bait' %}" method="POST">
+		<div class="flex">
+			{% csrf_token %}
+			<div class="flex-split m10"><input id="amount-input" name="amount" placeholder="Amount"></div>
+			<div class="flex-split m10"><button type="submit" class="primary">Buy for <span id="amount-label">0</span> Points</button></div>
+		</div>
+	</form>
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Sell Fish</h2>
+	<div class="flex-wrap mt10">
+		{% for fish in inventory_fish %}
+		  <div class="inventory-box mr10">
+		    <img src="{% static 'img/items/' %}{{ fish.item.category.name }}/{{ fish.item.url }}.png" width="100%" />
+		    <br /><small class="semibold"><b>{% if fish.item.rarity == 1 %}200{% elif fish.item.rarity == 2 %}500{% elif fish.item.rarity == 3 %}1000{% endif %}</b> points for your {{ fish.item.name }}?</small><br />
+		    <a href="{% url 'sell_fish' pk=fish.pk %}"><button>Accept</button></a>
+		  </div>
+		{% empty %}
+			<p class="gray">You do not have any fish to sell.</p>
+		{% endfor %}
+	</div>
+
+	<script>
+		$("#amount-input").on('change keyup paste input', function(){
+			var amount = $("#amount-input").val();
+			amount = parseInt(amount);
+			console.log(amount);
+			document.getElementById("amount-label").innerHTML = ""+amount*50;
+			if (!amount) {
+				document.getElementById("amount-label").innerHTML = "0";
+			}
+		});
+	</script>
+
+
+{% endblock %}

@@ -1,0 +1,507 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+<h1>Pyramids Solitaire</h1>
+<h2 class="gray mt10">{{ scores_sent }}/4 Scores Sent</h2>
+<p>
+   Pyramids Solitaire is a game where you attempt to clear the board of cards by matching the value of the cards to add up to 13.
+</p>
+
+<canvas id="pyramids" class="mt10" width="400" height="500" style="background:rgb(41, 110, 73);"></canvas>
+
+<br />
+<br />
+<h2 class="gray mt10">Rules & Strategy</h2>
+<p>
+  The goal of Pyramids is to add two cards together to get 13. You may deal an extra card from the deck in the bottom left to have more opportunities to match cards.
+</p>
+<p>
+  The number cards have a value equal to their number, and the face cards (Jack, Queen, King, and Ace) have the values 11, 12, 13, and 1, respectively. Kings may be flipped alone, as they are worth 13.
+</p>
+<p>
+  Only cards with no cards beneath them, or cards where the two cards below them have been flipped may be selected.
+</p>
+<p>
+  After you have either flipped the whole pyramid, or decided to end the game, you may send your score by clicking the box in the bottom right.
+</p>
+
+<div class="remodal" data-remodal-id="modal">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Send score of <span id="score-header">0</span>?
+  </div>
+  <div class="remodal-body">
+    <form id="score" action="{% url 'send_score' game='pyramids' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" id="score-box" name="score" value="0" />
+
+      <div class="right mb10">
+        <button data-remodal-action="cancel">Cancel</button>
+        <button type="submit" class="primary">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+var canvas_width = 400;
+var canvas_height = 500;
+
+var card_width = 50;
+var card_height = 70;
+
+var deck = [];
+var back = new Image();
+
+var on_board = [];
+var board_draw = [];
+var card_rects = [];
+
+// gameplay
+
+var clicked = 0;
+var selected = [];
+var turned = [];
+
+// stack
+
+var cards_in_stack = 24;
+var stack = [];
+var stack_dealt = [];
+
+var stack_rect;
+var stack_dealt_rect;
+
+var inst = $('[data-remodal-id=modal]').remodal();
+
+function Card(number, suit, image_src) {
+  this.number = number;
+  this.value = number;
+  this.suit = suit;
+  this.image = new Image();
+  this.image.src = image_src;
+
+  this.dealt = 0;
+}
+
+function build_deck() {
+  var suits = ["clubs", "hearts", "spades", "diamonds"];
+  var suit_index;
+  var numbers = ["ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"];
+  var number_index;
+  var i = 0;
+
+  for (suit_index=0; suit_index<4; suit_index++) {
+    for (number_index=0; number_index<13; number_index++) {
+      image_src = "{% static 'img/game/cards/' %}" + numbers[number_index] + "_of_" + suits[suit_index] + ".png";
+      deck[i] = new Card(number_index+1, suits[suit_index], image_src);
+      i++;
+    }
+  }
+}
+
+function deal_from_deck() {
+  var card;
+
+  var ch = 0;
+  while ((deck[ch].dealt>0) && (ch<51)) {
+    ch++;
+  }
+
+  if (ch >= 51) {
+    // ctx.fillText("Deck finished.", 200, 200);
+    ch = 51;
+  }
+  deck[ch].dealt = 1;
+  card = deck[ch];
+  return card;
+}
+
+function swap_in_deck(card_1, card_2) {
+  var hold = new Card(deck[card_1].number, deck[card_1].suit, deck[card_1].image.src);
+  deck[card_1] = deck[card_2];
+  deck[card_2] = hold;
+}
+
+function shuffle_deck() {
+  var i = deck.length - 1;
+  var s;
+  while (i > 0) {
+    s = Math.floor(Math.random()*(i+1));
+    swap_in_deck(s, i);
+    i--;
+  }
+}
+
+function start_deal() {
+
+  for (n=0; n<=27; n++) {
+    on_board[n] = deal_from_deck();
+  }
+
+  // card, x, y (coordinates calculated)
+  board_draw[0] = [on_board[0], 175, 10];
+  board_draw[1] = [on_board[1], 148, 50];
+  board_draw[2] = [on_board[2], 202, 50];
+  board_draw[3] = [on_board[3], 121, 100];
+  board_draw[4] = [on_board[4], 175, 100];
+  board_draw[5] = [on_board[5], 229, 100];
+  board_draw[6] = [on_board[6], 94, 150];
+  board_draw[7] = [on_board[7], 148, 150];
+  board_draw[8] = [on_board[8], 202, 150];
+  board_draw[9] = [on_board[9], 256, 150];
+  board_draw[10] = [on_board[10], 67, 200];
+  board_draw[11] = [on_board[11], 121, 200];
+  board_draw[12] = [on_board[12], 175, 200];
+  board_draw[13] = [on_board[13], 229, 200];
+  board_draw[14] = [on_board[14], 283, 200];
+  board_draw[15] = [on_board[15], 40, 250];
+  board_draw[16] = [on_board[16], 94, 250];
+  board_draw[17] = [on_board[17], 148, 250];
+  board_draw[18] = [on_board[18], 202, 250];
+  board_draw[19] = [on_board[19], 256, 250];
+  board_draw[20] = [on_board[20], 310, 250];
+  board_draw[21] = [on_board[21], 13, 300];
+  board_draw[22] = [on_board[22], 67, 300];
+  board_draw[23] = [on_board[23], 121, 300];
+  board_draw[24] = [on_board[24], 175, 300];
+  board_draw[25] = [on_board[25], 229, 300];
+  board_draw[26] = [on_board[26], 283, 300];
+  board_draw[27] = [on_board[27], 337, 300];
+
+  for (n=0; n<=27; n++) {
+    ctx.drawImage(board_draw[n][0].image, board_draw[n][1], board_draw[n][2], card_width, card_height);
+    card_rects[n] = {x:board_draw[n][1], y:board_draw[n][2], width:card_width, height:card_height-20};
+  }
+}
+
+function start_stack() {
+  for (var n=0; n<cards_in_stack;n++) {
+    stack[n] = deal_from_deck();
+  }
+
+  ctx.drawImage(back, 13, 400, card_width, card_height);
+  stack_rect = {x:13, y:400, width:card_width, height:card_height};
+  stack_dealt_rect = {x:67, y:400, width:card_width, height:card_height};
+
+}
+
+function deal_stack() {
+  clicked = 0;
+  selected = [];
+
+  if (stack_dealt.length < cards_in_stack) {
+    //cards_in_stack--;
+    var dealt = stack.pop();
+    stack_dealt.push(dealt);
+    ctx.drawImage(stack_dealt[stack_dealt.length-1].image, 67, 400, card_width, card_height); //show last
+  } else {
+    for(n=0; n<cards_in_stack; n++) {
+      var dealt = stack_dealt.pop();
+      stack.push(dealt);
+      ctx.clearRect(67, 400, card_width, card_height);
+    }
+  }
+}
+
+function select_stack() {
+  selected_card = [stack_dealt[stack_dealt.length-1], 67, 400];
+  selected[clicked] = selected_card;
+  clicked++;
+
+  ctx.rect(69, 402, card_width-4, card_height-4);
+  ctx.strokeStyle = "#538af6";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  check_win();
+}
+
+
+function isInside(pos, rect) {
+  return pos.x > rect.x && pos.x < rect.x+rect.width && pos.y < rect.y+rect.height && pos.y > rect.y;
+}
+
+function init() {
+
+  ctx = document.getElementById('pyramids').getContext('2d');
+  build_deck();
+  back.src = "{% static 'img/game/cards/' %}back.png";
+
+  shuffle_deck();
+  start_deal();
+  start_stack();
+
+  ctx.font = "16px Open Sans";
+  ctx.fillStyle = "white";
+  ctx.fillText("Score:", 15, 488);
+  ctx.fillText("0", 62, 488);
+
+  ctx.beginPath();
+  ctx.rect(335, 457, 52, 30);
+  ctx.fillStyle = "rgb(25, 193, 79)";
+  ctx.fill()
+
+  ctx.fillStyle = "white";
+  ctx.fillText("Send", 342, 478);
+  var send_rect = {x:335, y:457, width:52, height:30};
+
+
+  var canvas_1 = document.getElementById("pyramids");
+  window.addEventListener('click', function(event) {
+
+    var mousePos = getMousePos(canvas_1, event);
+    //debugger;
+
+    if (isInside(mousePos, stack_rect)) {
+     deal_stack();
+    }
+
+    if (isInside(mousePos, stack_dealt_rect)) {
+     select_stack();
+    }
+
+    if (isInside(mousePos, send_rect)) {
+      console.log("here")
+      send_score();
+    }
+
+    make_move(mousePos);
+
+  }, false);
+
+  window.addEventListener('touchstart', function(event) {
+    var mousePos = getTouchPos(canvas_1, event);
+    //debugger;
+
+    if (isInside(mousePos, stack_rect)) {
+     deal_stack();
+    }
+
+    if (isInside(mousePos, stack_dealt_rect)) {
+     select_stack();
+    }
+
+    if (isInside(mousePos, send_rect)) {
+      console.log("here")
+      send_score();
+    }
+
+    make_move(mousePos);
+
+  }, false);
+
+}
+
+function make_move(mousePos) {
+
+  var clicked_on_card_index = -1;
+  for (var n=0; n<28; n++) {
+    if (isInside(mousePos, card_rects[n])) {
+      // check if card is already turned over/selected
+      if (!contains.call(turned, board_draw[n]) && !contains.call(selected, board_draw[n])) {
+        clicked_on_card_index = n;
+      }
+    }
+  }
+  var n = clicked_on_card_index;
+  var select = false;
+
+  if (n == 0 && contains.call(turned, board_draw[1]) && contains.call(turned, board_draw[2])) {
+    select = true;
+  } else if (n == 1 && contains.call(turned, board_draw[3]) && contains.call(turned, board_draw[4])) {
+    select = true
+  } else if (n == 2 && contains.call(turned, board_draw[4]) && contains.call(turned, board_draw[5])) {
+    select = true
+  } else if (n == 3 && contains.call(turned, board_draw[6]) && contains.call(turned, board_draw[7])) {
+    select = true
+  } else if (n == 4 && contains.call(turned, board_draw[7]) && contains.call(turned, board_draw[8])) {
+    select = true
+  } else if (n == 5 && contains.call(turned, board_draw[8]) && contains.call(turned, board_draw[9])) {
+    select = true
+  } else if (n == 6 && contains.call(turned, board_draw[10]) && contains.call(turned, board_draw[11])) {
+    select = true
+  } else if (n == 7 && contains.call(turned, board_draw[11]) && contains.call(turned, board_draw[12])) {
+    select = true
+  } else if (n == 8 && contains.call(turned, board_draw[12]) && contains.call(turned, board_draw[13])) {
+    select = true
+  } else if (n == 9 && contains.call(turned, board_draw[13]) && contains.call(turned, board_draw[14])) {
+    select = true
+  } else if (n == 10 && contains.call(turned, board_draw[15]) && contains.call(turned, board_draw[16])) {
+    select = true
+  } else if (n == 11 && contains.call(turned, board_draw[16]) && contains.call(turned, board_draw[17])) {
+    select = true
+  } else if (n == 12 && contains.call(turned, board_draw[17]) && contains.call(turned, board_draw[18])) {
+    select = true
+  } else if (n == 13&& contains.call(turned, board_draw[18]) && contains.call(turned, board_draw[19])) {
+    select = true
+  } else if (n == 14 && contains.call(turned, board_draw[19]) && contains.call(turned, board_draw[20])) {
+    select = true
+  } else if (n == 15 && contains.call(turned, board_draw[21]) && contains.call(turned, board_draw[22])) {
+    select = true
+  } else if (n == 16 && contains.call(turned, board_draw[22]) && contains.call(turned, board_draw[23])) {
+    select = true
+  } else if (n == 17 && contains.call(turned, board_draw[23]) && contains.call(turned, board_draw[24])) {
+    select = true
+  } else if (n == 18 && contains.call(turned, board_draw[24]) && contains.call(turned, board_draw[25])) {
+    select = true
+  } else if (n == 19 && contains.call(turned, board_draw[25]) && contains.call(turned, board_draw[26])) {
+    select = true
+  } else if (n == 20 && contains.call(turned, board_draw[26]) && contains.call(turned, board_draw[27])) {
+    select = true
+  } else if (n > 20 && n < 28) {
+    select = true
+  }
+
+  if (n != -1 && select == true) {
+    if (on_board[n].value != 13) {
+      selected[clicked] = board_draw[n];
+      clicked++;
+
+      check_win();
+
+      redraw_board();
+
+    } else {
+      turned.push(board_draw[n]);
+      // ctx.drawImage(back, board_draw[n][1]-2, board_draw[n][2]-2, card_width+4, card_height+4);
+      redraw_board();
+    }
+  }
+}
+
+function redraw_board() {
+  for(var n=0;n<28;n++) {
+    // if (!contains.call(selected, board_draw[n])) {
+    ctx.drawImage(board_draw[n][0].image, board_draw[n][1], board_draw[n][2], card_width, card_height);
+    // } else {
+    //   console.log("drew")
+    //   ctx.drawImage(board_draw[n][0].image, board_draw[n][1], board_draw[n][2], card_width, card_height);
+    //   ctx.rect(selected[0][1]+2, selected[0][2]+2, card_width-4, card_height-4);
+    //   ctx.strokeStyle = "#538af6";
+    //   ctx.lineWidth = 4;
+    //   ctx.stroke();
+    // }
+  }
+  for (var n=0; n<selected.length; n++) {
+      console.log(selected[n])
+      // ctx.drawImage(selected[n][0].image, selected[n][1], selected[n][2], card_width, card_height);
+      ctx.rect(selected[n][1]+2, selected[n][2]+2, card_width-4, card_height-4);
+      ctx.strokeStyle = "#538af6";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+  }
+
+  for(var n=0;n<turned.length;n++) {
+    ctx.drawImage(back, turned[n][1]-2, turned[n][2]-2, card_width+4, card_height+4);
+  }
+
+  if (stack_dealt.length > 0) {
+    ctx.drawImage(stack_dealt[stack_dealt.length-1].image, 67, 400, card_width, card_height);
+  } else {
+    ctx.clearRect(67, 400, card_width, card_height);
+  }
+
+  ctx.clearRect(60, 475, 50, 400);
+  ctx.font = "16px Open Sans";
+  ctx.fillStyle = "white";
+  ctx.fillText(turned.length*50, 62, 488);
+}
+
+function check_win() {
+  if (clicked == 2) {
+    var total_value = selected[0][0].value + selected[1][0].value;
+    if (total_value == 13) {
+      if (contains.call(board_draw, selected[0])) {
+        turned.push(selected[0]);
+      } else if (contains.call(stack_dealt, selected[0][0])) {
+        var index = stack_dealt.indexOf(selected[0][0]);
+        stack_dealt.splice(index, 1);
+        cards_in_stack--;
+      }
+      if (contains.call(board_draw, selected[1])) {
+        console.log("board_Draw")
+        turned.push(selected[1]);
+      } else if (contains.call(stack_dealt, selected[1][0])) {
+        console.log("stack_dealt")
+        var index = stack_dealt.indexOf(selected[1][0]);
+        stack_dealt.splice(index, 1);
+        cards_in_stack--;
+      } else {
+        console.log("other?")
+      }
+    } else {
+      ctx.drawImage(selected[0][0].image, selected[0][1], selected[0][2], card_width, card_height);
+      ctx.drawImage(selected[1][0].image, selected[1][1], selected[1][2], card_width, card_height);
+    }
+    
+    clicked = 0;
+    selected = [];
+
+    console.log(stack_dealt)
+
+    redraw_board();
+  }
+}
+
+function send_score() {
+  document.getElementById("score-header").innerHTML = turned.length*50;
+  document.getElementById("score-box").setAttribute("value", turned.length*50);
+  inst.open();
+}
+
+function getMousePos(canvas, event) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+}
+
+function getTouchPos(canvas, event) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: event.touches[0].clientX - rect.left,
+    y: event.touches[0].clientY - rect.top
+  };
+}
+
+
+var contains = function(needle) {
+    // Per spec, the way to identify NaN is that it is not equal to itself
+    var findNaN = needle !== needle;
+    var indexOf;
+
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                var item = this[i];
+
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle) > -1;
+};
+
+</script>
+
+
+
+
+{% endblock %}

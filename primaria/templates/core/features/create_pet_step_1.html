@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<h1>Create a Pet</h1>
+<p>
+  Your pet will be your companion in your journey through Primaria.
+</p>
+
+</div>
+</div>
+
+<div class="mt10">
+  <ul class="progress-indicator">
+    <li class="completed"> <span class="bubble"></span> <i class="fa fa-paw"></i> Species</li>
+    <li> <span class="bubble"></span> <i class="fa fa-tint"></i> Color</li>
+    <li> <span class="bubble"></span> <i class="fa fa-star-o"></i> Name</li>
+  </ul>
+</div>
+
+<div style="width: 100%">
+
+<div class="columns">
+  {% for animal in animals %}
+    {% if animal.name != "bird" and animal.name != "crab" and animal.name != "dog" and animal.name != "gargoyle" and animal.name != "penguin" %}
+    <div class="mt10 column-item" style="background: white;">
+      <div class="content-box">
+        <div class="content-box-header">
+          {{ animal.name|title }}
+        </div>
+        <div class="content-box-body">
+          <img src="{% static 'img/' %}{{ animal.name }}/red.png" width="100%" />
+        </div>
+        <div class="content-box-body border-top-gray">
+          {{ animal.description }}
+        </div>
+        <div class="content-box-body border-top-gray">
+          <a href="{% url 'create_pet_step_2' animal=animal.name %}"><button>Pick Me!</button></a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+</div>
+</div>
+
+{% endblock %}

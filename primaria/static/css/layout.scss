@@ -1,0 +1,55 @@
+#navbar {
+  background: white;
+  box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.05);
+  color: #bec3d0;
+  height: 60px;
+  line-height: 60px;
+  padding-left: 10px;
+
+  .right {
+    float:right;
+    margin-right: 10px;
+
+    a {
+      padding: 0 5px;
+    }
+
+  }
+}
+
+#sidebar {
+  padding: 10px;
+  flex-basis: 25vw;
+}
+
+#content {
+  padding: 10px 10px 10px 0;
+}
+
+#admin-panel {
+  background: $blue;
+  bottom: 0;
+  margin: 10px;
+  padding: 10px;
+  opacity: 0.8;
+  position: fixed;
+  right: 0;
+  z-index: 100;
+
+  a {
+    color: white;
+  }
+}
+
+#footer {
+  box-sizing: border-box;
+  color: $darkergray;
+  postion: absolute;
+  bottom: -60px;
+  width: 100vw;
+  background: #e3e8ef;
+  margin-top: 10px;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 20px;
+}

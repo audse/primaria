@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<h1>Your Inventory</h1>
+<p>
+  This is where you can see all the items in your possession. You have used <b>{{ item_count }} of 50 slots.</b>
+</p>
+
+<div class="flex-wrap">
+{% for item in items %}
+<div class="inventory-box m10">
+  {% if item.item.usable %}<a data-remodal-target="modal-{{ item.pk }}">{% endif %}
+    <img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+    <br /><small class="semibold">{{ item.item.name }}</small>
+  {% if item.item.usable %}</a>{% endif %}
+</div>
+
+{% if item.item.usable %}
+<div class="remodal" data-remodal-id="modal-{{ item.pk }}">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+      Use {{ item.item.name }} on your pet?
+  </div>
+  <div class="remodal-body">
+    <p>
+      This item will be gone after use.
+    </p>
+  </div>
+  <div class="remodal-body border-top-gray">
+    <form action="{% url 'use_item' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="inventory_pk" value="{{ item.pk }}" />
+
+      <div class="right mb10">
+        <button data-remodal-action="cancel">Cancel</button>
+        <button type="submit" class="primary">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+{% endfor %}
+</div>
+
+{% if results %}
+
+<div class="remodal" data-remodal-id="modal">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Success!
+  </div>
+  <div class="remodal-body">
+    <p>
+      {{ results }}
+    </p>
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right">
+        <button data-remodal-action="confirm">OK</button>
+      </div>
+      <div style="clear:both"></div>
+  </div>
+</div>
+
+<script>
+  var inst = $('[data-remodal-id=modal]').remodal();
+  inst.open();
+</script>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<h1>Results!</h1>
+<p>
+  {{ results }}
+</p>
+<img src="{% static 'img/'%}{{ pet.animal.name }}/{{ pet.color }}.png" width="100%" style="max-width: 50vw;" />
+{% endblock %}

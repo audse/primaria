@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/reservoir_links.html' %}
+
+<h1>Trails</h1>
+<p>A nice trail stretches for about a mile ahead of you, surrounded by greenery and clean water creeks. It seems like the perfect place to go for a quick jog with your pet to keep them feeling good.</p>
+
+{% if request.user.is_authenticated %}
+	{% if pet %}
+		{% if trails_claim == None %}
+		<a href="{% url 'trails' %}"><button>Go for a Run</button></a>
+		{% else %}
+			<p class="gray">{{ trails_claim.message }} Come again tomorrow for another run!</p>
+		{% endif %}
+	{% else %}
+		<p class="gray">You cannot go for a run without a pet.</p>
+	{% endif %}
+{% endif %}
+
+{% endblock %}

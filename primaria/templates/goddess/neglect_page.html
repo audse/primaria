@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<center><img src="{% static 'img/goddess/neglect-goddess.png' %}" width="50%" /></center>
+
+{% include 'includes/caves_links.html' %}
+
+
+<h1>Goddess of Neglect</h1>
+<div class="quote darkergray">
+	<p>Doesn't it make you sad seeing how many pets go hungry, sick, and unloved? It is my duty to keep all pets alive, but sometimes I can do no more than that.</p>
+	<p>Come visit me while your pets are in good condition and I'll give you something for keeping your pet happy.</p>
+</div>
+
+{% if pet %}
+	{% if claims != None %}
+		<p>{{ claims.message }} Come back tomorrow with a healthy pet for another prize.</p>
+	{% else %}
+		{% if maximum %}
+			<p>You are eligible for a gift from the Goddess of Neglect!</p>
+			<a href="{% url 'goddess_neglect_collect' %}"><button>Collect Gift</button></a>
+		{% else %}
+			<p>Please come back when your pet is <b>Fine</b> (or better) to receive something from the Goddess of Neglect.</p>
+		{% endif %}
+	{% endif %}
+{% else %}
+	<p>Please come back if you get a pet.</p>
+{% endif %}
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Quests <small>({{quests_today}}/5)</small></h2>
+	<br />
+	{% if quests_today < 5 and not unfinished_quest %}
+	<div class="quote darkergray">Are you willing to take on a quest for the Goddess of Neglect? It will require you to find and bring me a certain item, and in turn I will reward you. I need five items per person per day. If you fail to bring me an item, it will count against you.</div>
+	<p><a href="{% url 'start_goddess_quest' goddess='neglect' %}"><button class="small">Accept Quest</button></a></p>
+	{% else %}
+		{% if quests_today == 5 %}
+			<div class="quote darkergray">You have already completed the maximum quests for today. Thank you for helping.</div><br />
+		{% elif unfinished_quest %}
+			<div class="quote darkergray">I am currently asking you to bring me a <b>{{ unfinished_quest.requested_item }}</b>. Bring this to me and you will be rewarded with
+				{% if unfinished_quest.reward_item and unfinished_quest.reward_points %}a {{ unfinished_quest.reward_item }} and {{ unfinished_quest.reward_points }} points.{% elif unfinished_quest.reward_item %}a {{ unfinished_quest.reward_item }}.{% else %} {{ unfinished_quest.reward_points }} points.{% endif %}
+			</div>
+			<div class="flex-wrap">
+			<div class="inventory-box m10">
+				<img src="{% static 'img/items/' %}{{ unfinished_quest.requested_item.category.name }}/{{ unfinished_quest.requested_item.url }}.png" width="60%" />
+				<br /><small class="semibold">Bring me this...</small>
+			</div>
+			{% if unfinished_quest.reward_item and unfinished_quest.reward_points %}
+				<div class="inventory-box m10">
+					<img src="{% static 'img/items/' %}{{ unfinished_quest.reward_item.category.name }}/{{ unfinished_quest.reward_item.url }}.png" width="60%" />
+					<br /><small class="semibold">...To get this...</small>
+				</div>
+				<div class="inventory-box m10">
+					<br /><br /><small class="semibold">As well as {{ unfinished_quest.reward_points }} Points!</small>
+				</div>
+			{% elif unfinished_quest.reward_item %}
+				<div class="inventory-box m10">
+					<img src="{% static 'img/items/' %}{{ unfinished_quest.reward_item.category.name }}/{{ unfinished_quest.reward_item.url }}.png" width="60%" />
+					<br /><small class="semibold">...To get this!</small>
+				</div>
+			{% else %} 
+				<div class="inventory-box m10">
+					<br /><br /><small class="semibold">To get {{ unfinished_quest.reward_points }} Points!</small>
+				</div>
+			{% endif %}
+			</div>
+			<p>
+				<div class="flex">
+					<div class="flex-grow mr10">
+						<a href="{% url 'complete_goddess_quest' goddess='neglect' %}"><button class="primary">Give Item</button></a>
+					</div>
+					<div class="flex-shrink">
+						<a href="{% url 'cancel_goddess_quest' goddess='neglect' %}"><button class="small">Cancel Quest</button></a>
+					</div>
+				</div>
+			</p>
+		{% endif %}
+	{% endif %}
+
+{% if completed != None %}
+<div class="remodal" data-remodal-id="completed">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Success!
+  </div>
+  <div class="remodal-body">
+  	{{ completed }}
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+
+<script>
+
+{% if completed %}
+var inst = $('[data-remodal-id=completed]').remodal();
+inst.open();
+{% endif %}
+
+</script>
+ 
+{% endblock %}

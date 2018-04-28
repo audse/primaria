@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content-box-image %}
+<div class="content-box-image">
+  <img src="{% static 'img/place/almighty-meatloaf.png' %}" />
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% include 'includes/caves_links.html' %}
+
+<h1>Almighty Meatloaf</h1>
+<p>A massive structure looms over you. It appears to be made of... meat. If you're stealthy, you might be able to take a chunk home. If you're into that sort of thing.</p>
+
+{% if request.user.is_authenticated %}
+{% if loaf_claim == None %}
+<a href="{% url 'take_from_meatloaf' %}"><button>Go for a chunk</button></a>
+{% else %}
+	<p class="gray">{{ loaf_claim.message }} Come again tomorrow for another try!</p>
+{% endif %}
+{% endif %}
+
+{% endblock %}

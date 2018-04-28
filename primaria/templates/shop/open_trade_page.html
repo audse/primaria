@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content %}
+
+{% include 'includes/beach_links.html' %}
+
+<h1>Open Trade</h1>
+
+<br />
+
+<form action="{% url 'open_trade' %}" method="POST">
+	{% csrf_token %}
+
+	<label>Items</label>
+	<div class="flex-wrap">
+	{% for item in inventory %}
+	<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+		<label for="box-{{ item.pk }}">
+	    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+	    	<br /><small class="semibold">{{ item.item.name }}</small>
+	    </label>
+	    <input type="checkbox" id="box-{{ item.pk }}" value="{{ item.pk }}" />
+	</div>
+	{% empty %}
+		<p class="gray">You do not have any items at this time.</p>
+	{% endfor %}
+	</div>
+	<small class="gray">You can select up to five items to include in your trade.</small>
+	<input type="hidden" name="items" id="items" value="" />
+
+	<br /><br />
+
+	<label>Message</label>
+	<textarea name="message" rows="4"></textarea>
+	<small class="gray">This can be up to 140 characters. You may leave this blank.</small>
+
+	<br /><br />
+	<button type="submit" class="primary">Open Trade</button>
+</form>
+
+<script>
+
+var items = [];
+
+function change_items(e, pk){
+	if (e.target.checked == true) {
+		items.push(pk);
+	} else {
+		var index = items.indexOf(pk);
+		if (index > -1) {
+		  items.splice(index, 1);
+		}
+	}
+	document.getElementById("items").value = (items.join())
+}
+
+</script>
+
+{% endblock %}

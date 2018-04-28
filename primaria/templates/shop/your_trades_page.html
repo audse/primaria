@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content %}
+
+{% include 'includes/beach_links.html' %}
+
+<h1>Your Trades</h1>
+<p>This is where you can view your trades and offers. You may cancel your trades but remember that offers are permanent.</p>
+
+{% for trade in your_trades %}
+<table>
+	<tr class="no-highlight">
+		<th>
+			Your Trade
+			<small>(link: {% url 'make_offer_page' pk=trade.pk %})</small>
+		</th>
+	</tr>
+	<tr class="no-highlight">
+		<td>
+			<div class="flex-wrap">
+				{% for item in trade.items.all %}
+				<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+			    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+			    	<br /><small class="semibold">{{ item.item.name }}</small>
+				</div>
+				{% endfor %}
+			</div>
+		</td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td><div class="quote">Message: {{ trade.message }}</div></td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td class="t-right">
+			<a href="{% url 'cancel_trade' trade_pk=trade.pk %}"><button class="small delete">Cancel Trade</button></a>
+		</td>
+	</tr>
+</table>
+<br />
+{% for trade in trade.offers %}
+<table class="deleted bg-gray">
+	<tr class="no-highlight">
+		<th><a class="white" href="{% url 'profile_page' username=trade.sending_user.username %}">{{ trade.sending_user.username }}</a>'s Offer</th>
+	</tr>
+	<tr class="no-highlight">
+		<td>
+			<div class="flex-wrap">
+				{% for item in trade.items.all %}
+				<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+			    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+			    	<br /><small class="semibold">{{ item.item.name }}</small>
+				</div>
+				{% endfor %}
+			</div>
+		</td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td><div class="quote">Message: {{ trade.message }}</div></td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td class="t-right"><a href="{% url 'accept_offer' original_pk=trade.original_trade.pk offer_pk=trade.pk %}"><button class="small primary">Accept Offer</button></a></td>
+	</tr>
+</table>
+<br />
+{% empty %}
+	<p class="gray">You do not have any offers at this time</p>
+{% endfor %}
+{% empty %}
+	<p class="gray">You do not have any open trades at this time</p>
+{% endfor %}
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray mt10">Your Offers</h2><br />
+
+
+{% for trade in your_offers %}
+<table>
+	<tr class="no-highlight">
+		<th><a class="white" href="{% url 'profile_page' username=trade.original_trade.sending_user.username %}">{{ trade.original_trade.sending_user.username }}</a>'s Trade</th>
+	</tr>
+	<tr class="no-highlight">
+		<td>
+			<div class="flex-wrap">
+				{% for item in trade.original_trade.items.all %}
+				<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+			    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+			    	<br /><small class="semibold">{{ item.item.name }}</small>
+				</div>
+				{% endfor %}
+			</div>
+		</td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td><div class="quote">{{ trade.original_trade.sending_user.username }}: {{ trade.original_trade.message }}</div></td>
+	</tr>
+	<tr class="no-highlight">
+		<th>Your Offer</th>
+	</tr>
+	<tr class="no-highlight">
+		<td>
+			<div class="flex-wrap">
+				{% for item in trade.items.all %}
+				<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+			    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+			    	<br /><small class="semibold">{{ item.item.name }}</small>
+				</div>
+				{% endfor %}
+			</div>
+		</td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td><div class="quote">Message: {{ trade.message }}</div></td>
+	</tr>
+</table>
+<br />
+{% empty %}
+	<p class="gray">You do not have any offers at this time</p>
+{% endfor %}
+
+{% endblock %}

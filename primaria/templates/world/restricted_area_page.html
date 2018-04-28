@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/caves_links.html' %}
+
+<h1>Restricted Area</h1>
+<p>
+	Hey...what are you doing here? Don't you know you're not supposed to be here?
+
+	{% if mystery_card %}
+		Hmm... I see you have a card. Well, we aren't using that system anymore so please get out. You'll have to talk to the boss if you need to get in. (If you're really allowed here, that is...)
+	{% endif %}
+
+	{% if activated_card %}
+		Oh, I guess you are supposed to be here. Well, keep quiet, keep your head down, and don't get in trouble.
+	{% endif %}
+</p>
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Try the Machine</h2>
+	<p>Select the crystals you would like to place in the machine.</p>
+
+	<form action="{% url 'restricted_machine' %}" method="POST">
+	{% csrf_token %}
+	
+	<div class="flex-wrap mt10">
+		{% for item in inventory %}
+		  <div class="inventory-box mr10" onclick="change_items(event, {{item.pk}})">
+		  	<label for="crystal-{{ item.pk }}">
+			    <img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" /><br />
+			    <small class="semibold">{{ item.item.name }}</small>
+			</label>
+		    <input type="checkbox" id="crystal-{{ item.pk }}" value="{{ item.pk }}" />
+		  </div>
+		{% empty %}
+			<p class="gray">You do not have any crystals to use.</p>
+		{% endfor %}
+	</div><br />
+	<small class="gray">You can use up to three crystals at once.</small>
+
+	<input type="hidden" name="items" id="items" value="" />
+	<br /><br />
+	<button>Insert Crystals and Try the Machine</button>
+
+
+{% if results %}
+
+<div class="remodal" data-remodal-id="modal">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Success!
+  </div>
+  <div class="remodal-body">
+    <p>
+      {{ results }}
+    </p>
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right">
+        <button data-remodal-action="confirm">OK</button>
+      </div>
+      <div style="clear:both"></div>
+  </div>
+</div>
+
+{% endif %}
+
+<script>
+
+	{% if results %}
+	var inst = $('[data-remodal-id=modal]').remodal();
+	inst.open();
+	{% endif %}
+
+
+	var items = [];
+
+	function change_items(e, pk){
+		if (e.target.checked == true) {
+			items.push(pk);
+		} else {
+			var index = items.indexOf(pk);
+			if (index > -1) {
+			  items.splice(index, 1);
+			}
+		}
+		console.log(items)
+		document.getElementById("items").value = (items.join())
+	}
+</script>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+{% include 'includes/city_links.html' %}
+
+<h1>Safety Deposit Box</h1>
+<p>The safety deposit box is a subsidiary of the bank. You can store items here, and the bank will keep them safe from any random events or thieves on the loose. Please note that the storage is not unlimited and additional space will need to be paid for. However, every citizen of Primaria is granted 10 free spaces.</p>
+
+{% if box_items.count < request.user.profile.box_size %}
+<a href="" data-remodal-target="add-item"><button>Add Item</button></a>
+<div class="remodal" data-remodal-id="add-item">
+	<div class="remodal-header">
+	  <button data-remodal-action="close" class="remodal-close"></button>
+	  Add Item
+	</div>
+<div class="remodal-body">
+  <form action="{% url 'add_box_item' %}" method="POST">
+    {% csrf_token %}
+    <div class="flex-wrap">
+      {% for item in inventory_items %}
+        <div class="inventory-box m10" style="width: 20%">
+          <label for="{{ item.pk }}" style="opacity: 1"><img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+          <br /><small class="semibold">{{ item.item.name }}</small></label>
+          <input id="{{ item.pk }}" type="radio" name="item" value="{{ item.pk }}" />
+        </div>
+      {% empty %}
+      <p>You do not currently have any items.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">Cancel</button>
+        {% if inventory_items %}<button type="submit" class="primary">Add</button>{% endif %}
+      </div>
+  </div>
+</form>
+</div>
+{% else %}
+<p> Sorry, your Safety Deposit Box is full right now! You cannot add any more items until you either clear a space or upgrade your box.</p>
+{% endif %}
+
+</div>
+<div class="content-box-body border-top-gray">
+
+<h2 class="gray">{{ box_items.count }} / {{ request.user.profile.box_size }} Items</h2>
+
+<div class="flex-wrap">
+{% for item in box_items %}
+<div class="inventory-box m10">
+    <img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+    <br /><small class="semibold">{{ item.item.name }}</small>
+    <br /><a href="{% url 'remove_box_item' item=item.pk %}"><button>Remove</button></a>
+</div>
+{% empty %}
+<p class="gray">Looks like your safety deposit box is currently empty!</p>
+{% endfor %}
+</div>
+
+</div>
+<div class="content-box-body border-top-gray">
+	<p>Your Safety Deposit Box is currently size {{ request.user.profile.box_size }}. To get more space, you will need to upgrade. Your next upgrade will cost 1000 points and give you 5 more spaces. This fee is fixed and will not increase as your Safety Deposit Box grows.</p>
+	{% if request.user.profile.points >= 1000 %}
+	<a href="{% url 'upgrade_box' %}"><button>Upgrade Safety Deposit Box</button></a>
+	{% else %}
+	<p class="gray">You do not have enough points to upgrade your Safety Deposit Box.</p>
+	{% endif %}
+</div>
+
+
+{% endblock %}

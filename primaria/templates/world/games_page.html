@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+<h1>Games</h1>
+<br />
+<h2 class="gray">Card</h2>
+
+<div class="flex-wrap">
+
+<div class="inventory-box mr10 mt10">
+  <a href="{% url 'blackjack_page' %}">
+    <img src="{% static 'img/game/blackjack.png' %}" width="100%" />
+    <br /><small class="semibold">Blackjack</small>
+  </a>
+</div>
+
+<div class="inventory-box mr10 mt10">
+  <a href="{% url 'tictactoe_page' %}">
+    <img src="{% static 'img/game/tictactoe.png' %}" width="100%" />
+    <br /><small class="semibold">Tic Tac Toe</small>
+  </a>
+</div>
+
+<div class="inventory-box mr10 mt10">
+  <a href="{% url 'pyramids_page' %}">
+    <img src="{% static 'img/game/pyramids.png' %}" width="100%" />
+    <br /><small class="semibold">Pyramids Solitaire</small>
+  </a>
+</div>
+
+</div>
+
+<br />
+<h2 class="gray">Chance</h2>
+
+<div class="flex-wrap">
+
+<div class="inventory-box mr10 mt10">
+  <a href="{% url 'wheel_serendipity_page' %}">
+    <img src="{% static 'img/game/wheel-serendipity.png' %}" width="100%" />
+    <br /><small class="semibold">Wheel of Serendipity</small>
+  </a>
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

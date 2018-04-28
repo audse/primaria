@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Register</h1>
+
+<p>
+  Welcome to Primaria World! To start your journey, please create an account. Be sure to read the <a href="{% url 'rules_page' %}">Site Rules</a> before registration.
+</p>
+
+<div class="flex">
+  <div class="flex-split">
+    <form action="{% url 'register' %}" method="post">
+      {% csrf_token %}
+      <label>Choose Your Username</label>
+      <div class="input-group">
+        <i class="fa fa-user-o" aria-hidden="true"></i>
+        <input type="text" name="username" />
+      </div>
+      <small class="gray">30 characters or less. Letters, numbers and @/./+/-/_ only.</small>
+
+      <!-- <label class="mt10">Enter Your Email</label>
+      <div class="input-group">
+        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+        <input type="text" name="email" />
+      </div> -->
+
+      <label class="mt10">Create Your Password</label>
+      <div class="input-group">
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <input type="password" name="password" />
+      </div>
+      <!-- <small class="gray">8 characters or more. Cannot be only numeric, too common, or too similar to your username.</small> -->
+      <small class="gray">{{ help_text|safe }}</small>
+
+      <label class="mt10">Confirm Your Password</label>
+      <div class="input-group">
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <input type="password" name="confirm_password" />
+      </div>
+
+      <label class="mt10">Confirm Your Age</label>
+      <label class="checkbox">
+        <input type="checkbox" name="age" style="display: inline-block" />
+        <span>I am 13 years or older</span>
+      </label>
+
+      <button type="submit" class="mt10">Register</button>
+  </form>
+  </div>
+  <div class="flex-split">
+    {% if errors %}
+      {% for error in errors %}
+        <div class="error">
+          <b>Error!</b> {{ error }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

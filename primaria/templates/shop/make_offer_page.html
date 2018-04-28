@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content %}
+
+{% include 'includes/beach_links.html' %}
+
+<h1>Make Offer</h1>
+<p>Please keep in mind that once an offer is made, it cannot be cancelled.</p>
+<br />
+<h2 class="gray">Original</h2>
+<br />
+<table>
+	<tr class="no-highlight">
+		<th>Offering on <a class="white" href="{% url 'profile_page' username=original.sending_user.username %}">{{ original.sending_user.username }}</a>'s Trade ({{ original.date|naturaltime }})</th>
+	</tr>
+	<tr class="no-highlight">
+		<td>
+			<div class="flex-wrap">
+				{% for item in original.items.all %}
+				<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+			    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+			    	<br /><small class="semibold">{{ item.item.name }}</small>
+				</div>
+				{% endfor %}
+			</div>
+		</td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td><div class="quote">{{ original.sending_user.username }}: {{ original.message }}</div></td>
+	</tr>
+</table>
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Your Offer</h2>
+	<br />
+
+<form action="{% url 'make_offer' %}" method="POST">
+	{% csrf_token %}
+
+	<label>Items</label>
+	<div class="flex-wrap">
+	{% for item in inventory %}
+	<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+		<label for="box-{{ item.pk }}">
+	    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+	    	<br /><small class="semibold">{{ item.item.name }}</small>
+	    </label>
+	    <input type="checkbox" id="box-{{ item.pk }}" value="{{ item.pk }}" />
+	</div>
+	{% empty %}
+		<p class="gray">You do not have any items at this time.</p>
+	{% endfor %}
+	</div>
+	<small class="gray">You can select up to five items to include in your trade.</small>
+	<input type="hidden" name="items" id="items" value="" />
+	<input type="hidden" name="original" value="{{ original.pk }}" />
+
+	<br /><br />
+
+	<label>Message</label>
+	<textarea name="message" rows="4"></textarea>
+	<small class="gray">This can be up to 140 characters. You may leave this blank.</small>
+
+	<br /><br />
+	<button type="submit" class="primary">Make Offer</button>
+</form>
+
+<script>
+
+var items = [];
+
+function change_items(e, pk){
+	if (e.target.checked == true) {
+		items.push(pk);
+	} else {
+		var index = items.indexOf(pk);
+		if (index > -1) {
+		  items.splice(index, 1);
+		}
+	}
+	document.getElementById("items").value = (items.join())
+}
+
+</script>
+
+{% endblock %}

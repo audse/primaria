@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content %}
+
+{% include 'includes/beach_links.html' %}
+
+<h1>Trading Post</h1>
+<p>
+	The trading post is a location where you can trade items with the general public. You can trade up to five items at a time, and offer up to five items on any open trade. It is up to the creator whether they will accept your offer.
+</p>
+
+<div class="flex">
+	<div class="flex-split m10">
+		<a href="{% url 'your_trades_page' %}"><button>Your Trades and Offers</button></a>
+	</div>
+	<div class="flex-split m10">
+		<a href="{% url 'open_trade_page' %}"><button class="primary">Open Trade</button></a>
+	</div>
+</div>
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">All Open Trades</h2>
+	<br />
+{% for trade in all_trades %}
+<table>
+	<tr class="no-highlight">
+		<th><a class="white" href="{% url 'profile_page' username=trade.sending_user.username %}">{{ trade.sending_user.username }}</a>'s Trade ({{ trade.date|naturaltime }})</th>
+	</tr>
+	<tr class="no-highlight">
+		<td>
+			<div class="flex-wrap">
+				{% for item in trade.items.all %}
+				<div class="inventory-box m10" onclick="change_items(event, {{item.pk}})">
+			    	<img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+			    	<br /><small class="semibold">{{ item.item.name }}</small>
+				</div>
+				{% endfor %}
+			</div>
+		</td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td><div class="quote">{{ trade.sending_user.username }}: {{ trade.message }}</div></td>
+	</tr>
+	<tr class="no-highlight border-top-gray">
+		<td class="t-right">
+			{% if request.user == trade.sending_user %}
+				<p class="gray">You may not make an offer on your own trade.</p>
+			{% else %}
+				<a href="{% url 'make_offer_page' pk=trade.pk %}"><button class="small primary">Make Offer</button></a>
+			{% endif %}
+		</td>
+	</tr>
+</table>
+<br />
+{% empty %}
+	<p class="gray">Sorry, there are no open trades at this time.</p>
+{% endfor %}
+
+</div>
+<div class="content-box-body border-top-gray gray center">
+
+{% if all_trades.has_previous %}
+	<a href="?page=1">First</a>
+	<a href="?page={{ all_trades.previous_page_number }}">Prev</a>
+{% else %}
+	First Prev
+{% endif %}
+{{ all_trades.number }} of {{ all_trades.paginator.num_pages }}
+
+{% if topics.has_next %}
+	<a href="?page={{ all_trades.next_page_number }}">Next</a>
+	<a href="?page={{ all_trades.paginator.num_pages }}">Last</a>
+{% else %}
+	Next Last
+{% endif %}
+
+{% endblock %}

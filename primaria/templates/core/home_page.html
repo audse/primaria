@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load humanize %}
+
+<h1>Primaria World</h1>
+
+<p>Primaria World is a virtual pet site that began in September 2017, where you can adopt and raise a pet of your own, without any of the cleanup or expensive care products. There are many species, colors, and patterns to discover, and many more features to play with, so join today to try it all out!</p> 
+<!-- <p>Nam vestibulum pharetra sem id dapibus. Ut tincidunt id massa id dapibus. Fusce rhoncus convallis laoreet. Curabitur ullamcorper nunc lacinia justo sagittis mattis. Mauris eu facilisis dui. Ut eu pharetra tellus, nec faucibus libero. Donec at tempor justo, a malesuada orci. Vivamus pellentesque, velit sed aliquam blandit, ex turpis feugiat ante, eget tempus orci dolor quis orci. Vivamus et eleifend augue. Cras in rutrum elit. Quisque egestas elementum arcu vel maximus. Cras sit amet pretium dolor, auctor tincidunt sem. Pellentesque rhoncus tortor et risus porttitor faucibus. In ultrices risus vitae dolor pulvinar, vitae porttitor quam dapibus.</p>
+
+<p>Morbi pharetra neque dolor. Integer venenatis vel lacus id molestie. Nulla vitae velit lectus. Curabitur vitae dapibus quam. Donec pharetra, quam a sagittis ornare, quam erat facilisis ante, id vulputate purus odio et magna. Vivamus ut tincidunt ex. Sed ornare pretium nulla, a venenatis neque volutpat vel.</p>
+ -->
+</div>
+<div class="content-box-body border-top-gray">
+<h2 class="gray">Recent Announcements</h2>
+
+<br />
+<table>
+{% for topic in announcements %}
+	<tr class="no-highlight">
+		<th><a class="white semibold" href="{% url 'topic_page' topic=topic.slug %}">{{ topic.title }}</a></th>
+	</tr>
+	<tr class="no-highlight">
+		<td>{{ topic.message|truncatewords:50 }}</td>
+	</tr>
+	<tr class="no-highlight border-top-gray gray">
+		<td>
+			Posted {{ topic.date|naturaltime }}
+			<a class="right" href="{% url 'topic_page' topic=topic.slug %}">See Replies</a>
+		</td>
+	</tr>
+{% endfor %}
+</table><br />
+<div class="right">
+	<a href="{% url 'board_page' board='announcements' %}">More Announcements...</a>
+</div>
+<br />
+
+{% endblock %}

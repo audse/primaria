@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Log In</h1>
+
+<p>
+  Welcome to Primaria World! To continue your journey, please log in.
+</p>
+
+<div class="flex">
+  <div class="flex-split">
+    <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+      <label>Enter Your Username</label>
+      <div class="input-group">
+        <i class="fa fa-user-o" aria-hidden="true"></i>
+        <input type="text" name="username" />
+      </div>
+
+      <label class="mt10">Enter Your Password</label>
+      <div class="input-group">
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <input type="password" name="password" />
+      </div>
+      <button type="submit" class="mt10">Log In</button>
+  </form>
+  </div>
+  <div class="flex-split">
+    {% if errors %}
+      {% for error in errors %}
+        <div class="error">
+          <b>Error!</b> {{ error }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

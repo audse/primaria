@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load humanize %}
+
+<h1>Messages</h1>
+
+{% for message in received_messages %}
+
+</div>
+<div class="content-box-body border-top-gray">
+	{% if message.subject %}<b>{{ message.subject }}</b> {% else %}<b>No Subject</b>{% endif %}
+	<div class="quote {% if not message.read %}quote-important{% endif %} m10 paddington">
+		{% if message.original_message %}
+			<small class="gray">"{{ message.original_message.text }}"</small><br /><br />
+		{% endif %}
+
+		{{ message.text }}
+		{% if message.sending_user %}
+			<br /><br /><small><a data-remodal-target="reply-{{ message.pk }}">Reply?</a></small>
+		{% else %}
+			<br /><br /><small class="gray">You can not reply to system messages.</small>
+		{% endif %}
+	</div>
+	<small>Message from: <b> {% if message.sending_user %}<a href="{% url 'profile_page' username=message.sending_user.username %}">{{ message.sending_user.username }}</a>{% else %}System{% endif %}</b>, <b>{{ message.date|naturaltime }}</b>. {% if not message.read %}<a href="{% url 'mark_message_as_read' pk=message.pk %}">Mark as read.</a>{% else %}<a href="{% url 'mark_message_as_unread' pk=message.pk %}">Mark as unread.</a>{% endif %}</small>
+	<small class="right"><a href="{% url 'delete_message' pk=message.pk %}" class="red">Delete?</a></small>
+
+	<div class="remodal" data-remodal-id="reply-{{ message.pk }}">
+	  <div class="remodal-header">
+	    <button data-remodal-action="close" class="remodal-close"></button>
+	    Send Reply to {{ user.username }}
+	  </div>
+	  <div class="remodal-body">
+	  	<form action="{% url 'send_message' %}" method="POST">
+	  		{% csrf_token %}
+	  		<input type="hidden" name="receiving_user" value="{{ message.sending_user.pk }}" />
+	  		<input type="hidden" name="original" value="{{ message.pk }}" />
+	  		<label>Subject: Re: {{ message.subject }}</label>
+	  		<small class="gray">"{{ message.text }}"</small>
+	  		<label>Message</label>
+	  		<textarea name="text" rows="6"></textarea>
+	  </div>
+	  <div class="remodal-body border-top-gray">
+	      <div class="right mb10">
+	        <button data-remodal-action="cancel">Cancel</button>
+	        <button type="submit" class="primary">Send</button>
+	      </div>
+	    </form>
+	  </div>
+	</div>
+
+{% empty %}
+	<p>You have no messages at this time.</p>
+{% endfor %}
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Sent Messages</h2>
+
+	{% for message in sent_messages %}
+
+		</div>
+		<div class="content-box-body border-top-gray">
+			{% if message.subject %}<b>{{ message.subject }}</b> {% else %}<b>No Subject</b>{% endif %}
+			<div class="quote m10 paddington">
+				{% if message.original_message %}
+					<small class="gray">"{{ message.original_message.text }}"</small><br /><br />
+				{% endif %}
+				{{ message.text }}
+			</div>
+			<small class="gray">Message to: <b> <a href="{% url 'profile_page' username=message.receiving_user.username %}">{{ message.receiving_user.username }}</a></b>, <b>{{ message.date|naturaltime }}</b>.</small>
+			<small class="right"><a href="{% url 'delete_message' pk=message.pk %}" class="red">Delete?</a></small>
+
+	{% empty %}
+		<p>You have no sent messages at this time.</p>
+	{% endfor %}
+
+{% endblock %}

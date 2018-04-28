@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block content-box-image %}
+<div class="content-box-image">
+  <img src="{% static 'img/place/bank.png' %}" />
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- <p>Bank | <a href="{% url 'safety_deposit_box_page' %}">Safety Deposit Box</a> | <a href="{% url 'hospital_page' %}">Hospital</a></p> -->
+
+{% include 'includes/city_links.html' %}
+
+<h1>Bank</h1>
+<p>
+  Be careful with your points, anything could happen. It's probably in your best interest to open up an account with us. You will earn an interest on your balance.
+</p>
+
+{% if not bank_account %}
+<a href="{% url 'open_bank_account_page' %}"><button>Open Account</button></a>
+
+<div class="mt10">
+  <small class="gray">The bank is not responsible for any lost, stolen, or otherwise disappearing points.</small>
+</div>
+{% else %}
+
+<h2><span class="gray">Your Account Balance: </span> {{ bank_account.balance|intcomma }} points</h2>
+
+<div class="mt10 flex">
+  <div class="flex-split mr10">
+    <form action="{% url 'deposit' %}" method="POST">
+      {% csrf_token %}
+      <div class="flex">
+        <div class="flex-split mr10">
+          <div class="input-group">
+            <i class="fa fa-bank"></i>
+            <input type="text" name="amount" placeholder="Amount" />
+          </div>
+        </div>
+        <div class="flex-split">
+          <button type="submit">Deposit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+    <div class="flex-split">
+      <form action="{% url 'withdraw' %}" method="POST">
+        {% csrf_token %}
+        <div class="flex">
+          <div class="flex-split mr10">
+            <div class="input-group">
+              <i class="fa fa-bank"></i>
+              <input type="text" name="amount" placeholder="Amount" />
+            </div>
+          </div>
+          <div class="flex-split">
+            <button type="submit">Withdraw</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+
+</div>
+<div class="content-box-body border-top-gray">
+
+  <h3><span class="gray">Current Account Type: </span>
+  {% if bank_account.level == 1 %}
+  Basic
+  {% elif bank_account.level == 2 %}
+  Bronze
+  {% elif bank_account.level == 3 %}
+  Silver
+  {% elif bank_account.level == 4 %}
+  Gold
+  {% elif bank_account.level == 5 %}
+  Platinum
+  {% endif %}
+  </h3>
+
+  {% if interest == None %}
+  <a href="{% url 'collect_interest' %}"><button class="mt10">Collect interest: {{ interest_amount }} points</button></a>
+  {% else %}
+  <p>
+    You have already collected your interest ({{ interest_amount }} points) for today.
+  </p>
+  {% endif %}
+
+  <div class="mt10">
+    <small class="gray">The bank is not responsible for any lost, stolen, or otherwise disappearing points.</small>
+  </div>
+</div>
+
+<div class="content-box-body border-top-gray">
+  <p>You currently have a <b>{% if bank_account.level == 1 %}
+  Basic
+  {% elif bank_account.level == 2 %}
+  Bronze
+  {% elif bank_account.level == 3 %}
+  Silver
+  {% elif bank_account.level == 4 %}
+  Gold
+  {% elif bank_account.level == 5 %}
+  Platinum
+  {% endif %} level</b> account. {% if bank_account.level != 5 %}When your account balance reaches 
+  {% if bank_account.level == 1 %}
+  10,000
+  {% elif bank_account.level == 2 %}
+  100,000
+  {% elif bank_account.level == 3 %}
+  1,000,000
+  {% elif bank_account.level == 4 %}
+  10,000,000
+  {% endif %} points, you will be eligible for an upgrade. {% else %} You are at the highest level. {% endif %}</p>
+
+  {% if bank_account.level == 1 and bank_account.balance > 10000 %}
+    <a href="{% url 'upgrade_bank_account' %}"><button class="mt10">Upgrade to Bronze Account</button></a>
+  {% elif bank_account.level == 2 and bank_account.balance > 100000 %}
+    <a href="{% url 'upgrade_bank_account' %}"><button class="mt10">Upgrade to Silver Account</button></a>
+  {% elif bank_account.level == 3 and bank_account.balance > 1000000 %}
+    <a href="{% url 'upgrade_bank_account' %}"><button class="mt10">Upgrade to Gold Account</button></a>
+  {% elif bank_account.level == 4 and bank_account.balance > 10000000 %}
+    <a href="{% url 'upgrade_bank_account' %}"><button class="mt10">Upgrade to Platinum Account</button></a>
+  {% else %}
+    <p>You are not eligible for an upgrade at this time.</p>
+  {% endif %}
+  <div class="mt10">
+    <small class="gray">Upgrading will increase your revenue from interest as well as give you a higher status within the elitist banking community.</small>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

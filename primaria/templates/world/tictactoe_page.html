@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+<h1>Tic Tac Toe</h1>
+<h2 class="gray mt10">{{ scores_sent }}/15 Scores Sent</h2>
+<p>
+  Tic-tac-toe is a paper-and-pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid.
+</p>
+
+<!-- <canvas id="canvas1" class="mt10" width="400" height="300" style="border:1px solid black;background:white;" onclick="canvasClicked(1)"></canvas> -->
+
+<canvas id = "canvas1"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(1)"></canvas>
+<canvas id = "canvas2"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(2)"></canvas>
+<canvas id = "canvas3"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(3)"></canvas><br/>
+<canvas id = "canvas4"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(4)"></canvas>
+<canvas id = "canvas5"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(5)"></canvas>
+<canvas id = "canvas6"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(6)"></canvas><br/>
+<canvas id = "canvas7"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(7)"></canvas>
+<canvas id = "canvas8"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(8)"></canvas>
+<canvas id = "canvas9"  width="70" height="70" style="background: #538af6;" onclick="canvasClicked(9)"></canvas>
+
+<br />
+<br />
+<h2 class="gray mt10">Rules & Strategy</h2>
+<p>
+  The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game
+</p>
+
+<div class="remodal" data-remodal-id="win">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    X Won! Send score?
+  </div>
+  <div class="remodal-body">
+    <form id="score" action="{% url 'send_score' game='tictactoe' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" id="score-box" name="score" value="false" />
+
+      <div class="right mb10">
+        <button data-remodal-action="cancel">Cancel</button>
+        <button type="submit" class="primary">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="remodal" data-remodal-id="lose">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    O Won!
+  </div>
+  <div class="remodal-body">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="remodal" data-remodal-id="tie">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    It was a tie!
+  </div>
+  <div class="remodal-body">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="remodal" data-remodal-id="taken">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    That space is taken!
+  </div>
+  <div class="remodal-body">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+var win_modal = $('[data-remodal-id=win]').remodal();
+var lose_modal = $('[data-remodal-id=lose]').remodal();
+var tie_modal = $('[data-remodal-id=tie]').remodal();
+var taken_modal = $('[data-remodal-id=taken]').remodal();
+
+//Global Variables
+var painted;
+var content;
+var winningCombinations;
+var turn = 0;
+var theCanvas;
+var c;
+var cxt;
+var squaresFilled = 0;
+var w;
+var y;
+
+//Instanciate Arrays
+window.onload=function(){
+    
+  painted = new Array();
+  content = new Array();
+  winningCombinations = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+  for(var l = 0; l <= 8; l++){
+  painted[l] = false;
+  content[l]='';
+  }
+}
+
+//Game methods
+function canvasClicked(canvasNumber){
+  theCanvas = "canvas"+canvasNumber;
+  c = document.getElementById(theCanvas);
+  cxt = c.getContext("2d");
+
+  if(painted[canvasNumber-1] ==false){
+
+    cxt.beginPath();
+    cxt.moveTo(20,20);
+    cxt.lineTo(50,50);
+    cxt.moveTo(50,20);
+    cxt.lineTo(20,50);
+    cxt.strokeStyle = '#ffffff';
+    cxt.stroke();
+    cxt.closePath();
+    content[canvasNumber-1] = 'X';
+
+    turn++;
+    painted[canvasNumber-1] = true;
+    squaresFilled++;
+    var winner = checkForWinners(content[canvasNumber-1]);
+
+    if (winner==false && squaresFilled<9) {
+      setTimeout(ai_draw, 250);
+    }// } else if (squaresFilled==9) {
+    //   tie_modal.open()
+    //   //location.reload(true);
+    // }
+  
+  }
+}
+
+function ai_draw() {
+
+  var new_choice = false;
+  var ai_choice;
+
+  while (new_choice == false) {
+    ai_choice = Math.floor(Math.random() * 9) + 1;
+    if (painted[ai_choice-1] == false) {
+      new_choice = true;
+    }
+  }
+
+  theCanvas = "canvas"+ai_choice;
+  c = document.getElementById(theCanvas);
+  cxt = c.getContext("2d");
+
+  if (painted[ai_choice-1] == false) {
+      cxt.beginPath();
+      cxt.arc(35,35,20,0,Math.PI*2,true);
+      cxt.strokeStyle = '#ffffff';
+      cxt.stroke();
+      cxt.closePath();
+      content[ai_choice-1] = 'O';
+
+      turn++;
+      painted[ai_choice-1] = true;
+      squaresFilled++;
+      checkForWinners(content[ai_choice-1]);
+  }
+}
+
+function checkForWinners(symbol){  
+  var winner = false;
+  for(var a = 0; a < winningCombinations.length; a++){
+    if(content[winningCombinations[a][0]]==symbol&&content[winningCombinations[a][1]]== symbol&&content[winningCombinations[a][2]]==symbol){
+      //alert(symbol+ " WON!");
+      if (symbol == 'O') {
+        lose_modal.open();
+      } else {
+        winner = true;
+        document.getElementById("score-box").setAttribute("value", "success");
+        win_modal.open();
+      }
+    }
+  }
+  return winner;
+
+}
+
+
+</script>
+
+{% endblock %}

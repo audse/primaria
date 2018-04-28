@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content-box-image %}
+<div class="content-box-image">
+  <img src="{% static 'img/place/garden.png' %}" />
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% include 'includes/reservoir_links.html' %}
+<img src="{% static 'img/place/rose garden/statue.png' %}"  style="width:40%;float:left;"/>
+<h1>Rose Garden</h1>
+<p>
+  You enter the rose garden and a wave of calmness comes over you. A beautiful statue stands in a clearing.
+</p>
+
+{% if request.user.is_authenticated %}
+  {% if not claim %}
+
+    <div class="flex">
+      <div class="flex-split m10">
+        <form action="{% url 'garden_gather' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="gather" value="inspiration" />
+          <button type="submit" class="primary">Gather some inspiration</button>
+        </form>
+      </div>
+      <div class="flex-split m10">
+        <form action="{% url 'garden_gather' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="gather" value="roses" />
+          <button type="submit">Gather some roses</button>
+        </form>
+      </div>
+    </div>
+
+  {% else %}
+    <h2 class="gray">Your findings...</h2>
+    <p>{{ claim.message }}</p>
+    <small class="gray">You may come back and look for more tomorrow.</small>
+
+  {% endif %}
+  
+{% endif %}
+
+</div>
+
+{% endblock %}

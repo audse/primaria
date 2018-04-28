@@ -1,0 +1,28 @@
+
+// Define colors
+
+$black: #535976;
+$blue: #538af6;
+$darkerblue: #4278e3;
+$lightblue: #dae6fd;
+$lightgray: #eff2f7;
+$gray: #bec3d0;
+$darkergray: #aeb3bf;
+
+$red: #be4640;
+$yellow: #f2b254;
+$green: #60b157;
+$swatchblue: #2971b6;
+$swatchblack: #666666;
+
+// Define imports
+
+@import 'remodal.css';
+@import 'remodal-default-theme.scss';
+
+@import 'global.scss';
+@import 'layout.scss';
+@import 'styles.scss';
+@import 'mobile.scss';
+@import 'fixes.scss';
+@import 'progress-wizard.scss';

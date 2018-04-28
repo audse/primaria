@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<h1>Change Pet</h1>
+<p>You are able to change your pet back to any of its previously unlocked colors and species combinations.</p>
+
+<div class="flex-wrap">
+{% for color in all_colors %}
+	{% if forloop.last %}
+		<!-- nothing -->
+	{% else %}
+		<div class="inventory-box m10">
+			<form action="{% url 'change_pet' %}" name="change_color_form-{{ color.0 }}-{{ color.1 }}" method="POST">
+				{% csrf_token %}
+				<input type="hidden" name="color" value="{{ color.0 }}" />
+				<input type="hidden" name="animal" value="{{ color.1 }}" />
+				<a href="#" onclick="document.forms['change_color_form-{{ color.0 }}-{{ color.1 }}'].submit(); return false;">
+					<img src="{% static 'img/'%}{{ color.1 }}/{{ color.0 }}.png" width="100%" style="max-width: 50vw;" />
+					<br /><br /><small class="semibold">{{ color.0|title }} {{ color.1|title }}</small>
+				</a>
+			</form>
+		</div>
+	{% endif %}
+{% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+@media only screen and (max-width: 720px) {
+  #sidebar {
+    flex-basis: 95%;
+  }
+
+  #content {
+    padding: 10px;
+  }
+
+  .content-box {
+    .content-box-image {
+      .content-box-image-layer {
+        img {
+          margin: -10vh auto 0 auto;
+          width: 50%;
+        }
+      }
+    }
+  }
+
+  .flex {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+  }
+
+  .inventory-box {
+    width: 25%;
+  }
+
+  textarea {
+    background: white;
+    border: 1px solid $gray;
+    border-radius: 5px;
+    color: $darkerblue;
+    font-size: 1em;
+    padding: 10px;
+    width: 100%;
+
+    &:focus {
+      outline: 0;
+      border-color: $blue;
+    }
+  }
+
+}

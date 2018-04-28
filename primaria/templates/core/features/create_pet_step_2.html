@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<h1>Create a Pet</h1>
+<p>
+  Your pet will be your companion in your journey through Primaria.
+</p>
+
+</div>
+</div>
+
+<div class="mt10">
+  <ul class="progress-indicator">
+    <li class="completed"> <span class="bubble"></span> <i class="fa fa-paw"></i> Species</li>
+    <li class="completed"> <span class="bubble"></span> <i class="fa fa-tint"></i> Color</li>
+    <li> <span class="bubble"></span> <i class="fa fa-star-o"></i> Name</li>
+  </ul>
+</div>
+
+<div class="m10 center">
+  <img id="animal" src="{% static 'img/' %}{{ animal.name }}/red.png" width="70%" />
+  <br /><br />
+</div>
+
+<div class="content-box mt10">
+  <div class="content-box-body">
+    <div class="flex">
+      <div id="red" class="flex-split center">
+        Red
+        <div class="swatch swatch-red"></div>
+      </div>
+      <div id="yellow" class="flex-split center">
+        Yellow
+        <div class="swatch swatch-yellow"></div>
+      </div>
+      <div id="green" class="flex-split center">
+        Green
+        <div class="swatch swatch-green"></div>
+      </div>
+      <div id="blue" class="flex-split center">
+        Blue
+        <div class="swatch swatch-blue"></div>
+      </div>
+      <div id="black" class="flex-split center">
+        Black
+        <div class="swatch swatch-black"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form action="{% url 'create_pet_step_3' animal=animal.name %}" method="post">
+  {% csrf_token %}
+  <input id="color_input" type="hidden" value="red" name="color" />
+  <button class="mt10">Go with <span id="color">red</span>!</button>
+</form>
+
+<script>
+$("#red").click(function(){
+  $("#animal").attr("src","{% static 'img/' %}{{ animal.name }}/red.png");
+  $("#color").html("red");
+  $("#color_input").attr("value", "red");
+});
+
+$("#yellow").click(function(){
+  $("#animal").attr("src","{% static 'img/' %}{{ animal.name }}/yellow.png");
+  $("#color").html("yellow");
+  $("#color_input").attr("value", "yellow");
+});
+
+$("#green").click(function(){
+  $("#animal").attr("src","{% static 'img/' %}{{ animal.name }}/green.png");
+  $("#color").html("green");
+  $("#color_input").attr("value", "green");
+});
+
+$("#blue").click(function(){
+  $("#animal").attr("src","{% static 'img/' %}{{ animal.name }}/blue.png");
+  $("#color").html("blue");
+  $("#color_input").attr("value", "blue");
+});
+
+$("#black").click(function(){
+  $("#animal").attr("src","{% static 'img/' %}{{ animal.name }}/black.png");
+  $("#color").html("black");
+  $("#color_input").attr("value", "black");
+});
+</script>
+
+{% endblock %}

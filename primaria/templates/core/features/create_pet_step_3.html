@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<h1>Create a Pet</h1>
+<p>
+  Your pet will be your companion in your journey through Primaria.
+</p>
+
+</div>
+</div>
+
+<div class="mt10">
+  <ul class="progress-indicator">
+    <li class="completed"> <span class="bubble"></span> <i class="fa fa-paw"></i> Species</li>
+    <li class="completed"> <span class="bubble"></span> <i class="fa fa-tint"></i> Color</li>
+    <li class="completed"> <span class="bubble"></span> <i class="fa fa-star-o"></i> Name</li>
+  </ul>
+</div>
+
+<div class="flex">
+  <div class="flex-split mr10">
+    <img id="animal" src="{% static 'img/' %}{{ animal.name }}/{{ color }}.png" width="100%" />
+  </div>
+  <div class="flex-split" style="flex: 2">
+    <div class="content-box">
+      <div class="content-box-header">
+        {{ color|title }} {{ animal.name|title }}
+      </div>
+      <div class="content-box-body">
+        <label>My new name is...</label>
+        <div class="input-group">
+          <i class="fa fa-star-o"></i>
+          <form action="{% url 'create_pet' %}" method="POST">
+            {% csrf_token %}
+          <input type="text" name="name" />
+          <input type="hidden" value="{{ color }}" name="color" />
+          <input type="hidden" value="{{ animal.name }}" name="animal" />
+        </div>
+        <div class="gray mt10"><small>Must be less than 64 characters. Must be unique.</small></div>
+        {% if error %}
+          <div class="error">
+            <b>Error!</b> {{ error }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <button type="submit" class="mt10">Adopt Me!</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+{% include 'includes/suburb_links.html' %}
+
+{% if shop != None %}
+	<h1>{% if shop.name != None and shop.name != "" %}
+		Your Shop: <small>{{ shop.name }}</small>
+	{% else %}
+		Your Shop
+	{% endif %} <span class="gray">({{ shop_items|length }}/{{ shop.space }})</span>
+  </h1>
+  <p><a href="#" data-remodal-target="rename-modal">Rename?</a></p>
+	<p>Your user shop is where you can put items up for sale that other users can find and buy. You can only list a certain amount of items for sale before you have to upgrade, however.</p>
+
+	<button data-remodal-target="add-item">Add Item</button>
+
+</div>
+<div class="content-box-body border-top-gray">
+
+	<form action="{% url 'withdraw_shop_till' %}" method="POST">
+		{% csrf_token %}
+		<div class="flex">
+			<div class="flex-shrink m10">
+				<h2 class="gray">Shop Till: <br /><small>{{ shop.shop_till }} points</small></h2>
+			</div>
+			<div class="flex-split m10">
+				<input type="text" name="withdraw_amount" />
+			</div>
+			<div class="flex-split m10">
+				<button type="submit">Withdraw</button>
+			</div>
+		</div>
+	</form>
+
+	<div class="remodal" data-remodal-id="add-item">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Add Item
+    </div>
+    <div class="remodal-body">
+      <form action="{% url 'add_shop_item' %}" method="POST">
+        {% csrf_token %}
+        <div class="flex-wrap">
+          {% for item in user_items %}
+            <div class="inventory-box m10" style="width: 20%">
+              <label for="{{ item.pk }}" style="opacity: 1"><img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+              <br /><small class="semibold">{{ item.item.name }}</small></label>
+              <input id="{{ item.pk }}" type="radio" name="item" value="{{ item.pk }}" />
+            </div>
+          {% empty %}
+          <p>You do not currently have any items.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="remodal-body border-top-gray">
+      	<label>Price (in Points)</label>
+      	<input type="text" name="price">
+      </div>
+      <div class="remodal-body border-top-gray">
+          <div class="right mb10">
+            <button data-remodal-action="cancel">Cancel</button>
+            <button type="submit" class="primary">Add</button>
+          </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+<div class="content-box-body border-top-gray">
+<h2 class="gray">Items</h2>
+<br />
+<div class="flex-wrap">
+
+{% for item in shop_items %}
+  <div class="inventory-box m10">
+  	<h3 class="semibold">{{ item.0.name }}</h3><br />
+    <img src="{% static 'img/items/' %}{{ item.0.category }}/{{ item.0.url }}.png" width="60%" />
+    <br />
+    <form action="{% url 'edit_price' %}" method="POST" style="display:inline;margin:0;">
+    	{% csrf_token %}
+    	<input type="text" name="price" value="{{ item.1 }}">
+    	<input type="hidden" name="item" value="{{ item.0.pk }}">
+    	<button type="submit" class="primary">Edit Price</button>
+    </form>
+    <form action="{% url 'remove_from_shop' %}" method="POST" style="display:inline;margin:0;">
+    	{% csrf_token %}
+      <input type="hidden" name="item" value="{{ item.0.pk }}">
+      <input type="hidden" name="index" value="{{ forloop.counter0 }}">
+    	<button type="submit" class="secondary">Remove</button>
+    </form>
+  </div>
+{% endfor %}
+
+</div>
+
+</div>
+<div class="content-box-body border-top-gray">
+	<p>Your shop is currently size {{ shop.space }}. To get more space, you will need to upgrade. Your next upgrade will cost {{ shop.upgrade_cost }} points and give you 5 more spaces.</p>
+  	<a href="{% url 'upgrade_shop' %}"><button>Upgrade</button></a>
+
+  <div class="remodal" data-remodal-id="rename-modal">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Rename Shop
+    </div>
+    <form action="{% url 'rename_shop' %}" method="POST">
+      {% csrf_token %}
+      <div class="remodal-body">
+        <label>New Name</label>
+        <input type="text" name="new_shop_name" value="{{ shop.name }}" />
+        <small class="gray">This can be whatever you want, at a maximum of 140 characters.</small>
+      </div>
+      <div class="remodal-body border-top-gray">
+        <div class="right mb10">
+          <button data-remodal-action="cancel">Cancel</button>
+          <button type="submit" class="primary">Rename</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+{% else %}
+	<h1>Your Shop</h1>
+	<p>Your user shop is where you can put items up for sale that other users can find and buy. You can only list a certain amount of items for sale before you have to upgrade, however.</p>
+
+	<p>You do not appear to have a shop yet. Would you like to create one?</p>
+	<a href="{% url 'open_shop_page' %}"><button>Open Shop</button></a>
+{% endif %}
+
+{% endblock %}

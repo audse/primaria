@@ -1,0 +1,284 @@
+// Text formatting
+
+.center {
+  text-align: center;
+}
+
+.quote {
+  border-left: 3px solid $gray;
+  padding-left:10px;
+}
+
+.quote-important {
+  border-left: 3px solid $red;
+  color: $red;
+}
+
+.lightblue {
+  color: $lightblue;
+}
+
+a.white {
+  color: rgba(255,255,255,0.7);
+  &:hover {
+    color: white;
+  }
+}
+
+.blue {
+  color: $blue;
+}
+
+.red {
+  color: $red;
+}
+
+.gray {
+  color: $gray;
+} a.gray:hover {
+  color: $darkergray;
+}
+
+.bg-gray {
+  background: #eff2f7;
+}
+
+.bg-blue {
+  background: $blue;
+  color: white;
+}
+
+.darkergray {
+  color: $darkergray;
+}
+
+.right {
+  float:right;
+}
+
+.semibold {
+  font-weight: 600;
+}
+
+button.primary {
+  background: $blue;
+  color: white;
+}
+
+button.delete {
+  background: white;
+  border: 2px solid $red;
+  color: $red;
+
+  &:hover {
+    background: #ffefef;
+  }
+}
+
+button.small {
+  padding-left: 30px;
+  padding-right: 30px;
+  width: auto;
+}
+
+button.extrasmall {
+  border-width: 1px;
+  font-weight: 400;
+  font-size: .8em;
+  padding: 5px;
+  width: auto;
+}
+
+table.deleted {
+  th {
+    background: $red;
+  }
+}
+
+// Spacing formatting
+.mt10 {
+  margin-top: 10px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.m10 {
+  margin: 10px;
+}
+
+.paddington {
+  padding: 10px;
+}
+
+// Object formatting
+
+.flex {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.flex-column {
+  display: flex;
+  height: 970px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.flex-item {
+  flex: 1;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.flex-split {
+  flex: 1;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.columns {
+	column-width: 320px;
+	column-gap: 10px;
+  width: 100%;
+}
+
+.column-item {
+  break-inside: avoid;
+}
+
+// Components
+
+.content-box {
+  background: white;
+  box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.05);
+
+  .content-box-image {
+    position: relative;
+    img {
+      width: 100%;
+    }
+
+    .content-box-image-layer {
+      position: relative;
+      width: 100%;
+      text-align: center;
+      img {
+        margin: -25vh auto 0 auto;
+        width: 50%;
+      }
+    }
+  }
+
+  .content-box-header {
+    background: $blue;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .content-box-body {
+    padding: 10px;
+  }
+}
+
+.border-top-gray {
+  border-top: 1px solid #eff2f7;
+}
+
+
+.border-left-gray {
+  border-left: 1px solid #eff2f7;
+}
+
+.inventory-box {
+  cursor: pointer;
+  text-align: center;
+  width: 15%;
+}
+
+.input-group {
+  position: relative;
+
+  i {
+    color: $darkergray;
+    position: absolute;
+    top: 13px;
+    left: 10px;
+  }
+
+  input {
+    padding-left: 30px;
+  }
+}
+
+.error {
+  border: 1px solid $red;
+  border-radius: 5px;
+  color: $red;
+  margin: 10px;
+  padding: 10px;
+}
+
+.swatch {
+  border: 2px solid transparent;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  border-radius: 50%;
+  &:hover {
+    border: 2px solid $black;
+  }
+}
+
+.swatch-red {
+  background: $red;
+}
+.swatch-yellow {
+  background: $yellow;
+}
+.swatch-green {
+  background: $green;
+}
+.swatch-blue {
+  background: $swatchblue;
+}
+.swatch-black {
+  background: $swatchblack;
+}
+
+.badge {
+  border: 1px solid $gray;
+  border-radius: 3px;
+  color: $gray;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 1px 7px;
+}
+
+.badge-primary {
+  background: $blue;
+  border: none;
+  color: white;
+}

@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/city_links.html' %}
+
+<h1>City Dump</h1>
+<p>Here you may find unloved items that users willingly threw away into the Primaria landfill. If you find something here, feel free to take it at no cost to help clear the dump.</p>
+
+<div class="flex-wrap">
+
+{% for item in dump_items %}
+  <div class="inventory-box mr10 mt10">
+  {% if request.user.is_authenticated %}<a data-remodal-target="modal-{{ item.pk }}"> {% endif %}
+
+    <img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+    <br /><small class="semibold">{{ item.item.name }}</small>
+  {% if request.user.is_authenticated %}</a>{% endif %}
+  <div class="remodal" data-remodal-id="modal-{{ item.pk }}">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Take {{ item.item.name }} from City Dump?
+    </div>
+    <div class="remodal-body">
+      <p>
+        This item will be sent to your inventory.
+      </p>
+    </div>
+    <div class="remodal-body border-top-gray">
+        <div class="right mb10">
+          <button data-remodal-action="cancel">Cancel</button>
+          <a href="{% url 'take_from_dump' pk=item.pk %}"><button class="primary">OK</button></a>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% empty %}
+<p>
+  Yay, the City Dump is currently empty!
+</p>
+{% endfor %}
+</div>
+
+{% if request.user.is_authenticated %}
+</div>
+<div class="content-box-body border-top-gray">
+<a data-remodal-target="dump-item"><button class="small delete">Dump Item</button></a>
+
+<div class="remodal" data-remodal-id="dump-item">
+    <div class="remodal-header">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      Dump Item
+    </div>
+    <div class="remodal-body">
+      <form action="{% url 'dump_item' %}" method="POST">
+        {% csrf_token %}
+        <div class="flex-wrap">
+          {% for item in inventory %}
+            <div class="inventory-box m10" style="width: 20%">
+              <label for="{{ item.pk }}" style="opacity: 1"><img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+              <br /><small class="semibold">{{ item.item.name }}</small></label>
+              <input id="{{ item.pk }}" type="radio" name="item" value="{{ item.pk }}" />
+            </div>
+          {% empty %}
+          <p>You do not currently have any items.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="remodal-body border-top-gray">
+          <div class="right mb10">
+            <button data-remodal-action="cancel">Cancel</button>
+            {% if inventory %}<button type="submit" class="delete">Dump</button>{% endif %}
+          </div>
+      </div>
+    </form>
+  </div>
+{% endif %}
+
+
+
+{% if success != False %}
+<div class="remodal" data-remodal-id="confirm">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Success!
+  </div>
+  <div class="remodal-body">
+  	{{ success }}
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">OK</button>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+<script>
+
+{% if success %}
+var inst = $('[data-remodal-id=confirm]').remodal();
+inst.open();
+{% endif %}
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+<h1>{% if shop.name != None %}
+    <a href="{% url 'profile_page' username=shop.user.username %}">{{ username }}</a>'s Shop: <small>{{ shop.name }}</small>
+  {% else %}
+    <a href="{% url 'profile_page' username=shop.user.username %}">{{ username }}</a>'s Shop
+  {% endif %}</h1>
+
+<div class="flex-wrap">
+  {% for item in shop_items %}
+    <div class="inventory-box mr10 mt10">
+    {% if request.user.is_authenticated %}<a data-remodal-target="modal-{{ forloop.counter0 }}"> {% endif %}
+      <img src="{% static 'img/items/' %}{{ item.0.category.name }}/{{ item.0.url }}.png" width="60%" />
+      <br /><small class="semibold">{{ item.0.name }}</small>
+      <br /><small>{{ item.1 }} points</small>
+    {% if request.user.is_authenticated %}</a>{% endif %}
+    <div class="remodal" data-remodal-id="modal-{{ forloop.counter0 }}">
+      <div class="remodal-header">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        Purchase {{ item.0.name }} for {{ item.1 }} points?
+      </div>
+      <div class="remodal-body">
+        <p>
+          This item will be sent to your inventory.
+        </p>
+      </div>
+      <div class="remodal-body border-top-gray">
+        <form action="{% url 'purchase_from_user_shop' username=shop.user.username %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="item_pk" value="{{ item.0.pk }}" />
+          <input type="hidden" name="price" value="{{ item.1 }}" />
+          <input type="hidden" name="index" value="{{ forloop.counter0 }}">
+
+          <div class="right mb10">
+            <button data-remodal-action="cancel">Cancel</button>
+            <button type="submit" class="primary">OK</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% empty %}
+<p>
+  Oh no! The shop is currently empty. Maybe check back in a little while.
+</p>
+{% endfor %}
+</div>
+
+</div>
+
+{% endblock %}

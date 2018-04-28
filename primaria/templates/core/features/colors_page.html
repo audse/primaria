@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+
+<h1>Color Lookup</h1>
+<p>
+  Here you can view all the colors and pets combinations available on Primaria.
+</p>
+
+<div class="flex">
+	<div class="flex-split m10">
+		<select id="color">
+			<option value="red">Red</option>
+			<option value="yellow">Yellow</option>
+			<option value="green">Green</option>
+			<option value="blue">Blue</option>
+			<option value="black">Black</option>
+
+			<option value="red-knit">Red-Knit</option>
+			<option value="yellow-knit">Yellow-Knit</option>
+			<option value="green-knit">Green-Knit</option>
+			<option value="blue-knit">Blue-Knit</option>
+			<option value="black-knit">Black-Knit</option>
+
+			<option value="albino">Albino</option>
+			<option value="baroque">Baroque</option>
+			<option value="camo">Camo</option>
+			<option value="cloud">Cloud</option>
+			<option value="galaxy">Galaxy</option>
+			<option value="gingham">Gingham</option>
+			<option value="glitter">Glitter</option>
+			<option value="iridescent">Iridescent</option>
+			<option value="marble">Marble</option>
+			<option value="opalescent">Opalescent</option>
+			<option value="robot">Robot</option>
+			<option value="sea">Sea</option>
+			<option value="sprinkle">Sprinkle</option>
+			<option value="starry">Starry</option>
+			<option value="tiger">Tiger</option>
+		</select>
+	</div>
+	<div class="flex-split m10">
+		<select id="animal">
+			<option value="dino">Dino</option>
+			<option value="lizard">Lizard</option>
+			<option value="monkey">Monkey</option>
+			<option value="mouse">Mouse</option>
+			<option value="tapir">Tapir</option>
+
+			<option value="bird">Bird</option>
+			<option value="crab">Crab</option>
+			<option value="dog">Dog</option>
+			<option value="gargoyle">Gargoyle</option>
+			<option value="penguin">Penguin</option>
+		</select>
+	</div>
+</div>
+
+<div class="center">
+	<img id="image" src="{% static 'img/' %}dino/red.png" width="60%" />
+</div>
+
+<script>
+	$('select').on('change', function(){
+		var color = $("#color").val();
+		var animal = $("#animal").val();
+
+		$("#image").attr("src", "{% static 'img/' %}"+animal+"/"+color+".png");
+	});
+</script>
+
+
+{% endblock %}
+
+
+

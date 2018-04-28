@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<h1>Open Gallery</h1>
+<p>
+  This is where you can see all the collectibles you have stored for safe keeping.
+</p>
+
+<form action="{% url 'open_gallery' %}" method="POST">
+	{% csrf_token %}
+	<label>Name of Gallery</label>
+	<div class="input-group">
+		<i class="fa fa-bank"></i>
+		<input type="text" name="gallery_name" />
+	</div>
+
+	<small class="gray">This can be whatever you want, at a maximum of 140 characters.</small>
+	<p>A <b>deposit of 500 points</b> is required for a 5-space gallery. Additional costs may be needed upon expansion of the gallery.</p>
+	<button type="submit">Open Gallery</button></a>
+</form>
+
+{% endblock %}

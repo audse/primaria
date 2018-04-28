@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+{% include 'includes/city_links.html' %}
+
+<h1>Primaria Pound</h1>
+<p>This is where you can find and adopt pets that others have put in the pound...or put your pet up for adoption.</p>
+
+<h2 class="gray">Available Pets</h2>
+<br />
+
+{% if pound_pets %}
+<div class="flex">
+	{% for pet in pound_pets %}
+		<div class="flex-split">
+			<img src="{% static 'img/'%}{{ pet.animal.name }}/{{ pet.color }}.png" width="70%" />
+			<br />
+		</div>
+	{% endfor %}
+</div>
+<div class="flex">
+	{% for pet in pound_pets %}
+		<div class="flex-split center m10">
+			<h3 class="semibold">{{ pet.name }}</h3>
+			The {{ pet.color }} {{ pet.animal.name }}
+			<br /><br />
+			{% if pet == None and request.user.is_authenticated %}
+			<a href="{% url 'adopt_from_pound' adopt=pet.name %}"><button class="primary">Adopt Me!</button></a>
+			{% endif %}
+		</div>
+	{% endfor %}
+</div>
+
+{% if pet != None and request.user.is_authenticated %}
+	<p class="gray">Sorry, you cannot adopt a new pet when you already have one.</p>
+{% endif %}
+
+{% else %}
+	<p>Yay! There are no pets in the pound right now.</p>
+{% endif %}
+
+
+{% if pet != None and request.user.is_authenticated %}
+	</div>
+	<div class="content-box-body border-top-gray">
+
+	<span class="semibold gray">Sick of Your Pet?</span>
+	<a data-remodal-target="pound"><button class="extrasmall delete">Put {{ pet.name }} in the Pound</button></a>
+
+
+	<div class="remodal" data-remodal-id="pound">
+	  <div class="remodal-header">
+	    <button data-remodal-action="close" class="remodal-close"></button>
+	    Are you sure you want to do this?
+	  </div>
+	  <div class="remodal-body">
+	  	This cannot be undone. You will be giving your pet up forever. It could possibly never be adopted, as is the life of many shelter pets.
+	  </div>
+	  <div class="remodal-body">
+	      <div class="right mb10">
+	        <button data-remodal-action="cancel" class="delete">OK</button>
+	        <a href="{% url 'give_up_pet' %}"><button class="primary">Wait, No! Take me back!</button></a>
+	      </div>
+	  </div>
+	</div>
+{% endif %}
+
+{% endblock %}

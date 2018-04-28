@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+  <h1>
+    {% if gallery.name != None and gallery.name != "" %}
+      <a href="{% url 'profile_page' username=gallery.user.username %}">{{ gallery.user.username }}</a>'s Gallery: <small>{{ gallery.name }}</small>
+    {% else %}
+      <a href="{% url 'profile_page' username=gallery.user.username %}">{{ gallery.user.username }}</a>'s Gallery
+    {% endif %}
+  </h1>
+
+</div>
+<div class="content-box-body border-top-gray">
+    
+  <h2 class="gray">Plush ({{gallery.plush.count}}/{{total_plush}})</h2>
+
+  <div class="flex-wrap">
+    {% for item in gallery_plush %}
+      <div class="inventory-box m10">
+        <img src="{% static 'img/items/' %}{{ item.category.name }}/{{ item.url }}.png" width="60%" />
+        <br /><small class="semibold">{{ item.name }}</small>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+<div class="content-box-body border-top-gray">
+    
+  <h2 class="gray">Playing Cards ({{gallery.cards.count}}/{{total_cards}})</h2>
+
+  <div class="flex-wrap">
+    {% for item in gallery_cards %}
+      <div class="inventory-box m10">
+        <img src="{% static 'img/items/' %}{{ item.category.name }}/{{ item.url }}.png" width="60%" />
+        <br /><small class="semibold">{{ item.name }}</small>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

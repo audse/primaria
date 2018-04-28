@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load humanize %}
+{% load staticfiles %}
+
+<h1 class="mt10">{{ user.username }}'s Profile</h1>
+<br />
+<div class="flex">
+  <div class="flex-shrink m10 center bg-blue paddington">
+    <br /><span class="semibold">Avatar</span><br /><br />
+    <img src="{% static 'img/avatar/' %}{{ user.profile.selected_avatar }}.png" width="100px" /><br /><br />
+    <span style="opacity:0.7">{{ user.profile.avatars.all.count }} / {{ avatar_count }} unlocked</span>
+  </div>
+  <div class="flex-grow mt10">
+    <h2 class="gray">Bio</h2>
+    <div class="quote m10">
+      {% if user.profile.bio %}
+      <p>{{ user.profile.bio|linebreaks }}</p>
+      {% else %}
+      <p>This user has not entered a bio.</p>
+      {% endif %}
+
+      {% if request.user == user %}
+        <a data-remodal-target="modal-bio"><button class="small">Edit Bio</button></a>
+        <div class="remodal" data-remodal-id="modal-bio">
+          <div class="remodal-header">
+            <button data-remodal-action="close" class="remodal-close"></button>
+            Edit Bio
+          </div>
+          <div class="remodal-body">
+            <form action="{% url 'edit_bio' %}" method="POST">
+              {% csrf_token %}
+              <textarea name="bio" rows="6">{{ user.profile.bio }}</textarea>
+          </div>
+          <div class="remodal-body border-top-gray">
+              <div class="right mb10">
+                <button data-remodal-action="cancel">Cancel</button>
+                <button type="submit" class="primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      {% else %}
+      <div class="flex">
+        {% if request.user and not request.user in user.profile.blocked_users.all %}
+        <div class="flex-split">
+          <a data-remodal-target="modal-message"><button class="">Send Message</button></a>
+        </div>
+        <div class="flex-split">
+        </div>
+        {% else %}
+          <p class="gray">This user has blocked you. You may not message them.</p>
+        {% endif %}
+      </div>
+
+      {% if request.user and not request.user in user.profile.blocked_users.all %}
+      <div class="remodal" data-remodal-id="modal-message">
+        <div class="remodal-header">
+          <button data-remodal-action="close" class="remodal-close"></button>
+          Send Message to {{ user.username }}
+        </div>
+        <div class="remodal-body">
+          <form action="{% url 'send_message' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="receiving_user" value="{{ user.pk }}" />
+            <label>Subject</label>
+            <input type="text" name="subject" />
+            <small class="gray">The subject must be 140 characters or less and is not required.</small>
+            <label>Message</label>
+            <textarea name="text" rows="6"></textarea>
+        </div>
+        <div class="remodal-body border-top-gray">
+            <div class="right mb10">
+              <button data-remodal-action="cancel">Cancel</button>
+              <button type="submit" class="primary">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="content-box-body border-top-gray">
+  <div class="flex">
+    <div class="flex-split">
+  <h2 class="gray">Information</h2>
+      <ul>
+        <li>Member since {{ user.date_joined }} ({{ user.date_joined|timesince }})</li>
+        <li>Last online {{ user.profile.last_online|naturaltime }}.</li>
+        <li>Fishing skill of {{ user.profile.fishing_skill }}.</li>
+      </ul>
+      <br />
+      <div class="flex">
+        <div class="flex-split center">
+          <a href="{% url 'user_shop_page' username=user.username %}">
+          <img src="{% static 'img/place/icon/your-shop.png' %}" width="100%" />
+          <br /><small class="semibold">Shop</small>
+          </a>
+        </div>
+        <div class="flex-split center">
+          <a href="{% url 'user_gallery_page' username=user.username %}">
+          <img src="{% static 'img/place/icon/gallery.png' %}" width="100%" />
+          <br /><small class="semibold">Gallery</small>
+          </a>
+        </div>
+        <div class="flex-split"></div>
+      </div>
+    </div>
+    <div class="flex-split border-left-gray" style="padding-left: 10px;">
+      {% if pet %}
+        <h2 class="gray">Pet: {{ pet.name }}</h2>
+        <p>{{ pet.name }} is a <span class="semibold">{{ pet.color|title }} {{ pet.animal.name|title }}</span> adopted on {{ pet.adopt_date }} ({{ pet.adopt_date|naturalday }}).</p>
+        <img src="{% static 'img/'%}{{ pet.animal.name }}/{{ pet.color }}.png" width="60%" /><br />
+
+      {% else %}
+        <h2 class="gray">Pet: </h2>
+        <p class="gray">This user has no pet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+<div class="content-box-body border-top-gray">
+  <h2 class="gray">Badges</h2>
+  {% if badges %}<br />
+    <div class="flex-wrap">
+      {% for badge in badges %}
+        <div class="inventory-box m10">
+          <img src="{% static 'img/badge/' %}{{ badge.rank }}-{{ badge.area }}.png" width="100%" />
+          <br /><small class="semibold">{{ badge.rank|title }} {{ badge.area|title }}</small>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>This user has no badges yet.</p>
+  {% endif %}
+
+  {% if request.user and user != request.user %}
+    {% if not user in request.user.profile.blocked_users.all %}
+      </div>
+      <div class="content-box-body border-top-gray">
+        <h3 class="gray semibold mb10">Block User</h3>
+        <small class="gray">This will stop this user from being able to message you. You can unblock someone from your settings page.</small><br /><br />
+        <a href="{% url 'block_user' username=user.username %}"><button class="small delete">Block User</button></a>
+      </div>
+    {% else %}
+      </div>
+      <div class="content-box-body border-top-gray">
+        <h3 class="gray semibold mb10">Unblock User</h3>
+        <small class="gray">You have blocked this user.</small><br /><br />
+        <a href="{% url 'unblock_user' username=user.username %}"><button class="small delete">Unblock User</button></a>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

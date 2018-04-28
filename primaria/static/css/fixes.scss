@@ -1,0 +1,78 @@
+label.checkbox {
+  color: $black;
+  display: block;
+  padding-left: 15px;
+  text-indent: -15px;
+
+  input {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    overflow: hidden;
+  }
+
+  span {
+    color: $black;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+
+.select {
+  position: relative;
+}
+
+.select select {
+  color: gray;
+  outline: none;
+  -webkit-appearance: none;
+  display: block;
+  font-size: 16px;
+  padding: 10px;
+  margin: 0;
+
+  border: 1px solid $gray;
+  border-radius: 40px;
+
+  background: #fff;
+  width: 100%;
+}
+
+.select .arrow {
+  bottom: 5px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 50px;
+  pointer-events: none;
+}
+.select .arrow:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  margin-top: -5px;
+  pointer-events: none;
+  border-top: 10px solid $gray;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+
+.select .arrow:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  margin-top: -5px;
+  pointer-events: none;
+  border-top: 6px solid #fff;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+}

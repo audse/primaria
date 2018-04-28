@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Settings</h1>
+<br />
+
+<h2 class="gray">Change Password</h2>
+
+{% if confirm != None %}
+<div class="remodal" data-remodal-id="confirm">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Success!
+  </div>
+  <div class="remodal-body">
+  	{{ confirm }}
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<div class="flex">
+	<div class="flex-split m10">
+		<form action="{% url 'change_password' %}" method="POST">
+			{% csrf_token %}
+			<label>New Password</label>
+			<input type="password" name="new_password" />
+      <small class="gray">{{ help_text|safe }}</small>
+			<label>Confirm New Password</label>
+			<input type="password" name="confirm_new_password" />
+			<button type="submit" class="primary mt10">Change Password</button>
+		</form>
+	</div>
+	<div class="flex-split m10">
+	</div>
+</div>
+
+</div>
+<div class="content-box-body border-top-gray">
+<h2 class="gray">Viewing</h2>
+
+<br />
+<form action="{% url 'change_view_settings' %}" method="POST">
+      {% csrf_token %}
+  <label class="checkbox">
+    <input type="checkbox" name="disable_headers" style="display: inline-block" {% if request.user.profile.disable_header_images %}checked{% endif %}> <span>Disable Header Images</span>
+  </label>
+  <br />
+  <button class="small" type="submit">Save</button>
+</form>
+
+</div>
+<div class="content-box-body border-top-gray">
+<h2 class="gray">Blocked Users</h2>
+
+<ul>
+{% for user in request.user.profile.blocked_users.all %}
+  <li><a href="{% url 'profile_page' username=user.username %}">{{ user.username }}</a> <a href="{% url 'unblock_user' username=user.username %}"><button class="extrasmall delete">Unblock</button></a></li>
+{% empty %}
+  <li>No users to be shown</li>
+{% endfor %}
+</ul>
+
+<script>
+
+{% if confirm %}
+var inst = $('[data-remodal-id=confirm]').remodal();
+inst.open();
+{% endif %}
+
+</script>
+
+{% endblock %}

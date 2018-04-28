@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block content-box-image %}
+<div class="content-box-image">
+  <img src="{% static 'img/place/city.png' %}" />
+</div>
+{% endblock %}
+
+{% block content %}
+
+<h1>Prime City</h1>
+<p>
+</p>
+
+<div class="flex-wrap mt10">
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_sun_page' %}">
+    <img src="{% static 'img/place/icon/goddess-sun.png' %}" width="100%" />
+    <br /><small class="semibold">Sun Goddess</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'bank_page' %}">
+    <img src="{% static 'img/place/icon/bank.png' %}" width="100%" />
+    <br /><small class="semibold">Bank</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'safety_deposit_box_page' %}">
+    <img src="{% static 'img/place/icon/sdb.png' %}" width="100%" />
+    <br /><small class="semibold">Safety Deposit Box</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'hospital_page' %}">
+    <img src="{% static 'img/place/icon/hospital.png' %}" width="100%" />
+    <br /><small class="semibold">Hospital</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'pound_page' %}">
+    <img src="{% static 'img/place/icon/pound.png' %}" width="100%" />
+    <br /><small class="semibold">Pound</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'dump_page' %}">
+    <img src="{% static 'img/place/icon/dump.png' %}" width="100%" />
+    <br /><small class="semibold">City Dump</small>
+    </a>
+  </div>
+  {% for shop in city_shops %}
+  <div class="inventory-box mr10">
+    <a href="{% url 'shop_page' shop_url=shop.url %}">
+    <img src="{% static 'img/shop/icon/' %}{{ shop.url }}.png" width="100%" />
+    <br /><small class="semibold">{{ shop.name }}</small>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+<br />
+</div>
+<div class="content-box-body border-top-gray">
+<h1>Prime City Suburbs</h1>
+<p>
+</p>
+
+<div class="flex-wrap mt10">
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_commerce_page' %}">
+    <img src="{% static 'img/place/icon/goddess-commerce.png' %}" width="100%" />
+    <br /><small class="semibold">Goddess of Commerce</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'games_page' %}">
+    <img src="{% static 'img/place/icon/games-room.png' %}" width="100%" />
+    <br /><small class="semibold">Games Room</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'gallery_page' %}">
+    <img src="{% static 'img/place/icon/gallery.png' %}" width="100%" />
+    <br /><small class="semibold">Your Gallery</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'your_shop_page' %}">
+    <img src="{% static 'img/place/icon/your-shop.png' %}" width="100%" />
+    <br /><small class="semibold">Your Shop</small>
+    </a>
+  </div>
+  {% for shop in suburb_shops %}
+  <div class="inventory-box mr10">
+    <a href="{% url 'shop_page' shop_url=shop.url %}">
+    <img src="{% static 'img/shop/icon/' %}{{ shop.url }}.png" width="100%" />
+    <br /><small class="semibold">{{ shop.name }}</small>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+<br />
+</div>
+<div class="content-box-body border-top-gray">
+<h1>Outland Reservoir</h1>
+<p>
+</p>
+
+<div class="flex-wrap mt10">
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_garden_page' %}">
+    <img src="{% static 'img/place/icon/goddess-garden.png' %}" width="100%" />
+    <br /><small class="semibold">Goddess of Gardens</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'garden_page' %}">
+    <img src="{% static 'img/place/icon/rose-garden.png' %}" width="100%" />
+    <br /><small class="semibold">Rose Garden</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'trails_page' %}">
+    <img src="{% static 'img/place/icon/trails.png' %}" width="100%" />
+    <br /><small class="semibold">Trails</small>
+    </a>
+  </div>
+  {% for shop in reservoir_shops %}
+  <div class="inventory-box mr10">
+    <a href="{% url 'shop_page' shop_url=shop.url %}">
+    <img src="{% static 'img/shop/icon/' %}{{ shop.url }}.png" width="100%" />
+    <br /><small class="semibold">{{ shop.name }}</small>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+<br />
+</div>
+<div class="content-box-body border-top-gray">
+<h1>Dark Caves</h1>
+<p>
+</p>
+
+<div class="flex-wrap mt10">
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_neglect_page' %}">
+    <img src="{% static 'img/place/icon/goddess-neglect.png' %}" width="100%" />
+    <br /><small class="semibold">Goddess of Neglect</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'quarry_page' %}">
+    <img src="{% static 'img/place/icon/quarry.png' %}" width="100%" />
+    <br /><small class="semibold">Crystal Quarry</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'restricted_area_page' %}">
+    <img src="{% static 'img/place/icon/restricted-area.png' %}" width="100%" />
+    <br /><small class="semibold">Restricted Area</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'almighty_meatloaf_page' %}">
+    <img src="{% static 'img/place/icon/almighty-meatloaf.png' %}" width="100%" />
+    <br /><small class="semibold">Almighty Meatloaf</small>
+    </a>
+  </div>
+  {% for shop in caves_shops %}
+  <div class="inventory-box mr10">
+    <a href="{% url 'shop_page' shop_url=shop.url %}">
+    <img src="{% static 'img/shop/icon/' %}{{ shop.url }}.png" width="100%" />
+    <br /><small class="semibold">{{ shop.name }}</small>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+<br />
+</div>
+<div class="content-box-body border-top-gray">
+<h1>Beach</h1>
+<p>
+</p>
+
+<div class="flex-wrap mt10">
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_ocean_page' %}">
+    <img src="{% static 'img/place/icon/goddess-ocean.png' %}" width="100%" />
+    <br /><small class="semibold">Goddess of the Ocean</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'fishing_page' %}">
+    <img src="{% static 'img/place/icon/fishing.png' %}" width="100%" />
+    <br /><small class="semibold">Fishing</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'trading_post_page' %}">
+    <img src="{% static 'img/place/icon/trading-post.png' %}" width="100%" />
+    <br /><small class="semibold">Trading Post</small>
+    </a>
+  </div>
+  {% for shop in beach_shops %}
+  <div class="inventory-box mr10">
+    <a href="{% url 'shop_page' shop_url=shop.url %}">
+    <img src="{% static 'img/shop/icon/' %}{{ shop.url }}.png" width="100%" />
+    <br /><small class="semibold">{{ shop.name }}</small>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+<!-- 
+<h2 class="gray">Places</h2>
+<div class="flex-wrap mt10">
+  <div class="inventory-box mr10">
+    <a href="{% url 'bank_page' %}">
+    <img src="{% static 'img/place/icon/bank.png' %}" width="100%" />
+    <br /><small class="semibold">Bank</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'safety_deposit_box_page' %}">
+    <img src="{% static 'img/place/icon/box.png' %}" width="100%" />
+    <br /><small class="semibold">Safety Deposit Box</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'games_page' %}">
+    <img src="{% static 'img/game/blackjack.png' %}" width="100%" />
+    <br /><small class="semibold">Games Room</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'gallery_page' %}">
+    <img src="{% static 'img/place/icon/gallery.png' %}" width="100%" />
+    <br /><small class="semibold">Your Gallery</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'your_shop_page' %}">
+    <img src="{% static 'img/place/icon/your-shop.png' %}" width="100%" />
+    <br /><small class="semibold">Your Shop</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'hospital_page' %}">
+    <img src="{% static 'img/place/icon/hospital.png' %}" width="100%" />
+    <br /><small class="semibold">Hospital</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'pound_page' %}">
+    <img src="{% static 'img/place/icon/pound.png' %}" width="100%" />
+    <br /><small class="semibold">Pound</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_neglect_page' %}">
+    <img src="{% static 'img/place/icon/goddess-neglect.png' %}" width="100%" />
+    <br /><small class="semibold">Goddess of Neglect</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'dump_page' %}">
+    <img src="{% static 'img/place/icon/dump.png' %}" width="100%" />
+    <br /><small class="semibold">City Dump</small>
+    </a>
+  </div>
+</div>
+
+<br />
+<h2 class="gray">Shops</h2>
+<div class="flex-wrap mt10">
+{% for shop in shops %}
+<div class="inventory-box mr10">
+  <a href="{% url 'shop_page' shop_url=shop.url %}">
+  <img src="{% static 'img/shop/icon/' %}{{ shop.url }}.png" width="100%" />
+  <br /><small class="semibold">{{ shop.name }}</small>
+  </a>
+</div>
+{% endfor %}
+</div>
+
+<br />
+</div>
+
+<div class="content-box-image">
+  <img src="{% static 'img/place/outskirts.png' %}" />
+</div>
+<div class="content-box-body">
+<h1>Outskirts</h1>
+
+<br />
+<h2 class="gray">Landmarks</h2>
+
+<div class="flex-wrap mt10">
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_garden_page' %}">
+    <img src="{% static 'img/place/icon/goddess-garden.png' %}" width="100%" />
+    <br /><small class="semibold">Goddess of Gardens</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'garden_page' %}">
+    <img src="{% static 'img/place/icon/garden.png' %}" width="100%" />
+    <br /><small class="semibold">Rose Garden</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'goddess_ocean_page' %}">
+    <img src="{% static 'img/place/icon/goddess-ocean.png' %}" width="100%" />
+    <br /><small class="semibold">Goddess of the Ocean</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'fishing_page' %}">
+    <img src="{% static 'img/place/icon/fishing.png' %}" width="100%" />
+    <br /><small class="semibold">Fishing</small>
+    </a>
+  </div>
+</div>
+
+</div> -->
+
+{% endblock %}

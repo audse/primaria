@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+<h1>Boards</h1>
+<p>Chat with other Primaria users on the boards. See the <a href="{% url 'rules_page' %}">Site Rules</a> before posting.</p>
+
+<table>
+	<tr class="no-highlight">
+		<th class="left">Board Name</th>
+		<th class="t-right">Last Topic</th>
+	</tr>
+	{% for board in boards %}
+		<tr class="no-highlight">
+			<td class="">
+				<a href="{% url 'board_page' board=board.url %}">{{ board.name }}</a>
+				<p><small class="gray">{{ board.description }}</small></p>
+			</td>
+			<td class="t-right">{{ board.last_topic|naturaltime }}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+{% if request.user.is_authenticated %}
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Avatars</h2>
+	
+	<br />
+	<table>
+		<tr class="no-highlight">
+			<th>Your Current Avatar<br /><img src="{% static 'img/avatar/' %}{{ request.user.profile.selected_avatar }}.png" style="margin:10px; border:3px solid white; width: 75px;" /></th>
+			<td style="width: 100%">
+				Click a different avatar to change your avatar.<br />
+				{% for avatar in request.user.profile.avatars.all %}
+					<a href="{% url 'change_avatar' avatar=avatar.url %}"><img src="{% static 'img/avatar/' %}{{ avatar.url }}.png" style="margin:10px; border:3px solid white; width: 75px;" /></th></a>
+				{% endfor %}
+			</td>
+		</tr>
+	</table>
+{% endif %}
+
+{% endblock %}

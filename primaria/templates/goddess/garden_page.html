@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<center><img src="{% static 'img/goddess/garden-goddess.png' %}" width="50%" /></center>
+
+
+{% include 'includes/reservoir_links.html' %}
+
+<h1>Goddess of Gardens</h1>
+
+
+</div>
+<div class="content-box-body border-top-gray">
+	<h2 class="gray">Quests <small>({{quests_today}}/5)</small></h2>
+	<br />
+	{% if quests_today < 5 and not unfinished_quest %}
+	<div class="quote darkergray">Hi there, I am looking for someone to help me find a few things. Do you think you have a minute? I need just five things, and I'll reward you as best I can if you can bring them to me. Can you help me?</div>
+	<p><a href="{% url 'start_goddess_quest' goddess='garden' %}"><button class="small">Accept Quest</button></a></p>
+	{% else %}
+		{% if quests_today == 5 %}
+			<div class="quote darkergray">I think that's everything I need today! Come visit me tomorrow and I'll see if I need anything else.</div><br />
+		{% elif unfinished_quest %}
+			<div class="quote darkergray">I am currently asking you to bring me a <b>{{ unfinished_quest.requested_item }}</b>. Bring this to me and you will be rewarded with
+				{% if unfinished_quest.reward_item and unfinished_quest.reward_points %}a {{ unfinished_quest.reward_item }} and {{ unfinished_quest.reward_points }} points.{% elif unfinished_quest.reward_item %}a {{ unfinished_quest.reward_item }}.{% else %} {{ unfinished_quest.reward_points }} points.{% endif %}
+			</div>
+			<div class="flex-wrap">
+			<div class="inventory-box m10">
+				<img src="{% static 'img/items/' %}{{ unfinished_quest.requested_item.category.name }}/{{ unfinished_quest.requested_item.url }}.png" width="60%" />
+				<br /><small class="semibold">Bring me this...</small>
+			</div>
+			{% if unfinished_quest.reward_item and unfinished_quest.reward_points %}
+				<div class="inventory-box m10">
+					<img src="{% static 'img/items/' %}{{ unfinished_quest.reward_item.category.name }}/{{ unfinished_quest.reward_item.url }}.png" width="60%" />
+					<br /><small class="semibold">...To get this...</small>
+				</div>
+				<div class="inventory-box m10">
+					<br /><br /><small class="semibold">As well as {{ unfinished_quest.reward_points }} Points!</small>
+				</div>
+			{% elif unfinished_quest.reward_item %}
+				<div class="inventory-box m10">
+					<img src="{% static 'img/items/' %}{{ unfinished_quest.reward_item.category.name }}/{{ unfinished_quest.reward_item.url }}.png" width="60%" />
+					<br /><small class="semibold">...To get this!</small>
+				</div>
+			{% else %} 
+				<div class="inventory-box m10">
+					<br /><br /><small class="semibold">To get {{ unfinished_quest.reward_points }} Points!</small>
+				</div>
+			{% endif %}
+			</div>
+			<p>
+				<div class="flex">
+					<div class="flex-grow mr10">
+						<a href="{% url 'complete_goddess_quest' goddess='garden' %}"><button class="primary">Give Item</button></a>
+					</div>
+					<div class="flex-shrink">
+						<a href="{% url 'cancel_goddess_quest' goddess='garden' %}"><button class="small">Cancel Quest</button></a>
+					</div>
+				</div>
+			</p>
+		{% endif %}
+	{% endif %}
+
+{% if completed != None %}
+<div class="remodal" data-remodal-id="completed">
+  <div class="remodal-header">
+    <button data-remodal-action="close" class="remodal-close"></button>
+    Success!
+  </div>
+  <div class="remodal-body">
+  	{{ completed }}
+  </div>
+  <div class="remodal-body border-top-gray">
+      <div class="right mb10">
+        <button data-remodal-action="cancel">OK</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+
+<script>
+
+{% if completed %}
+var inst = $('[data-remodal-id=completed]').remodal();
+inst.open();
+{% endif %}
+
+</script>
+ 
+{% endblock %}

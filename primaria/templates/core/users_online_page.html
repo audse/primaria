@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load humanize %}
+
+<h1>Users Online</h1>
+
+<p>
+  There are currently {{ users_online.count }} users that have been active recently.
+</p>
+
+<table>
+  <tr class="no-highlight">
+    <th class="left" width="70%">Username</th>
+    <th class="t-right">Last Active</th>
+  </tr>
+{% for user in users_online %}
+  <tr class="no-highlight">
+    <td class="left"><a href="{% url 'profile_page' username=user.user.username %}">{{ user.user.username }}</a></td>
+    <td class="t-right">{{ user.last_online|naturaltime }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}

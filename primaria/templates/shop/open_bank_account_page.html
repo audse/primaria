@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<h1>Open Bank Account</h1>
+<p>
+  Be careful with your points, anything could happen. It's probably in your best interest to open up an account with us.
+</p>
+
+<div class="flex">
+  <div class="flex-split">
+    <form action="{% url 'open_bank_account' %}" method="POST">
+      {% csrf_token %}
+      <label>Initial Deposit</label>
+      <div class="input-group">
+        <i class="fa fa-bank"></i>
+        <input type="text" name="deposit" />
+      </div>
+      <small class="gray">This must be at least 100 points.</small>
+
+      <br />
+      <label>Account Type</label>
+
+      <div class="select">
+        <span class="arrow"></span>
+        <select name="level">
+          <option value="1">Basic (Requires 100 point deposit)</option>
+          <option value="2">Bronze (Requires 10,000 point deposit)</option>
+          <option value="3">Silver (Requires 100,000 point deposit)</option>
+          <option value="4">Gold (Requires 1,000,000 point deposit)</option>
+          <option value="5">Platinum (Requires 10,000,000 point deposit)</option>
+        </select>
+      </div>
+      <small class="gray">The account type determines the interest earned.</small>
+
+      <button type="submit" class="mt10">Open</button>
+    </form>
+  </div>
+  <div class="flex-split">
+    {% if error %}
+      <div class="error">
+        <b>Error!</b> {{ error }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+<h1>Topic in {{ topic.board.name }}</h1>
+<br />
+
+<table {% if topic.deleted %}class="deleted"{% endif %}>
+	<tr class="no-highlight">
+		<th width="20%" {% if topic.sticky %}class="sticky{% endif %}">{% if topic.deleted and not request.user.is_staff %}Deleted Topic{% else %}<a class="white" href="{% url 'profile_page' username=topic.user.username %}">{{ topic.user.username }}</a>{% endif %}</th>
+		<th class="left {% if topic.sticky %}sticky{% endif %}">{% if topic.deleted and not request.user.is_staff %}Deleted Topic{% else %}"{{ topic.title }}"{% endif %}</th>
+	</tr>
+	<tr class="no-highlight">
+		<th class="center {% if topic.sticky %}sticky{% endif %}">
+			<!-- <img src="{% static 'img/'%}{{ topic.pet.animal.name }}/{{ topic.pet.color }}.png" width="100%" style="max-width: 25vw;" /> -->
+			<img src="{% static 'img/avatar/' %}{{ topic.user.profile.selected_avatar }}.png" style="margin:10px; border:3px solid white; width: 75px;" />
+		</td>
+		<td class="left" style="width: 100%;">{% if topic.deleted and not request.user.is_staff %}Deleted Topic{% else %}{{ topic.message|linebreaks }}{% endif %}</td>
+	</tr>
+	<tr class="no-highlight gray">
+		<td colspan="2">
+			<small>Posted {{ topic.date|naturaltime }} ({{ topic.date }})</small>
+			{% if request.user.is_staff %}
+			<span class="right">
+				{% if not topic.deleted %}
+					<a href="{% url 'delete_topic' topic=topic.slug %}"><button class="delete extrasmall">Delete</button></a>
+				{% else %}
+					<a href="{% url 'undelete_topic' topic=topic.slug %}"><button class="delete extrasmall">Undelete</button></a>
+				{% endif %}
+				{% if topic.locked %}
+				<a href="{% url 'unlock_topic' topic=topic.slug %}">
+					<button class="extrasmall">Unlock</button>
+				</a>
+				{% else %}
+				<a href="{% url 'lock_topic' topic=topic.slug %}">
+					<button class="extrasmall">Lock</button>
+				</a>
+				{% endif %}
+				{% if topic.sticky %}
+				<a href="{% url 'unsticky_topic' topic=topic.slug %}">
+					<button class="extrasmall">Unsticky</button>
+				</a>
+				{% else %}
+				<a href="{% url 'sticky_topic' topic=topic.slug %}">
+					<button class="extrasmall">Sticky</button>
+				</a>
+				{% endif %}
+			</span>
+			{% endif %}
+		</td>
+	</tr>
+</table>
+
+{% if not topic.deleted %}
+<table>
+	{% for reply in replies %}
+
+	{% if not reply.deleted %}
+	<tr class="no-highlight border-top-gray">
+		<th>
+			<a class="white" href="{% url 'profile_page' username=reply.user.username %}">{{ reply.user.username }}</a>
+			<img src="{% static 'img/avatar/' %}{{ topic.user.profile.selected_avatar }}.png" style="margin:10px; border:3px solid white; width: 75px;" />
+			<small style="opacity: 0.8">{{ reply.date|naturaltime }}</small>
+		</th>
+		<td style="width: 100%;">
+			{{ reply.message|linebreaks }}	
+			{% if request.user.is_staff %}
+			<span class="right">
+				<a href="#" data-remodal-target="modal-{{ reply.pk }}"><button class="delete extrasmall">Delete</button></a>
+			</span>
+			{% endif %}
+		</td>
+	</tr>
+	{% else %}
+	<tr class="no-highlight bg-gray">
+		<td colspan="2">
+			Deleted for {{ reply.deleted_reason }}
+			{% if request.user.is_staff %}
+				<div class="quote">{{ reply.message|linebreaks }}</div>
+				<span class="right"><a href="{% url 'undelete_reply' reply=reply.pk %}"><button class="delete extrasmall">Undelete</button></a></span>
+			{% endif %}
+		</td>
+	</tr>
+	{% endif %}
+
+	{% if request.user.is_staff %}
+	<div class="remodal" data-remodal-id="modal-{{ reply.pk }}">
+	  <div class="remodal-header">
+	    <button data-remodal-action="close" class="remodal-close"></button>
+	    Delete Reply
+	  </div>
+	  <div class="remodal-body">
+	  	<form action="{% url 'delete_reply' %}" method="POST">
+	  		{% csrf_token %}
+	  		<input type="hidden" name="reply" value="{{ reply.pk }}" />
+	  		<label>Reason</label>
+	  		<select name="deleted_reason">
+	  			<option value="Spam">Spam</option>
+	  			<option value="Advertising">Advertising</option>
+	  			<option value="Hate Speech">Hate Speech</option>
+	  			<option value="Graphic">Graphic</option>
+	  		</select>
+	  </div>
+	  <div class="remodal-body border-top-gray">
+	      <div class="right mb10">
+	        <button data-remodal-action="cancel">Cancel</button>
+	        <button type="submit" class="primary">Send</button>
+	      </div>
+	    </form>
+	  </div>
+	</div>
+	{% endif %}
+
+	{% endfor %}
+</table>
+</div>
+
+<div class="content-box-body border-top-gray">
+	{% if not topic.locked %}
+	<h2 class="gray">Reply to Topic</h2>
+	<p>Please keep in mind all board rules.</p>
+	<form action="{% url 'reply_to_topic' %}" method="POST">
+		{% csrf_token %}
+		<input type="hidden" name="topic" value="{{ topic.pk }}" />
+		<textarea name="message" rows="5"></textarea>
+		</div><div class="content-box-body border-top-gray">
+		<div class="flex">
+			<div class="flex-split">
+			</div>
+			<div class="flex-split">
+				<button type="submit" class="primary">Post</button>
+			</div>
+		</div>
+	</form>
+	{% else %}
+	<p class="gray">This post is locked. You may not reply to it.</p>
+	{% endif %}
+{% endif %}
+
+{% endblock %}
