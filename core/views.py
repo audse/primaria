@@ -119,6 +119,7 @@ def register(request):
             user.save()
 
             # AVATARS #
+            user = User.objects.get(username=username)
             new_avatar = Avatar.objects.get(url="hi-im-new")
             user.profile.avatars.add(new_avatar)
             user.profile.save()
