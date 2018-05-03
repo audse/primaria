@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+
+{% block title %} - Users Online{% endblock %}
+
 {% block content %}
 {% load humanize %}
 
@@ -15,7 +18,7 @@
   </tr>
 {% for user in users_online %}
   <tr class="no-highlight">
-    <td class="left"><a href="{% url 'profile_page' username=user.user.username %}">{{ user.user.username }}</a></td>
+    <td class="left"><a href="{% url 'profile_page' username=user.user.username %}" {% if user.user.is_superuser %}class="red semibold"{% endif %}>{% if user.user.is_superuser %}(staff) {% endif %}{{ user.user.username }}</a></td>
     <td class="t-right">{{ user.last_online|naturaltime }}</td>
   </tr>
 {% endfor %}

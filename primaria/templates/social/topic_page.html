@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+
+{% block title %} - "{{ topic.title }}"{% endblock %}
+
 {% block content %}
 
 {% load staticfiles %}
@@ -120,7 +123,7 @@
 <div class="content-box-body border-top-gray">
 	{% if not topic.locked %}
 	<h2 class="gray">Reply to Topic</h2>
-	<p>Please keep in mind all board rules.</p>
+	<p>Please keep in mind all <a href="{% url 'rules_page' %}">site rules</a>.</p>
 	<form action="{% url 'reply_to_topic' %}" method="POST">
 		{% csrf_token %}
 		<input type="hidden" name="topic" value="{{ topic.pk }}" />

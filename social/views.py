@@ -139,6 +139,15 @@ def board_page(request, board):
 		else:
 			topics = paginator.page(1)
 
+		for topic in sticky_topics:
+			replies = Reply.objects.filter(topic=topic).order_by('-date')
+			last_reply = replies.last()
+			if last_reply:
+				topic.last_reply = last_reply.date
+			else:
+				topic.last_reply = topic.date
+			topic.replies = replies.count()
+
 		for topic in topics:
 			replies = Reply.objects.filter(topic=topic).order_by('-date')
 			last_reply = replies.last()
