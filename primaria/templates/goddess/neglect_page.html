@@ -39,7 +39,7 @@
 	<div class="quote darkergray">Are you willing to take on a quest for the Goddess of Neglect? It will require you to find and bring me a certain item, and in turn I will reward you. I need five items per person per day. If you fail to bring me an item, it will count against you.</div>
 	<p><a href="{% url 'start_goddess_quest' goddess='neglect' %}"><button class="small">Accept Quest</button></a></p>
 	{% else %}
-		{% if quests_today == 5 %}
+		{% if quests_today == 5 and not unfinished_quest %}
 			<div class="quote darkergray">You have already completed the maximum quests for today. Thank you for helping.</div><br />
 		{% elif unfinished_quest %}
 			<div class="quote darkergray">I am currently asking you to bring me a <b>{{ unfinished_quest.requested_item }}</b>. Bring this to me and you will be rewarded with

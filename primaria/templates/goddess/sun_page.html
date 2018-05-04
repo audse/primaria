@@ -21,7 +21,7 @@
 	<div class="quote darkergray">Do you feel the rays of the sun shining upon you, citizen? Help me to keep my energy and find for me these objects.</div>
 	<p><a href="{% url 'start_goddess_quest' goddess='sun' %}"><button class="small">Accept Quest</button></a></p>
 	{% else %}
-		{% if quests_today == 5 %}
+		{% if quests_today == 5 and not unfinished_quest %}
 			<div class="quote darkergray">The divine light burns brighter from the strength of your actions.</div><br />
 		{% elif unfinished_quest %}
 			<div class="quote darkergray">I am currently asking you to bring me a <b>{{ unfinished_quest.requested_item }}</b>. Bring this to me and you will be rewarded with
