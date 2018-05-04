@@ -34,7 +34,7 @@ def goddess_sun_page(request):
 		today = datetime.today()
 
 		unfinished_quest = Quest.objects.filter(user=request.user, goddess="sun", completed=False).first()
-		quests_today = Quest.objects.filter(user=request.user, goddess="sun", completed=True, date__year=today.year, date__month=today.month, date__day=today.day).count()
+		quests_today = Quest.objects.filter(user=request.user, goddess="sun", date__year=today.year, date__month=today.month, date__day=today.day).count()
 		completed = request.session.pop('completed', False)
 		return render(request, 'goddess/sun_page.html', {'unfinished_quest':unfinished_quest, 'quests_today':quests_today, 'completed':completed})
 	else:
@@ -46,7 +46,7 @@ def goddess_garden_page(request):
 		today = datetime.today()
 
 		unfinished_quest = Quest.objects.filter(user=request.user, goddess="garden", completed=False).first()
-		quests_today = Quest.objects.filter(user=request.user, goddess="garden", completed=True, date__year=today.year, date__month=today.month, date__day=today.day).count()
+		quests_today = Quest.objects.filter(user=request.user, goddess="garden", date__year=today.year, date__month=today.month, date__day=today.day).count()
 		completed = request.session.pop('completed', False)
 		return render(request, 'goddess/garden_page.html', {'unfinished_quest':unfinished_quest, 'quests_today':quests_today, 'completed':completed})
 	else:
@@ -58,7 +58,7 @@ def goddess_ocean_page(request):
 		today = datetime.today()
 
 		unfinished_quest = Quest.objects.filter(user=request.user, goddess="ocean", completed=False).first()
-		quests_today = Quest.objects.filter(user=request.user, goddess="ocean", completed=True, date__year=today.year, date__month=today.month, date__day=today.day).count()
+		quests_today = Quest.objects.filter(user=request.user, goddess="ocean", date__year=today.year, date__month=today.month, date__day=today.day).count()
 		completed = request.session.pop('completed', False)
 		return render(request, 'goddess/ocean_page.html', {'unfinished_quest':unfinished_quest, 'quests_today':quests_today, 'completed':completed})
 	else:
@@ -70,7 +70,7 @@ def goddess_commerce_page(request):
 		today = datetime.today()
 
 		unfinished_quest = Quest.objects.filter(user=request.user, goddess="commerce", completed=False).first()
-		quests_today = Quest.objects.filter(user=request.user, goddess="commerce", completed=True, date__year=today.year, date__month=today.month, date__day=today.day).count()
+		quests_today = Quest.objects.filter(user=request.user, goddess="commerce", date__year=today.year, date__month=today.month, date__day=today.day).count()
 		completed = request.session.pop('completed', False)
 
 		# QUEST
@@ -92,31 +92,68 @@ def goddess_neglect_collect(request):
 			claims = DailyClaim.objects.filter(user=request.user, daily_type="neglect", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day).count()
 			if claims == 0:
 				if pet.hunger >= 3 and pet.wellness >= 4 and pet.happiness >= 3:
-					food_or_herb = random.randint(1, 2)
-					if food_or_herb == 1:
-						food_category = Category.objects.filter(name="organic food").first()
-						foods = Item.objects.filter(category=food_category, rarity=3) | Item.objects.filter(second_category=food_category, rarity=3)
-						food = random.choice(foods)
-						message = "Thank you for keeping your pet happy and healthy! You have received a " + food.name + " as a reward."
-						items_in_inventory = Inventory.objects.filter(user=request.user, box=False, pending=False).count()
-						if items_in_inventory < 50:
-							inventory = Inventory.objects.create(user=request.user, item=food)
-						else:
-							message += "But your bag is full! You gave it back."
-						claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message, reward=food)
-						return redirect(goddess_neglect_page)
-					elif food_or_herb == 2:
-						herb_category = Category.objects.filter(name="herbal").first()
-						herbs = Item.objects.filter(category=herb_category, rarity=2) | Item.objects.filter(second_category=herb_category, rarity=2)
-						herb = random.choice(herbs)
-						message = "Thank you for keeping your pet happy and healthy! You have received a " + herb.name + " as a reward."
-						items_in_inventory = Inventory.objects.filter(user=request.user, box=False, pending=False).count()
-						if items_in_inventory < 50:
-							inventory = Inventory.objects.create(user=request.user, item=herb)
-						else:
-							message += "But your bag is full! You gave it back."
-						claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message, reward=herb)
-						return redirect(goddess_neglect_page)
+					# food_or_herb = random.randint(1, 2)
+					# if food_or_herb == 1:
+					# 	food_category = Category.objects.filter(name="organic food").first()
+					# 	foods = Item.objects.filter(category=food_category, rarity=3) | Item.objects.filter(second_category=food_category, rarity=3)
+					# 	food = random.choice(foods)
+					# 	message = "Thank you for keeping your pet happy and healthy! You have received a " + food.name + " as a reward."
+					# 	items_in_inventory = Inventory.objects.filter(user=request.user, box=False, pending=False).count()
+					# 	if items_in_inventory < 50:
+					# 		inventory = Inventory.objects.create(user=request.user, item=food)
+					# 	else:
+					# 		message += "But your bag is full! You gave it back."
+					# 	claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message, reward=food)
+					# 	return redirect(goddess_neglect_page)
+					# elif food_or_herb == 2:
+					# 	herb_category = Category.objects.filter(name="herbal").first()
+					# 	herbs = Item.objects.filter(category=herb_category, rarity=2) | Item.objects.filter(second_category=herb_category, rarity=2)
+					# 	herb = random.choice(herbs)
+					# 	message = "Thank you for keeping your pet happy and healthy! You have received a " + herb.name + " as a reward."
+					# 	items_in_inventory = Inventory.objects.filter(user=request.user, box=False, pending=False).count()
+					# 	if items_in_inventory < 50:
+					# 		inventory = Inventory.objects.create(user=request.user, item=herb)
+					# 	else:
+					# 		message += "But your bag is full! You gave it back."
+					# 	claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message, reward=herb)
+					# 	return redirect(goddess_neglect_page)
+					if Inventory.objects.filter(user=request.user, box=False, pending=False).count() < 50:
+						prize_type = random.randint(1, 4)
+						if prize_type == 1: # random stat potion
+							reward = Item.objects.filter(second_category=Category.objects.get(name="stat potion")).order_by('?').first()
+							message = "Thank you for keeping your pet happy and healthy! You have received a " + reward.name + " as a reward."
+							inventory = Inventory.objects.create(user=request.user, item=reward)
+							claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message, reward=reward)
+							return redirect(goddess_neglect_page)
+						elif prize_type == 2: # random prescription medicine
+							reward = Item.objects.filter(category=Category.objects.get(name="medicine")).order_by('?').first()
+							message = "Thank you for keeping your pet happy and healthy! You have received a " + reward.name + " as a reward."
+							inventory = Inventory.objects.create(user=request.user, item=reward)
+							claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message, reward=reward)
+							return redirect(goddess_neglect_page)
+						elif prize_type == 3: # random rare plush
+							reward = Item.objects.filter(category=Category.objects.get(name="plush"), rarity__gte=2).order_by('?').first()
+							message = "Thank you for keeping your pet happy and healthy! You have received a " + reward.name + " as a reward."
+							inventory = Inventory.objects.create(user=request.user, item=reward)
+							claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message, reward=reward)
+							return redirect(goddess_neglect_page)
+						elif prize_type == 4: # random 3 items (hunger, wellness, happiness)
+							if Inventory.objects.filter(user=request.user, box=False, pending=False).count() < 48:
+								hunger_reward = Item.objects.filter(second_category=Category.objects.get(name="organic food"), rarity__lte=2).order_by('?').first()
+								wellness_reward = Item.objects.filter(category=Category.objects.get(name="herbal"), rarity__lte=2).order_by('?').first()
+								happiness_reward = Item.objects.filter(category=Category.objects.get(name="book"), rarity=1).order_by('?').first()
+								message = "Thank you for keeping your pet happy and healthy! You have received a " + hunger_reward.name + ", a " + wellness_reward.name + ", and a " + happiness_reward.name + " as a reward."
+								inventory = Inventory.objects.create(user=request.user, item=hunger_reward)
+								inventory = Inventory.objects.create(user=request.user, item=wellness_reward)
+								inventory = Inventory.objects.create(user=request.user, item=happiness_reward)
+								claim = DailyClaim.objects.create(user=request.user, daily_type="neglect", message=message)
+								return redirect(goddess_neglect_page)
+							else:
+								request.session['error'] = "You can only have up to 50 items in your inventory."
+								return redirect(error_page)
+					else:
+						request.session['error'] = "You can only have up to 50 items in your inventory."
+						return redirect(error_page)
 				else:
 					request.session['error'] = "You have already claimed your gift for today."
 					return redirect(error_page)

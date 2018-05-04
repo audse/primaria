@@ -473,6 +473,12 @@ def fish(request):
                     elif request.user.profile.fishing_rod == 3: # best rod
                         rarity_set = [None, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3]
                     rarity = random.choice(rarity_set)
+
+                    fishing_skill_bonus = random.randint(request.user.profile.fishing_skill, 20)
+                    if fishing_skill_bonus == 20:
+                        if rarity < 3:
+                            rarity += 1
+
                     fishing_category = Category.objects.filter(name="fishing")
                     if Inventory.objects.filter(user=request.user, box=False, pending=False).count() < 50:
                         if rarity is not None:
@@ -480,12 +486,13 @@ def fish(request):
                             
                             message = "You cast your line and... you pull up a " + reward.name + "!"
                             if rarity > 0: # rarity 0 is junk...boot, tire, etc
-                                message += " Your fishing skill progress went up one point!"
-                                request.user.profile.fishing_skill_progress += 1
-                                if request.user.profile.fishing_skill_progress == 10*request.user.profile.fishing_skill:
-                                    request.user.profile.fishing_skill += 1
-                                    request.user.profile.fishing_skill_progress == 0
-                                request.user.profile.save()
+                                if request.user.profile.fishing_skill < 10:
+                                    message += " Your fishing skill progress went up one point!"
+                                    request.user.profile.fishing_skill_progress += 1
+                                    if request.user.profile.fishing_skill_progress == 10*request.user.profile.fishing_skill:
+                                        request.user.profile.fishing_skill += 1
+                                        request.user.profile.fishing_skill_progress == 0
+                                    request.user.profile.save()
                             claim = DailyClaim.objects.create(user=request.user, daily_type="fish", message=message, reward=reward)
                             inventory = Inventory.objects.create(user=request.user, item=reward)
                             

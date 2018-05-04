@@ -53,6 +53,9 @@
   <label class="checkbox">
     <input type="checkbox" name="disable_headers" style="display: inline-block" {% if request.user.profile.disable_header_images %}checked{% endif %}> <span>Disable Header Images</span>
   </label>
+  <label class="checkbox">
+    <input type="checkbox" name="night_mode" style="display: inline-block" {% if request.user.profile.night_mode %}checked{% endif %}> <span>Night Mode</span>
+  </label>
   <br />
   <button class="small" type="submit">Save</button>
 </form>

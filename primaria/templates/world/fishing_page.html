@@ -10,7 +10,7 @@
 <h1>Fishing</h1>
 
 <p>Take your pets fishing and get a chance to catch a rare fish! These fish can be eaten or traded in to the fishing hut for points. Once per hour, come here to test your skills and try to get a fish.</p>
-<p>Your current fishing skill is <b>{{ request.user.profile.fishing_skill }}</b>. Catch <b>{{ request.user.profile.fishing_skill }}0</b> fish to upgrade ({{ request.user.profile.fishing_skill_progress }}/{{ request.user.profile.fishing_skill }}0).</p>
+<p>Your current fishing skill is <b>{{ request.user.profile.fishing_skill }}</b>. {% if request.user.profile.fishing_skill < 10 %}Catch <b>{{ request.user.profile.fishing_skill }}0</b> fish to upgrade ({{ request.user.profile.fishing_skill_progress }}/{{ request.user.profile.fishing_skill }}0).{% else %}This is the maximum.{% endif %}</p>
 
 {% if request.user.profile.fishing_rod != 0 %}
 {% if fish_claim == None %}

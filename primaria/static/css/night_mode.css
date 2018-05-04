@@ -1,0 +1,20 @@
+body {
+  background: #25242d;
+  color: #aca8c4; }
+
+#navbar, #footer, .content-box {
+  background: #3b3949; }
+
+.border-top-gray {
+  border-top: 1px solid #25242d; }
+
+.gray {
+  color: #555266; }
+
+th {
+  border: 1px solid #3b3949; }
+
+button.delete {
+  background: #3b3949; }
+
+/*# sourceMappingURL=../../../../../../../static/css/night_mode.css.map */

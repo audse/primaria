@@ -23,6 +23,7 @@ class Profile(models.Model):
 
     # SETTINGS
     disable_header_images = models.BooleanField(default=False)
+    night_mode = models.BooleanField(default=False)
 
     # WORLD
     fishing_rod = models.IntegerField(default=0) # none=0, basic=1, etc

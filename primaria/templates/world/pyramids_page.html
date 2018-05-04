@@ -217,6 +217,8 @@ function select_stack() {
   selected[clicked] = selected_card;
   clicked++;
 
+  redraw_board();
+
   ctx.rect(69, 402, card_width-4, card_height-4);
   ctx.strokeStyle = "#538af6";
   ctx.lineWidth = 4;

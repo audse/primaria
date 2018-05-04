@@ -210,10 +210,15 @@ def change_password(request):
 def change_view_settings(request):
     if request.user.is_authenticated():
         disable_headers = request.POST.get("disable_headers")
+        night_mode = request.POST.get("night_mode")
         if disable_headers:
             request.user.profile.disable_header_images = True
         else:
             request.user.profile.disable_header_images = False
+        if night_mode:
+            request.user.profile.night_mode = True
+        else:
+            request.user.profile.night_mode = False
         request.user.profile.save()
         return redirect(settings_page)
     else:

@@ -8,5 +8,5 @@ register = Library()
 @register.filter()
 def get_quests(user, goddess):
 	today = datetime.today()
-	quests_today = Quest.objects.filter(user=user, goddess=goddess, completed=True, date__year=today.year, date__month=today.month, date__day=today.day).count()
+	quests_today = Quest.objects.filter(user=user, goddess=goddess, date__year=today.year, date__month=today.month, date__day=today.day).count()
 	return quests_today

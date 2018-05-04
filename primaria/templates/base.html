@@ -16,6 +16,9 @@
 
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <link rel="stylesheet" href="{% sass_src 'css/main.scss' %}" />
+  {% if request.user.is_authenticated and request.user.profile.night_mode == True %}
+    <link rel="stylesheet" href="{% sass_src 'css/night_mode.scss' %}" />
+  {% endif %}
 
   <script src="https://use.fontawesome.com/41617813a4.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
