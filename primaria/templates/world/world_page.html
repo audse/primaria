@@ -76,6 +76,12 @@
     </a>
   </div>
   <div class="inventory-box mr10">
+    <a href="{% url 'vending_machine_page' %}">
+    <img src="{% static 'img/place/icon/vending-machine.png' %}" width="100%" />
+    <br /><small class="semibold">Vending Machine</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
     <a href="{% url 'games_page' %}">
     <img src="{% static 'img/place/icon/games-room.png' %}" width="100%" />
     <br /><small class="semibold">Games Room</small>
@@ -91,6 +97,12 @@
     <a href="{% url 'your_shop_page' %}">
     <img src="{% static 'img/place/icon/your-shop.png' %}" width="100%" />
     <br /><small class="semibold">Your Shop</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'day_old_stock_page' %}">
+    <img src="{% static 'img/place/icon/day-old-stock.png' %}" width="100%" />
+    <br /><small class="semibold">Day Old Stock</small>
     </a>
   </div>
   {% for shop in suburb_shops %}
@@ -127,6 +139,12 @@
     <a href="{% url 'trails_page' %}">
     <img src="{% static 'img/place/icon/trails.png' %}" width="100%" />
     <br /><small class="semibold">Trails</small>
+    </a>
+  </div>
+  <div class="inventory-box mr10">
+    <a href="{% url 'apple_orchard_page' %}">
+    <img src="{% static 'img/place/icon/apple-orchard.png' %}" width="100%" />
+    <br /><small class="semibold">Apple Orchard</small>
     </a>
   </div>
   {% for shop in reservoir_shops %}
@@ -216,117 +234,5 @@
   </div>
   {% endfor %}
 </div>
-<!-- 
-<h2 class="gray">Places</h2>
-<div class="flex-wrap mt10">
-  <div class="inventory-box mr10">
-    <a href="{% url 'bank_page' %}">
-    <img src="{% static 'img/place/icon/bank.png' %}" width="100%" />
-    <br /><small class="semibold">Bank</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'safety_deposit_box_page' %}">
-    <img src="{% static 'img/place/icon/box.png' %}" width="100%" />
-    <br /><small class="semibold">Safety Deposit Box</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'games_page' %}">
-    <img src="{% static 'img/game/blackjack.png' %}" width="100%" />
-    <br /><small class="semibold">Games Room</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'gallery_page' %}">
-    <img src="{% static 'img/place/icon/gallery.png' %}" width="100%" />
-    <br /><small class="semibold">Your Gallery</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'your_shop_page' %}">
-    <img src="{% static 'img/place/icon/your-shop.png' %}" width="100%" />
-    <br /><small class="semibold">Your Shop</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'hospital_page' %}">
-    <img src="{% static 'img/place/icon/hospital.png' %}" width="100%" />
-    <br /><small class="semibold">Hospital</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'pound_page' %}">
-    <img src="{% static 'img/place/icon/pound.png' %}" width="100%" />
-    <br /><small class="semibold">Pound</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'goddess_neglect_page' %}">
-    <img src="{% static 'img/place/icon/goddess-neglect.png' %}" width="100%" />
-    <br /><small class="semibold">Goddess of Neglect</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'dump_page' %}">
-    <img src="{% static 'img/place/icon/dump.png' %}" width="100%" />
-    <br /><small class="semibold">City Dump</small>
-    </a>
-  </div>
-</div>
-
-<br />
-<h2 class="gray">Shops</h2>
-<div class="flex-wrap mt10">
-{% for shop in shops %}
-<div class="inventory-box mr10">
-  <a href="{% url 'shop_page' shop_url=shop.url %}">
-  <img src="{% static 'img/shop/icon/' %}{{ shop.url }}.png" width="100%" />
-  <br /><small class="semibold">{{ shop.name }}</small>
-  </a>
-</div>
-{% endfor %}
-</div>
-
-<br />
-</div>
-
-<div class="content-box-image">
-  <img src="{% static 'img/place/outskirts.png' %}" />
-</div>
-<div class="content-box-body">
-<h1>Outskirts</h1>
-
-<br />
-<h2 class="gray">Landmarks</h2>
-
-<div class="flex-wrap mt10">
-  <div class="inventory-box mr10">
-    <a href="{% url 'goddess_garden_page' %}">
-    <img src="{% static 'img/place/icon/goddess-garden.png' %}" width="100%" />
-    <br /><small class="semibold">Goddess of Gardens</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'garden_page' %}">
-    <img src="{% static 'img/place/icon/garden.png' %}" width="100%" />
-    <br /><small class="semibold">Rose Garden</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'goddess_ocean_page' %}">
-    <img src="{% static 'img/place/icon/goddess-ocean.png' %}" width="100%" />
-    <br /><small class="semibold">Goddess of the Ocean</small>
-    </a>
-  </div>
-  <div class="inventory-box mr10">
-    <a href="{% url 'fishing_page' %}">
-    <img src="{% static 'img/place/icon/fishing.png' %}" width="100%" />
-    <br /><small class="semibold">Fishing</small>
-    </a>
-  </div>
-</div>
-
-</div> -->
 
 {% endblock %}

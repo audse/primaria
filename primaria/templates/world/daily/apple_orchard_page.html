@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} - Apple Orchard{% endblock %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/reservoir_links.html' %}
+
+<h1>Apple Orchard</h1>
+<p>You stand in an orchard filled with dozens of trees, each with so many apples... surely, no one would notice if you took one.</p>
+
+{% if request.user.is_authenticated %}
+	{% if orchard_claim == None %}
+		<a href="{% url 'apple_orchard' %}"><button>Take an Apple</button></a>
+	{% else %}
+		<p class="gray">{{ orchard_claim.message }} Come again tomorrow for another apple!</p>
+	{% endif %}
+{% endif %}
+
+{% endblock %}

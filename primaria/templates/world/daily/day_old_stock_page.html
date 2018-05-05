@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} - Day Old Stock{% endblock %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+<h1>Day Old Stock</h1>
+<p>Sometimes, Sprite's Sprouts produces more stock than it can sell. Every Primaria citizen can feel free to take something from the extra stock.</p>
+
+{% if request.user.is_authenticated %}
+	{% if dayold_claim == None %}
+		<a href="{% url 'day_old_stock' %}"><button>Ask for Something</button></a>
+	{% else %}
+		<p class="gray">{{ dayold_claim.message }} Come again tomorrow for something else!</p>
+	{% endif %}
+{% endif %}
+
+{% endblock %}

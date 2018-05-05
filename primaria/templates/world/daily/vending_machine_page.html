@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} - Vending Machine{% endblock %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'includes/suburb_links.html' %}
+
+<h1>Vending Machine</h1>
+<p>Once an hour you can use the vending machine to get some candy for your pet for a lower price than at other stores. All candy costs 50 points.</p>
+
+{% if request.user.is_authenticated %}
+	{% if vend_claim == None %}
+		<br />
+		<div class="flex" style="justify-content: center;">
+			{% for candy in candies %}
+				<div class="inventory-box mr10">
+					<small class="semibold">{{ candy.name }}</small><br />
+				    <img src="{% static 'img/items/' %}{{ candy.category.name }}/{{ candy.url }}.png" width="60%" />
+				    <br />
+				    <a href="{% url 'vending_machine' pk=candy.pk %}"><button>Vend</button></a>
+				 </div>
+				{% if forloop.counter == 3 or forloop.counter == 6 %}</div><br /><div class="flex" style="justify-content: center;">{% endif %}
+			{% endfor %}
+		</div>
+	{% else %}
+		<p class="gray">{{ vend_claim.message }} Come again in an hour for another candy!</p>
+	{% endif %}
+{% endif %}
+
+{% endblock %}

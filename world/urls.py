@@ -46,9 +46,21 @@ urlpatterns = [
     url(r'restricted/activate/$', views.activate_card, name='activate_card'),
     url(r'restricted/machine/$', views.restricted_machine, name='restricted_machine'),
 
+
+    # DAILIES
+
     url(r'meatloaf/$', views.almighty_meatloaf_page, name='almighty_meatloaf_page'),
     url(r'meatloaf/take/$', views.take_from_meatloaf, name='take_from_meatloaf'),
 
     url(r'trails/$', views.trails_page, name='trails_page'),
     url(r'trails/run/$', views.trails, name='trails'),
+
+    url(r'orchard/$', views.apple_orchard_page, name='apple_orchard_page'),
+    url(r'orchard/take/$', views.apple_orchard, name='apple_orchard'),
+
+    url(r'day-old/$', views.day_old_stock_page, name='day_old_stock_page'),
+    url(r'day-old/take/$', views.day_old_stock, name='day_old_stock'),
+
+    url(r'vending/$', views.vending_machine_page, name='vending_machine_page'),
+    url(r'vending/(?P<pk>[0-9]+)/vend/$', views.vending_machine, name='vending_machine'),
 ]

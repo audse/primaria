@@ -936,7 +936,7 @@ def take_from_meatloaf(request):
                 request.session['error'] = "You can only have up to 50 items in your inventory."
                 return redirect(error_page)
         else:
-            request.session['error'] = "You have already take a chunk of meatloaf today."
+            request.session['error'] = "You have already taken a chunk of meatloaf today."
             return redirect(error_page)
     else:
         request.session['error'] = "You must be logged in to view this page."
@@ -998,6 +998,113 @@ def trails(request):
                 return redirect(error_page)
         else:
             request.session['error'] = "You must have a pet to view this page."
+            return redirect(error_page)
+    else:
+        request.session['error'] = "You must be logged in to view this page."
+        return redirect(error_page)
+
+def apple_orchard_page(request):
+    if request.user.is_authenticated():
+        today = datetime.today()
+        orchard_claim = DailyClaim.objects.filter(user=request.user, daily_type="orchard", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day).first()
+    else:
+        orchard_claim = None
+    return render(request, 'world/daily/apple_orchard_page.html', {'orchard_claim':orchard_claim})
+
+def apple_orchard(request):
+    if request.user.is_authenticated():
+        today = datetime.today()
+        orchard_claim = DailyClaim.objects.filter(user=request.user, daily_type="orchard", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day).first()
+        if orchard_claim == None:
+            if Inventory.objects.filter(user=request.user, box=False, pending=False).count() < 50:
+                take_chance = random.randint(1, 8)
+                if take_chance != 8:
+                    reward = Item.objects.filter(url__icontains="apple").order_by('?').first()
+                    message = "You sneakily pull a " + reward.name + " to take home."
+                    
+                    inventory = Inventory.objects.create(user=request.user, item=reward)
+                    claim = DailyClaim.objects.create(user=request.user, daily_type="orchard", message=message, reward=reward)
+                    return redirect(apple_orchard_page)
+                else:
+                    message = "Someone seems to be watching... You decide not to take anything today."
+                    claim = DailyClaim.objects.create(user=request.user, daily_type="orchard", message=message)
+                    return redirect(apple_orchard_page)
+            else:
+                request.session['error'] = "You can only have up to 50 items in your inventory."
+                return redirect(error_page)
+        else:
+            request.session['error'] = "You have already taken an apple today."
+            return redirect(error_page)
+    else:
+        request.session['error'] = "You must be logged in to view this page."
+        return redirect(error_page)
+
+def day_old_stock_page(request):
+    if request.user.is_authenticated():
+        today = datetime.today()
+        dayold_claim = DailyClaim.objects.filter(user=request.user, daily_type="dayold", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day).first()
+    else:
+        dayold_claim = None
+    return render(request, 'world/daily/day_old_stock_page.html', {'dayold_claim':dayold_claim})
+
+def day_old_stock(request):
+    if request.user.is_authenticated():
+        today = datetime.today()
+        dayold_claim = DailyClaim.objects.filter(user=request.user, daily_type="dayold", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day).first()
+        if dayold_claim == None:
+            if Inventory.objects.filter(user=request.user, box=False, pending=False).count() < 50:
+                reward = Item.objects.filter(url__icontains="bread").order_by('?').first()
+                message = "You are handed a " + reward.name + " to take home."
+                
+                inventory = Inventory.objects.create(user=request.user, item=reward)
+                claim = DailyClaim.objects.create(user=request.user, daily_type="dayold", message=message, reward=reward)
+                return redirect(day_old_stock_page)
+            else:
+                request.session['error'] = "You can only have up to 50 items in your inventory."
+                return redirect(error_page)
+        else:
+            request.session['error'] = "You have already taken something today."
+            return redirect(error_page)
+    else:
+        request.session['error'] = "You must be logged in to view this page."
+        return redirect(error_page)
+
+def vending_machine_page(request):
+    if request.user.is_authenticated():
+        today = datetime.today()
+        vend_claim = DailyClaim.objects.filter(user=request.user, daily_type="vend", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day, date_of_claim__hour=today.hour).first()
+    else:
+        vend_claim = None
+    candies = Item.objects.filter(second_category__name="candy")
+    return render(request, 'world/daily/vending_machine_page.html', {'vend_claim':vend_claim, 'candies':candies})
+
+def vending_machine(request, pk):
+    if request.user.is_authenticated():
+        today = datetime.today()
+        vend_claim = DailyClaim.objects.filter(user=request.user, daily_type="vend", date_of_claim__year=today.year, date_of_claim__month=today.month, date_of_claim__day=today.day, date_of_claim__hour=today.hour).first()
+        if vend_claim == None:
+            item = Item.objects.filter(second_category__name="candy", pk=pk).first()
+            if item is not None:
+                if Inventory.objects.filter(user=request.user, box=False, pending=False).count() < 50:
+                    if request.user.profile.points >= 50:
+                        request.user.profile.points -= 50
+                        request.user.profile.save()
+                        message = "You insert some coins and out pops a " + item.name + "."
+                        
+                        inventory = Inventory.objects.create(user=request.user, item=item)
+                        claim = DailyClaim.objects.create(user=request.user, daily_type="vend", message=message, reward=item)
+                        return redirect(vending_machine_page)
+                    else:
+                        request.session['error'] = "You do not have enough points to use the Vending Machine."
+                        return redirect(error_page)
+                else:
+                    request.session['error'] = "You can only have up to 50 items in your inventory."
+                    return redirect(error_page)
+            else:
+                request.session['error'] = "That candy does not exist."
+                return redirect(error_page)
+        else:
+            request.session['error'] = "You have already taken something this hour."
             return redirect(error_page)
     else:
         request.session['error'] = "You must be logged in to view this page."
