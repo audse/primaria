@@ -51,6 +51,8 @@ class Topic(models.Model):
 	message = models.TextField()
 	date = models.DateTimeField(default=timezone.now)
 
+	last_reply_date = models.DateTimeField(default=timezone.now)
+
 	deleted = models.BooleanField(default=False)
 	locked = models.BooleanField(default=False)
 	sticky = models.BooleanField(default=False)

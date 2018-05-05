@@ -9,6 +9,7 @@ from core.models import Pet, Avatar
 
 from slugify import slugify
 import random
+from django.utils import timezone
 
 def messages_page(request):
 	if request.user.is_authenticated():
@@ -123,21 +124,8 @@ def boards_page(request):
 def board_page(request, board):
 	board = Board.objects.filter(url=board).first()
 	if board:
-		topics = Topic.objects.filter(board=board, deleted=False, sticky=False).order_by('-date')
-		sticky_topics = Topic.objects.filter(board=board, deleted=False, sticky=True).order_by('-date')
-		
-		paginator = Paginator(topics, 15)
-		page = request.GET.get('page')
-
-		if page:
-			try:
-				page = int(page)
-			except:
-				request.session['error'] = "Page must be a number."
-				return redirect(error_page)
-			topics = paginator.page(page)
-		else:
-			topics = paginator.page(1)
+		topics = Topic.objects.filter(board=board, deleted=False, sticky=False).order_by('-last_reply_date')
+		sticky_topics = Topic.objects.filter(board=board, deleted=False, sticky=True).order_by('-last_reply_date')
 
 		for topic in sticky_topics:
 			replies = Reply.objects.filter(topic=topic).order_by('-date')
@@ -156,6 +144,19 @@ def board_page(request, board):
 			else:
 				topic.last_reply = topic.date
 			topic.replies = replies.count()
+
+		paginator = Paginator(topics, 15)
+		page = request.GET.get('page')
+
+		if page:
+			try:
+				page = int(page)
+			except:
+				request.session['error'] = "Page must be a number."
+				return redirect(error_page)
+			topics = paginator.page(page)
+		else:
+			topics = paginator.page(1)
 
 		return render(request, 'social/board_page.html', {'board':board, 'topics':topics, 'sticky_topics':sticky_topics})
 	else:
@@ -253,6 +254,8 @@ def reply_to_topic(request):
 				if not topic.locked:
 					if message:
 						reply = Reply.objects.create(user=request.user, topic=topic, message=message)
+						topic.last_reply_date = timezone.now()
+						topic.save()
 						
 						# AVATARS
 						chatty_avatar = Avatar.objects.get(url="very-chatty")
