@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^games/tictactoe/$', views.tictactoe_page, name='tictactoe_page'),
     url(r'^games/pyramids/$', views.pyramids_page, name='pyramids_page'),
     url(r'^games/wheel/serendipity/$', views.wheel_serendipity_page, name='wheel_serendipity_page'),
+    url(r'^games/wheel/plush/$', views.wheel_plush_page, name='wheel_plush_page'),
     url(r'^games/(?P<game>[A-Za-z]+)/send/$', views.send_score, name='send_score'),
 
     url(r'fishing/$', views.fishing_page, name='fishing_page'),

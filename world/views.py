@@ -196,6 +196,15 @@ def wheel_serendipity_page(request):
         score = None
     return render(request, 'world/wheel_serendipity_page.html', {'score':score})
 
+def wheel_plush_page(request):
+    today = datetime.today()
+    if request.user.is_authenticated():
+        score = Score.objects.filter(user=request.user, game="plush", date__year=today.year, date__month=today.month, date__day=today.day).first()
+    else:
+        score = None
+    return render(request, 'world/wheel_plush_page.html', {'score':score})
+
+
 def send_score(request, game):
     if request.user.is_authenticated():
         if request.POST.get("score") == "success":
@@ -256,20 +265,26 @@ def send_score(request, game):
             return redirect(error_page)
         elif request.POST.get("score") is not "false":
             score = request.POST.get("score")
-            try:
-                score = int(score)
-            except:
+            if game != "plush":
+                try:
+                    score = int(score)
+                except:
 
-                # AVATARS
-                cheat_avatar = Avatar.objects.get(url="pumpkin-eater")
-                if cheat_avatar not in request.user.profile.avatars.all():
-                    request.user.profile.avatars.add(cheat_avatar)
-                    request.user.profile.save()
-                    message = Message.objects.create(receiving_user=request.user, subject="You just found a secret avatar!", text="You have just received the avatar \"Pumpkin-Eater\" to use on the boards!")
+                    # AVATARS
+                    cheat_avatar = Avatar.objects.get(url="pumpkin-eater")
+                    if cheat_avatar not in request.user.profile.avatars.all():
+                        request.user.profile.avatars.add(cheat_avatar)
+                        request.user.profile.save()
+                        message = Message.objects.create(receiving_user=request.user, subject="You just found a secret avatar!", text="You have just received the avatar \"Pumpkin-Eater\" to use on the boards!")
 
-                error = "No cheating, please! That ruins the fun for everyone."
-                request.session['error'] = error
-                return redirect(error_page)
+                    error = "No cheating, please! That ruins the fun for everyone."
+                    request.session['error'] = error
+                    return redirect(error_page)
+            else:
+                if score == "Plush!":
+                    score = 1
+                else:
+                    score = 0
 
             if game == "pyramids" and score > 1400: 
 
@@ -295,6 +310,17 @@ def send_score(request, game):
                 error = "No cheating, please! That ruins the fun for everyone."
                 request.session['error'] = error
                 return redirect(error_page)
+            elif game == "plush" and score not in [0, 1]:
+                # AVATARS
+                cheat_avatar = Avatar.objects.get(url="pumpkin-eater")
+                if cheat_avatar not in request.user.profile.avatars.all():
+                    request.user.profile.avatars.add(cheat_avatar)
+                    request.user.profile.save()
+                    message = Message.objects.create(receiving_user=request.user, subject="You just found a secret avatar!", text="You have just received the avatar \"Pumpkin-Eater\" to use on the boards!")
+
+                error = "No cheating, please! That ruins the fun for everyone."
+                request.session['error'] = error
+                return redirect(error_page)    
             else:
                 today = datetime.today()
                 scores_sent = Score.objects.filter(user=request.user, game=game, date__year=today.year, date__month=today.month, date__day=today.day).count()
@@ -304,17 +330,33 @@ def send_score(request, game):
                     scores_sendable = 4
                 elif game == "serendipity":
                     scores_sendable = 1
+                elif game == "plush":
+                    scores_sendable = 1
 
                 if scores_sent < scores_sendable: 
-                    new_score = Score.objects.create(user=request.user, game=game, score=score)
 
-                    request.user.profile.points += score
-                    request.user.profile.save()
+                    if game == "plush" and score == 1:
+                        item = Item.objects.filter(category__name="plush", rarity=1).order_by('?').first()
+                        if Inventory.objects.filter(user=request.user,box=False,pending=False).count() < 50:
+                            inventory = Inventory.objects.create(user=request.user, item=item)
+                            # score = 0
+                            new_score = Score.objects.create(user=request.user, game=game, score=score)
+                            return redirect(wheel_plush_page)
+                        else:
+                            request.session['error'] = "You can only have up to 50 items in your inventory."
+                            return redirect(error_page)
+                    else:
+                        new_score = Score.objects.create(user=request.user, game=game, score=score)
 
-                    if game == "pyramids":
-                        return redirect(pyramids_page)
-                    elif game == "serendipity":
-                        return redirect(wheel_serendipity_page)
+                        request.user.profile.points += score
+                        request.user.profile.save()
+
+                        if game == "pyramids":
+                            return redirect(pyramids_page)
+                        elif game == "serendipity":
+                            return redirect(wheel_serendipity_page)
+                        elif game == "plush":
+                            return redirect(wheel_plush_page)
                 else:
                     error = "You've already sent the maximum scores for this game today."
                     request.session['error'] = error
@@ -1109,6 +1151,7 @@ def vending_machine(request, pk):
     else:
         request.session['error'] = "You must be logged in to view this page."
         return redirect(error_page)
+
 
 
 

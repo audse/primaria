@@ -441,7 +441,8 @@ def unblock_user(request, username):
 def users_online_page(request):
     today = datetime.today()
     today = today - timedelta(hours=1)
-    users_online = Profile.objects.filter(last_online__year=today.year, last_online__month=today.month, last_online__day=today.day, last_online__hour__gte=today.hour).order_by('-last_online')
+    # users_online = Profile.objects.filter(last_online__year=today.year, last_online__month=today.month, last_online__day=today.day, last_online__hour=today.hour).order_by('-last_online')
+    users_online = Profile.objects.filter(last_online__gte=today).order_by('-last_online')    
     return render(request, 'core/users_online_page.html', {'users_online':users_online})
 
 def claim_login_bonus(request):
