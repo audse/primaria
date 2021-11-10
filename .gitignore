@@ -1,11 +1,12 @@
 *.pyc
-/venv
-*/migrations
+/venv/
+**/migrations
 celerybeat-schedule.db
-celerybeat.pid
 celery1.log
 db.sqlite3
 erl_crash.dump
 run.py
 todo.md
-*/.DS_Store
+**/.DS_Store
+.DS_Store
+celerybeat.pid
