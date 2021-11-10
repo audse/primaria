@@ -75,7 +75,7 @@ def garden_gather(request):
                         # AVATARS
                         thinker_avatar = Avatar.objects.get(url="thinker")
                         if thinker_avatar not in request.user.profile.avatars.all():
-                            if inventory.item.second_category == Category.objects.get("philosophy genre"):
+                            if inventory.item.second_category == Category.objects.get(name="philosophy genre"):
                                 request.user.profile.avatars.add(thinker_avatar)
                                 request.user.profile.save()
                                 message = Message.objects.create(receiving_user=request.user, subject="You just found a secret avatar!", text="You have just received the avatar \"Thinker\" to use on the boards!")

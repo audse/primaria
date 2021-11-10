@@ -16,8 +16,8 @@ class Item(models.Model):
     url = models.CharField(max_length=140)
     description = models.TextField()
 
-    category = models.ForeignKey('Category', blank=True, null=True)
-    second_category = models.ForeignKey('Category', related_name="second_category", blank=True, null=True)
+    category = models.ForeignKey('Category', blank=True, null=True, on_delete=models.CASCADE)
+    second_category = models.ForeignKey('Category', related_name="second_category", blank=True, null=True, on_delete=models.CASCADE)
     price_class = models.IntegerField()
     rarity = models.IntegerField(default=1) # 1 to 5, very common to very rare
 
@@ -32,8 +32,8 @@ class Item(models.Model):
         return self.name
 
 class Inventory(models.Model):
-    user = models.ForeignKey('auth.User', blank=True, null=True)
-    item = models.ForeignKey('Item', blank=True, null=True)
+    user = models.ForeignKey('auth.User', blank=True, null=True, on_delete=models.CASCADE)
+    item = models.ForeignKey('Item', blank=True, null=True, on_delete=models.CASCADE)
 
     gallery = models.BooleanField(default=False)
     box = models.BooleanField(default=False)
@@ -51,8 +51,8 @@ class Shop(models.Model):
     description = models.TextField()
     location = models.CharField(max_length=140)
 
-    category = models.ForeignKey('Category')
-    items = models.ManyToManyField('Item', blank=True)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    items = models.ManyToManyField('Item', through='Stock', blank=True)
     prices = models.CharField(max_length=140, blank=True, null=True)
     quantities = models.CharField(max_length=140, blank=True, null=True)
 
@@ -61,8 +61,18 @@ class Shop(models.Model):
     def __str__(self):
         return self.name
 
+class Stock(models.Model):
+    shop = models.ForeignKey('Shop', on_delete=models.CASCADE)
+    item = models.ForeignKey('Item', on_delete=models.CASCADE)
+
+    price = models.IntegerField()
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.shop.name + ": " + self.item.name
+
 class BankAccount(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     level = models.IntegerField(default=1)
     balance = models.IntegerField(default=0)
 
@@ -74,7 +84,7 @@ class BankAccount(models.Model):
 #     amount = models.IntegerField(default=0)
 
 class Gallery(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=140, blank=True, null=True)
     space = models.IntegerField(default=5)
     upgrade_cost = models.IntegerField(default=500)
@@ -86,7 +96,7 @@ class Gallery(models.Model):
         return self.user.username + "'s Gallery"
 
 class UserShop(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=140, blank=True, null=True)
     space = models.IntegerField(default=5)
     upgrade_cost = models.IntegerField(default=500)
@@ -98,8 +108,8 @@ class UserShop(models.Model):
         return self.user.username + "'s Shop"
 
 class Trade(models.Model):
-    original_trade = models.ForeignKey('self', related_name="original", blank=True, null=True)
-    sending_user = models.ForeignKey('auth.User', related_name="trade_sending_user")
+    original_trade = models.ForeignKey('self', related_name="original", blank=True, null=True, on_delete=models.CASCADE)
+    sending_user = models.ForeignKey('auth.User', related_name="trade_sending_user", on_delete=models.CASCADE)
     items = models.ManyToManyField('Inventory', related_name="items", blank=True)
 
     message = models.CharField(max_length=140, blank=True, null=True)

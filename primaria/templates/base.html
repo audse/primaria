@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 {% load sass_tags %}
 {% load get_messages %}
 {% load get_quests %}
@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <link rel="stylesheet" href="{% sass_src 'css/main.scss' %}" />
   {% if request.user.is_authenticated and request.user.profile.night_mode == True %}
-    <link rel="stylesheet" href="{% sass_src 'css/night_mode.scss' %}" />
+    <link rel="stylesheet" href="{% sass_src 'css/night_mode.scss' %}" type="text/css" />
   {% endif %}
 
   <script src="https://use.fontawesome.com/41617813a4.js"></script>

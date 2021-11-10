@@ -6,7 +6,7 @@ from django.utils import timezone
 from shop.models import Item
 
 class Score(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     game = models.CharField(max_length=140)
     date = models.DateTimeField(default=timezone.now)
     score = models.IntegerField(blank=True, null=True)
@@ -15,10 +15,10 @@ class Score(models.Model):
     	return self.user.username + "'s " + self.game + " score"
 
 class DailyClaim(models.Model):
-	user = models.ForeignKey('auth.User')
+	user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	daily_type = models.CharField(max_length=140)
 	message = models.CharField(max_length=1024)
-	reward = models.ForeignKey('shop.Item', blank=True, null=True)
+	reward = models.ForeignKey('shop.Item', blank=True, null=True, on_delete=models.CASCADE)
 	points = models.IntegerField(blank=True, null=True)
 	date_of_claim = models.DateTimeField(default=timezone.now)
 
@@ -26,6 +26,6 @@ class DailyClaim(models.Model):
 		return self.user.username + "'s " + self.daily_type + " claim"
 
 class MedicinePickup(models.Model):
-	user = models.ForeignKey('auth.User')
+	user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	cost = models.IntegerField(default=250)
-	item = models.ForeignKey('shop.Item', blank=True, null=True)
+	item = models.ForeignKey('shop.Item', blank=True, null=True, on_delete=models.CASCADE)

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .models import Category, Item, Inventory, Shop, BankAccount, Gallery, UserShop, Trade
+from .models import Category, Item, Inventory, Shop, Stock, BankAccount, Gallery, UserShop, Trade
 from social.models import Message, Badge
 from world.models import DailyClaim
 from core.models import Animal, Pet, Avatar
@@ -288,25 +288,9 @@ def potion_results_page(request):
     return render(request, 'shop/potion_results_page.html', {'results':results, 'pet':pet})
 
 def shop_page(request, shop_url):
+
     shop = Shop.objects.get(url=shop_url)
-    items = shop.items.all()
-    prices = shop.prices.split(",")
-    try:
-        quantities = shop.quantities.split(",")
-    except:
-        quantities = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-
-    n = 0
-    shop_items = {}
-    for item in items:
-        shop_items[item] = [prices[n], quantities[n]]
-        # item.price = prices[n]
-        n += 1
-
-    keys =  list(shop_items.keys())
-    random.shuffle(keys)
-    shop_items = [(key, shop_items[key]) for key in keys]
-
+    shop_items = Stock.objects.filter(shop=shop)
 
     # QUEST
     if shop.name == "Alchemist":
@@ -319,7 +303,8 @@ def shop_page(request, shop_url):
         inventory = None
         mystery_card = None
         bank_card = None
-    return render(request, 'shop/shop_page.html', {'shop':shop, 'items':items, 'shop_items':shop_items, 'mystery_card':mystery_card, 'inventory':inventory, 'bank_card':bank_card})
+
+    return render(request, 'shop/shop_page.html', {'shop':shop, 'shop_items':shop_items, 'mystery_card':mystery_card, 'inventory':inventory, 'bank_card':bank_card})
 
 def purchase_item(request, shop_url):
     if request.user.is_authenticated():

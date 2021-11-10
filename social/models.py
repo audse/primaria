@@ -7,9 +7,9 @@ from django.utils import timezone
 from .unique_slugify import unique_slugify
 
 class Message(models.Model):
-	sending_user = models.ForeignKey('auth.User', related_name="sending_user", blank=True, null=True) # system messages
-	receiving_user = models.ForeignKey('auth.User', related_name="receiving_user")
-	original_message = models.ForeignKey('self', related_name="original", blank=True, null=True)
+	sending_user = models.ForeignKey('auth.User', related_name="sending_user", blank=True, null=True, on_delete=models.CASCADE) # system messages
+	receiving_user = models.ForeignKey('auth.User', related_name="receiving_user", on_delete=models.CASCADE)
+	original_message = models.ForeignKey('self', related_name="original", blank=True, null=True, on_delete=models.CASCADE)
 	
 	date = models.DateTimeField(default=timezone.now)
 	
@@ -27,7 +27,7 @@ class Message(models.Model):
 			return "System's message to " + self.receiving_user.username
 
 class Badge(models.Model):
-	user = models.ForeignKey('auth.User')
+	user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 	rank = models.CharField(max_length=140) # Amateur, Professional, Expert
 	area = models.CharField(max_length=140) # Plush Collector, Forum poster?
 	awarded = models.DateTimeField(default=timezone.now)
@@ -43,8 +43,8 @@ class Board(models.Model):
 		return self.name
 
 class Topic(models.Model):
-	user = models.ForeignKey('auth.User')
-	board = models.ForeignKey('Board', blank=True, null=True)
+	user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+	board = models.ForeignKey('Board', blank=True, null=True, on_delete=models.CASCADE)
 
 	title = models.CharField(max_length=140)
 	slug = models.SlugField(blank=True)
@@ -66,8 +66,8 @@ class Topic(models.Model):
 		super(Topic, self).save(**kwargs)
 
 class Reply(models.Model):
-	user = models.ForeignKey('auth.User')
-	topic = models.ForeignKey('Topic', blank=True, null=True)
+	user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+	topic = models.ForeignKey('Topic', blank=True, null=True, on_delete=models.CASCADE)
 
 	message = models.TextField()
 	date = models.DateTimeField(default=timezone.now)

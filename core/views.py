@@ -15,7 +15,12 @@ from shop.models import UserShop, Gallery, Item, Category, Inventory
 from world.models import DailyClaim
 
 def home_page(request):
-    announcements = Topic.objects.filter(board=Board.objects.get(name="Announcements")).order_by('-date')[:5]
+    announcements = []
+    try:
+        announcements = Topic.objects.filter(board=Board.objects.get(name="Announcements")).order_by('-date')[:5]
+    except:
+        announcements = []
+        
     return render(request, 'core/home_page.html', {'announcements':announcements})
 
 def privacy_policy_page(request):

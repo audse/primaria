@@ -7,7 +7,7 @@ from core.views import error_page, profile_page
 from .models import Message, Board, Topic, Reply
 from core.models import Pet, Avatar
 
-from slugify import slugify
+from django.template.defaultfilters import slugify
 import random
 from django.utils import timezone
 

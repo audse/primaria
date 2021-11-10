@@ -2,7 +2,7 @@
 
 {% block title %} - {{ shop.name }}{% endblock %}
 
-{% load staticfiles %}
+{% load static %}
 {% load humanize %}
 
 {% block content-box-image %}
@@ -31,20 +31,19 @@
 </p>
 
 <div class="flex-wrap">
-
-{% for item, value in shop_items %}
+{% for item in shop_items %}
   <div class="inventory-box mr10 mt10">
-  {% if request.user.is_authenticated %}<a data-remodal-target="modal-{{ item.url }}"> {% endif %}
+  {% if request.user.is_authenticated %}<a data-remodal-target="modal-{{ item.item.url }}"> {% endif %}
 
-    <img src="{% static 'img/items/' %}{{ item.category.name }}/{{ item.url }}.png" width="60%" />
-    <br /><small class="red semibold">{{ value.1 }} in stock</small>
-    <br /><small class="semibold">{{ item.name }}</small>
-    <br /><small>{{ value.0|intcomma }} points</small>
+    <img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+    <br /><small class="red semibold">{{ item.quantity }} in stock</small>
+    <br /><small class="semibold">{{ item.item.name }}</small>
+    <br /><small>{{ item.price|intcomma }} points</small>
   {% if request.user.is_authenticated %}</a>{% endif %}
-  <div class="remodal" data-remodal-id="modal-{{ item.url }}">
+  <div class="remodal" data-remodal-id="modal-{{ item.item.url }}">
     <div class="remodal-header">
       <button data-remodal-action="close" class="remodal-close"></button>
-      Purchase {{ item.name }} for {{ value.0|intcomma }} points?
+      Purchase {{ item.item.name }} for {{ item.price|intcomma }} points?
     </div>
     <div class="remodal-body">
       <p>
@@ -54,7 +53,7 @@
     <div class="remodal-body border-top-gray">
       <form action="{% url 'purchase_item' shop_url=shop.url %}" method="POST">
         {% csrf_token %}
-        <input type="hidden" name="item" value="{{ item.pk }}" />
+        <input type="hidden" name="item" value="{{ item.item.pk }}" />
         <!-- <input type="hidden" name="price" value="{{ value.0 }}" /> -->
 
         <div class="right mb10">

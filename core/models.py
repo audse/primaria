@@ -8,7 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Profile(models.Model):
-    user = models.OneToOneField('auth.User', blank=True, null=True)
+    user = models.OneToOneField('auth.User', blank=True, null=True, on_delete=models.CASCADE)
     points = models.IntegerField(default=1000)
     bio = models.TextField(blank=True, null=True)
     last_online = models.DateTimeField(default=timezone.now)
@@ -57,10 +57,10 @@ class Animal(models.Model):
         return self.name
 
 class Pet(models.Model):
-    user = models.ForeignKey('auth.User', blank=True, null=True) # pound
+    user = models.ForeignKey('auth.User', blank=True, null=True, on_delete=models.CASCADE) # pound
     name = models.CharField(max_length=64)
     color = models.CharField(max_length=10)
-    animal = models.ForeignKey('Animal', blank=True, null=True)
+    animal = models.ForeignKey('Animal', blank=True, null=True, on_delete=models.CASCADE)
 
     all_colors = models.TextField()
 
