@@ -2,7 +2,7 @@
 /venv
 */migrations
 celerybeat-schedule.db
-celerybeat,pid
+celerybeat.pid
 celery1.log
 db.sqlite3
 erl_crash.dump
