@@ -4,17 +4,11 @@
   color: #bec3d0;
   height: 60px;
   line-height: 60px;
-  padding-left: 10px;
-
-  .right {
-    float:right;
-    margin-right: 10px;
-
-    a {
-      padding: 0 5px;
-    }
-
-  }
+  padding: 0 10px;
+  width: 100%;
+  box-sizing: border-box;
+} #navbar a {
+    padding: 0 5pt;
 }
 
 #sidebar {
@@ -44,7 +38,7 @@
 #footer {
   box-sizing: border-box;
   color: $darkergray;
-  postion: absolute;
+  position: absolute;
   bottom: -60px;
   width: 100vw;
   background: #e3e8ef;

@@ -12,9 +12,6 @@
       <img src="{% static 'img/'%}{{ pet.animal.name }}/{{ pet.color }}.png" width="100%" style="max-width: 50vw;" />
     </div>
     <div class="content-box-body border-top-gray">
-      <span class="gray">Animal</span> <span class="semibold" style="float:right;">{{ pet.animal.name|title }}</span>
-    </div>
-    <div class="content-box-body border-top-gray">
       <span class="gray">Hunger</span> <span class="semibold" style="float:right;">
         {% if pet.hunger <= 1 %}
           Dying

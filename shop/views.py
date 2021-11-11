@@ -13,6 +13,8 @@ from operator import itemgetter
 import random
 from datetime import datetime
 
+from utils.error import handle_error, require_login
+
 def inventory_page(request):
     if request.user.is_authenticated():
         items = Inventory.objects.filter(user=request.user, box=False, pending=False)
@@ -165,6 +167,12 @@ def use_item(request):
                         old_color = pet.color
 
                         new = inventory.item.url.split("-") # returns color, animal, potion
+                        if "knit" in new:
+                            new = [
+                                    "%s-knit"%(new[0]),
+                                    new[2],
+                                    new[3]
+                                ]
                         new.pop() # remove -potion
                         new_species = Animal.objects.get(name=new[1])
                         new_color = new[0]
@@ -307,76 +315,47 @@ def shop_page(request, shop_url):
     return render(request, 'shop/shop_page.html', {'shop':shop, 'shop_items':shop_items, 'mystery_card':mystery_card, 'inventory':inventory, 'bank_card':bank_card})
 
 def purchase_item(request, shop_url):
-    if request.user.is_authenticated():
-        item_pk = request.POST.get("item")
-        # price = int(request.POST.get("price"))
+    require_login(request)
 
-        item = Item.objects.get(pk=item_pk)
-        shop = Shop.objects.get(url=shop_url)
+    item_pk = request.POST.get("item")
 
-        points = request.user.profile.points
+    shop = Shop.objects.get(url=shop_url)
+    item = Stock.objects.get(pk=item_pk, shop=shop)
 
-        item_in_shop = False
-        for shop_item in shop.items.all():
-            if item == shop_item:
-                item_in_shop = True
+    points = request.user.profile.points
+    num_items_in_inventory = Inventory.objects.filter(user=request.user, box=False, pending=False).count()
 
-        if not item_in_shop:
-            request.session['error'] = "Sorry, that item is not available at this time."
-            return redirect(error_page)
+    if not item:
+        return handle_error(request, "Sorry, that item is not available at this time.")
 
-        items_in_inventory = Inventory.objects.filter(user=request.user, box=False, pending=False).count()
-        if items_in_inventory < 50:
+    elif num_items_in_inventory >= 50:
+        return handle_error(request, "You can only have up to 50 items in your inventory.")
 
-            n = 0
-            for shop_item in shop.items.all():
-                if item == shop_item:
-                    break;
-                else:
-                    n += 1
-            prices = shop.prices.split(",")
-            price = int(prices[n])
+    elif item.price >= points:
+        return handle_error(request, "You do not have enough points to buy that item.")
 
-            if points >= price:
-                request.user.profile.subtract_points(price)
-
-                inventory = Inventory.objects.create(user=request.user, item=item)
-
-                quantities = shop.quantities.split(",")
-                if int(quantities[n]) > 1:
-                    quantities[n] = int(quantities[n]) - 1
-                    quantities[n] = str(quantities[n])
-                    quantities = ",".join(quantities)
-                    shop.quantities = quantities
-                    shop.save()
-                else:
-                    prices.pop(n)
-                    prices = ",".join(prices)
-                    shop.prices = prices
-                    shop.items.remove(item)
-
-
-                # AVATARS
-
-                pet = Pet.objects.filter(user=request.user).first()
-                if pet is not None:
-                    pink_avatar = Avatar.objects.get(url="yay-pink")
-                    if pink_avatar not in request.user.profile.avatars.all():
-                        if "pink" in inventory.item.name.lower():
-                            request.user.profile.avatars.add(pink_avatar)
-                            request.user.profile.save()
-                            message = Message.objects.create(receiving_user=request.user, subject="You just found a secret avatar!", text="You have just received the avatar \"Yay! Pink!!\" to use on the boards!")
-
-                return redirect(shop_page, shop_url)
-            else:
-                request.session['error'] = "You do not have enough points to buy that item."
-                return redirect(error_page)
-        else:
-            request.session['error'] = "You can only have up to 50 items in your inventory."
-            return redirect(error_page)
     else:
-        request.session['error'] = "You must be logged in to view this page."
-        return redirect(error_page)
+        request.user.profile.subtract_points(item.price)
+        inventory = Inventory.objects.create(user=request.user, item=item.item)
+        if item.quantity > 1:
+            item.quantity -= 1
+            item.save()
+        else:
+            item.delete()
+
+    # AVATARS
+
+    pet = Pet.objects.filter(user=request.user).first()
+    if pet is not None:
+        pink_avatar = Avatar.objects.get(url="yay-pink")
+        if pink_avatar not in request.user.profile.avatars.all():
+            if "pink" in inventory.item.name.lower():
+                request.user.profile.avatars.add(pink_avatar)
+                request.user.profile.save()
+                message = Message.objects.create(receiving_user=request.user, subject="You just found a secret avatar!", text="You have just received the avatar \"Yay! Pink!!\" to use on the boards!")
+
+    return redirect(shop_page, shop_url)
+        
 
 def compound_interest(principal, rate, times_per_year, years):
     # (1 + r/n)

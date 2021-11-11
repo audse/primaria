@@ -53,7 +53,7 @@
     <div class="remodal-body border-top-gray">
       <form action="{% url 'purchase_item' shop_url=shop.url %}" method="POST">
         {% csrf_token %}
-        <input type="hidden" name="item" value="{{ item.item.pk }}" />
+        <input type="hidden" name="item" value="{{ item.pk }}" />
         <!-- <input type="hidden" name="price" value="{{ value.0 }}" /> -->
 
         <div class="right mb10">

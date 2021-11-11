@@ -13,11 +13,13 @@ from .models import Pet, Animal, Avatar, Profile
 from social.models import Badge, Message, Board, Topic
 from shop.models import UserShop, Gallery, Item, Category, Inventory
 from world.models import DailyClaim
+from utils.error import handle_error, error_page
 
 def home_page(request):
     announcements = []
     try:
-        announcements = Topic.objects.filter(board=Board.objects.get(name="Announcements")).order_by('-date')[:5]
+        board = Board.objects.get(name="Announcements")
+        announcements = Topic.objects.filter(board=board).order_by('-date')[:5]
     except:
         announcements = []
         
@@ -25,12 +27,6 @@ def home_page(request):
 
 def privacy_policy_page(request):
     return render(request, 'core/privacy_policy_page.html')
-
-def error_page(request):
-    error = request.session.pop('error', False)
-    if error == False:
-        error = "We are not sure what, but we will work on fixing it."
-    return render(request, 'core/error_page.html', {'error':error})
 
 def profile_page(request, username):
     avatar_count = Avatar.objects.all().count()
@@ -80,7 +76,6 @@ def register(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
-        # email = request.POST.get("email")
         age = request.POST.get("age")
 
         errors = []
@@ -94,10 +89,6 @@ def register(request):
         if password != confirm_password:
             errors.append("Passwords do not match.")
 
-        # if email:
-        #     if "@" not in email or "." not in email:
-        #         errors.append("Email is not valid.")
-
         if len(password) < 8:
             errors.append("Your password must be at least 8 characters.")
         try:
@@ -109,8 +100,6 @@ def register(request):
         username_taken = User.objects.filter(username=username).first()
         if username_taken is not None:
             errors.append("Sorry, that username has been taken.")
-
-        # validate_password(password).messages
 
         try:
             validate_password(password)
@@ -185,7 +174,7 @@ def settings_page(request):
 
         return render(request, 'core/settings_page.html', {'confirm':confirm, 'help_text':help_text})
     else:
-        error = request.session['error'] = "You must be logged in to view this page."
+        request.session['error'] = "You must be logged in to view this page."
         return redirect(error_page)
 
 def change_password(request):
@@ -197,7 +186,7 @@ def change_password(request):
             try:
                 validate_password(new_password)
             except:
-                error = request.session['error'] = "Password must meet all password requirements."
+                request.session['error'] = "Password must meet all password requirements."
                 return redirect(error_page)  
             request.user.set_password(new_password)
             request.user.save()
@@ -206,10 +195,10 @@ def change_password(request):
             confirm = request.session['confirm'] = "You have successfully changed your password."
             return redirect(settings_page)
         else:
-            error = request.session['error'] = "New password and confirm new password fields must match."
+            request.session['error'] = "New password and confirm new password fields must match."
             return redirect(error_page)
     else:
-        error = request.session['error'] = "You must be logged in to view this page."
+        request.session['error'] = "You must be logged in to view this page."
         return redirect(error_page)
 
 def change_view_settings(request):
@@ -227,89 +216,91 @@ def change_view_settings(request):
         request.user.profile.save()
         return redirect(settings_page)
     else:
-        error = request.session['error'] = "You must be logged in to view this page."
+        request.session['error'] = "You must be logged in to view this page."
         return redirect(error_page)
 
 def create_pet_step_1(request):
     pet = Pet.objects.filter(user=request.user).first()
-    if pet is None:
-        animals = Animal.objects.all().order_by('name')
-        return render(request, 'core/features/create_pet_step_1.html', {'animals':animals})
-    else:
-        error = request.session['error'] = "You can't create another pet when you already have one."
-        return redirect(error_page)
+
+    if pet is not None:
+        handle_error(request, "You can't create another pet when you already have one.")
+
+    animals = Animal.objects.all().order_by('name')
+    return render(request, 'core/features/create_pet_step_1.html', {'animals':animals})
+
 
 def create_pet_step_2(request, animal):
     pet = Pet.objects.filter(user=request.user).first()
-    if pet is None:
-        animal = Animal.objects.get(name=animal)
-        return render(request, 'core/features/create_pet_step_2.html', {'animal':animal})
-    else:
-        error = request.session['error'] = "You can't create another pet when you already have one."
-        return redirect(error_page)
+
+    if pet is not None:
+        handle_error(request, "You can't create another pet when you already have one.")
+        
+    animal = Animal.objects.get(name=animal)
+    return render(request, 'core/features/create_pet_step_2.html', {'animal':animal})
 
 def create_pet_step_3(request, animal):
     pet = Pet.objects.filter(user=request.user).first()
-    if pet is None:
-        animal = Animal.objects.get(name=animal)
-        color = request.POST.get("color")
-        if color == "red" or color == "yellow" or color == "green" or color == "blue" or color == "black":
-            error = request.session.pop('error', False)
-            if error:
-                color = request.session.pop('color', False)
-            return render(request, 'core/features/create_pet_step_3.html', {'animal':animal, 'color':color, 'error':error})
-        else:
-            request.session['error'] = "No cheating, please! That ruins the fun for everyone."
-            return redirect(error_page)
+
+    if pet is not None:
+        handle_error(request, "You can't create another pet when you already have one.")
+
+    animal = Animal.objects.get(name=animal)
+    color = request.POST.get("color")
+
+    if color in ['red', 'yellow', 'green', 'blue', 'black']:
+        error = request.session.pop('error', False)
+        if error:
+            color = request.session.pop('color', False)
+        return render(request, 'core/features/create_pet_step_3.html', {'animal':animal, 'color':color, 'error':error})
     else:
-        error = request.session['error'] = "You can't create another pet when you already have one."
+        request.session['error'] = "No cheating, please! That ruins the fun for everyone."
         return redirect(error_page)
 
 def create_pet(request):
-    if request.user.is_authenticated():
-        pet = Pet.objects.filter(user=request.user).first()
-        if pet is None:
-            animal = request.POST.get("animal")
-            color = request.POST.get("color")
-            name = request.POST.get("name")
 
-            check_unique = Pet.objects.filter(name=name).first()
-            if check_unique is not None:
-                error = "Sorry, that name is already taken."
-                request.session['error'] = error
-                request.session['color'] = color
-                return redirect(create_pet_step_3, animal)
-            else:
-                if color == "red" or color == "yellow" or color == "green" or color == "blue" or color == "black":
-                    if animal == "dino" or animal == "lizard" or animal == "monkey" or animal == "mouse" or animal == "tapir":
-                        animal = Animal.objects.get(name=animal)
-                        all_colors = color + " " + animal.name + ","
-                        pet = Pet.objects.create(user=request.user, animal=animal, color=color, name=name, all_colors=all_colors)
-                        
-                        # AVATARS
-                        pet_avatar = Avatar.objects.get(url=animal.name)
-                        color_avatar = Avatar.objects.get(url=color)
-                        request.user.profile.avatars.add(pet_avatar)
-                        request.user.profile.avatars.add(color_avatar)
-                        request.user.profile.save()
+    if not request.user.is_authenticated():
+        handle_error(request, "You must be logged in to view this page.")
 
-                        subject = "You just found some avatars!"
-                        text = "You have just received the avatars \"" + pet_avatar.name + "\" and \"" + color_avatar.name + "\" to use on the boards!"
-                        message = Message.objects.create(receiving_user=request.user, subject=subject, text=text)
+    pet = Pet.objects.filter(user=request.user).first()
 
-                        return redirect(successful_create_pet_page)
-                    else:
-                        request.session['error'] = "No cheating, please! That ruins the fun for everyone."
-                        return redirect(error_page)
-                else:
-                    request.session['error'] = "No cheating, please! That ruins the fun for everyone."
-                    return redirect(error_page)
-        else:
-            error = request.session['error'] = "You can't create another pet when you already have one."
-            return redirect(error_page)
+    if pet is not None:
+        handle_error("You can't create another pet when you already have one.")
+
+    animal = request.POST.get("animal")
+    color = request.POST.get("color")
+    name = request.POST.get("name")
+
+    check_unique_name = Pet.objects.filter(name=name).first()
+    if check_unique_name is not None:
+        request.session['error'] = "Sorry, that name is already taken."
+        request.session['color'] = color
+        return redirect(create_pet_step_3, animal)
+
     else:
-        error = request.session['error'] = "You must be logged in to view this page."
-        return redirect(error_page)
+        
+        acceptable_colors = ['red', 'yellow', 'green', 'blue', 'black']
+        acceptable_animals = ['dino', 'lizard', 'monkey', 'mouse', 'tapir']
+        if color not in acceptable_colors or animal not in acceptable_animals:
+            handle_error(request, "No cheating, please! That ruins the fun for everyone.")
+        
+        animal = Animal.objects.get(name=animal)
+        all_colors = color + " " + animal.name + ","
+        pet = Pet.objects.create(user=request.user, animal=animal, color=color, name=name, all_colors=all_colors)
+        
+        # AVATARS
+        pet_avatar = Avatar.objects.get(url=animal.name)
+        color_avatar = Avatar.objects.get(url=color)
+        request.user.profile.avatars.add(pet_avatar)
+        request.user.profile.avatars.add(color_avatar)
+        request.user.profile.save()
+
+        message = Message.objects.create(
+                receiving_user=request.user,
+                subject="You just found some avatars!",
+                text="You have just received the avatars %s and %s to use on the boards!"%(pet_avatar.name, color_avatar.name)
+            )
+
+        return redirect(successful_create_pet_page)
 
 def successful_create_pet_page(request):
     return render(request, 'core/features/successful_create_pet_page.html')
@@ -368,38 +359,38 @@ def change_pet_page(request):
 
             return render(request, 'core/change_pet_page.html', {'all_colors': all_colors})
         else:
-            error = request.session['error'] = "You must have a pet to view this page."
+            request.session['error'] = "You must have a pet to view this page."
             return redirect(error_page)
     else:
-        error = request.session['error'] = "You must be logged in to view this page."
+        request.session['error'] = "You must be logged in to view this page."
         return redirect(error_page)
 
 def change_pet(request):
-    if request.user.is_authenticated():
-        pet = Pet.objects.filter(user=request.user).first()
-        if pet:
-            new_color = request.POST.get("color")
-            new_animal = request.POST.get("animal")
-            string = new_color + " " + new_animal + ","
-            if string in pet.all_colors:
-                new_animal = Animal.objects.filter(name=new_animal).first()
-                if new_animal:
-                    pet.color = new_color
-                    pet.animal = new_animal
-                    pet.save()
-                    return redirect(change_pet_page)
-                else:
-                    error = request.session['error'] = "That animal does not exist."
-                    return redirect(error_page)
-            else:
-                error = request.session['error'] = "You cannot make a pet a color you haven't unlocked."
-                return redirect(error_page)
-        else:
-            error = request.session['error'] = "You must have a pet to view this page."
-            return redirect(error_page)
-    else:
-        error = request.session['error'] = "You must be logged in to view this page."
-        return redirect(error_page)
+
+    current_pet = Pet.objects.filter(user=request.user).first()
+
+    requested_color = request.POST.get("color")
+    requested_animal_name = request.POST.get("animal")
+
+    requested_string = "%s %s," % (requested_color, requested_animal_name)
+    requested_animal = Animal.objects.filter(name=requested_animal_name).first()
+    
+    if not request.user.is_authenticated():
+        return handle_error(request, "You must be logged in to view this page.")
+    if not current_pet:
+        return handle_error(request, "You must have a pet to view this page.")
+    if requested_string not in current_pet.all_colors:
+        return handle_error(request, "You cannot make a pet a color you haven't unlocked.")
+    if not requested_animal:
+        return handle_error(request, "That animal does not exist.")
+
+    current_pet.color = requested_color
+    current_pet.animal = requested_animal
+    current_pet.save()
+
+    return redirect(change_pet_page)
+            
+        
 
 def colors_page(request):
     return render(request, 'core/features/colors_page.html')
@@ -408,45 +399,41 @@ def rules_page(request):
     return render(request, 'core/rules_page.html')
 
 def block_user(request, username):
-    if request.user.is_authenticated():
-        user = User.objects.filter(username=username).first()
-        if user != None:
-            if user != request.user:
-                request.user.profile.blocked_users.add(user)
-                request.user.profile.save()
-                return redirect(profile_page, username=user.username)
-            else:
-                error = request.session['error'] = "You may not block yourself."
-                return redirect(error_page)
-        else:
-            error = request.session['error'] = "No user with that username was found."
-            return redirect(error_page)
-    else:
-        error = request.session['error'] = "You must be logged in to view this page."
-        return redirect(error_page)
+
+    user = User.objects.filter(username=username).first()
+
+    if not request.user.is_authenticated():
+        return (request, "You must be logged in to view this page.")
+    if user is None:
+        return handle_error(request, "No user with that username was found.")
+    if user is request.user:
+        return handle_error(request, "You may not block yourself.")
+
+    request.user.profile.blocked_users.add(user)
+    request.user.profile.save()
+
+    return redirect(profile_page, username=user.username)
 
 def unblock_user(request, username):
-    if request.user.is_authenticated():
-        user = User.objects.filter(username=username).first()
-        if user != None:
-            if user in request.user.profile.blocked_users.all():
-                request.user.profile.blocked_users.remove(user)
-                request.user.profile.save()
-                return redirect(profile_page, username=user.username)
-            else:
-                error = request.session['error'] = "You do not have that user blocked."
-                return redirect(error_page)
-        else:
-            error = request.session['error'] = "No user with that username was found."
-            return redirect(error_page)
-    else:
-        error = request.session['error'] = "You must be logged in to view this page."
-        return redirect(error_page)
+
+    user = User.objects.filter(username=username).first()
+
+    if not request.user.is_authenticated():
+        return handle_error(request, "You must be logged in to view this page.")
+    if user is None:
+        return handle_error(request, "No user with that username was found.")
+    if user not in request.user.profile.blocked_users.all():
+        return handle_error(request, "You do not have that user blocked.")
+
+    request.user.profile.blocked_users.remove(user)
+    request.user.profile.save()
+    
+    return redirect(profile_page, username=user.username)
+
 
 def users_online_page(request):
     today = datetime.today()
     today = today - timedelta(hours=1)
-    # users_online = Profile.objects.filter(last_online__year=today.year, last_online__month=today.month, last_online__day=today.day, last_online__hour=today.hour).order_by('-last_online')
     users_online = Profile.objects.filter(last_online__gte=today).order_by('-last_online')    
     return render(request, 'core/users_online_page.html', {'users_online':users_online})
 
@@ -498,7 +485,7 @@ def claim_login_bonus(request):
 
             if reward:
                 if Inventory.objects.filter(user=request.user, box=False, pending=False).count() >= 50:
-                    error = request.session['error'] = "You can only have up to 50 items in your inventory."
+                    request.session['error'] = "You can only have up to 50 items in your inventory."
                     return redirect(error_page)
                 inventory = Inventory.objects.create(user=request.user, item=reward)
                 message = "You have claimed your login bonus and recieved a " + reward.name + "!"
@@ -514,10 +501,10 @@ def claim_login_bonus(request):
                 four_days_ago_claim.delete()
             return redirect(claimed_login_bonus_page)
         else:
-            error = request.session['error'] = "You have already claimed your login bonus for today."
+            request.session['error'] = "You have already claimed your login bonus for today."
             return redirect(error_page)
     else:
-        error = request.session['error'] = "You must be logged in to view this page."
+        request.session['error'] = "You must be logged in to view this page."
         return redirect(error_page)
 
 def claimed_login_bonus_page(request):
@@ -527,9 +514,9 @@ def claimed_login_bonus_page(request):
         if claim:
             return render(request, 'core/features/claimed_login_bonus_page.html', {'claim':claim})
         else:
-            error = request.session['error'] = "You have not yet claimed your login bonus."
+            request.session['error'] = "You have not yet claimed your login bonus."
     else:
-        error = request.session['error'] = "You must be logged in to view this page."
+        request.session['error'] = "You must be logged in to view this page."
         return redirect(error_page)
 
 

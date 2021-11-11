@@ -7,204 +7,205 @@
 
 {% load login_bonus %}
 
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  <title>{% if request.user|get_messages != 0 %}({{ request.user|get_messages }}) {% endif %}Primaria World{% block title %}{% endblock %}</title>
+    <title>{% if request.user|get_messages != 0 %}({{ request.user|get_messages }}) {% endif %}Primaria World{% block title %}{% endblock %}</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-  <link rel="stylesheet" href="{% sass_src 'css/main.scss' %}" />
-  {% if request.user.is_authenticated and request.user.profile.night_mode == True %}
-    <link rel="stylesheet" href="{% sass_src 'css/night_mode.scss' %}" type="text/css" />
-  {% endif %}
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% sass_src 'css/main.scss' %}" />
+    {% if request.user.is_authenticated and request.user.profile.night_mode == True %}
+        <link rel="stylesheet" href="{% sass_src 'css/night_mode.scss' %}" type="text/css" />
+    {% endif %}
 
-  <script src="https://use.fontawesome.com/41617813a4.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
-  <script src="{% static 'js/remodal.js' %}"></script>
+    <script src="https://use.fontawesome.com/41617813a4.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+    <script src="{% static 'js/remodal.js' %}"></script>
 </head>
 <body onLoad="init();">
 
-  <div id="navbar">
-    <a href="{% url 'home_page' %}" class="gray">Primaria World</a>
-    <span class="right">
-      <a href="{% url 'world_page' %}" class="gray">world</a>
-      <a href="{% url 'boards_page' %}" class="gray">boards</a>
-      <!-- <a href="{% url 'games_page' %}" class="gray">games</a> -->
-      {% if request.user.is_authenticated %}
-        <a href="{% url 'inventory_page' %}" class="gray">inventory</a>
-        <a href="{% url 'profile_page' username=request.user.username %}">@{{ request.user.username }}</a>
-        <a href="{% url 'messages_page' %}"><span class="badge {% if request.user|get_messages != 0 %}badge-primary{% endif %}">{{ request.user|get_messages }} Message{{ request.user|get_messages|pluralize }}</span></a>
-      {% endif %}
-    </span>
-  </div>
+    <nav id="navbar" class="flex justify-between">
+        <section>
+            <a href="{% url 'home_page' %}" class="gray">Primaria World</a>
+        </section>
+        <section>
+            <a href="{% url 'world_page' %}" class="gray">world</a>
+            <a href="{% url 'boards_page' %}" class="gray">boards</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'games_page' %}" class="gray">games</a>
+                <a href="{% url 'inventory_page' %}" class="gray">inventory</a>
+                <a href="{% url 'profile_page' username=request.user.username %}">@{{ request.user.username }}</a>
+                <a href="{% url 'messages_page' %}"><span class="badge {% if request.user|get_messages != 0 %}badge-primary{% endif %}">{{ request.user|get_messages }}</span></a>
+            {% endif %}
+        </section>
+    </nav>
 
-  <div class="flex">
+    <main class="flex">
 
-    <div id="sidebar" class="flex-item">
-      {% if request.user.is_authenticated %}
-        {% include 'includes/pet_box.html' %}
-        <div class="content-box mt10">
-          <div class="content-box-header">
-            Info
-          </div>
-          <div class="content-box-body">
-            {{ request.user.profile.points }} points
-          </div>
-          <div class="content-box-body border-top-gray">
-            <a href="{% url 'settings_page' %}" class="gray">Settings</a>
-          </div>
-          <div class="content-box-body border-top-gray">
-            <a href="{% url 'logout' %}" class="gray">Log Out</a>
-          </div>
-          <div class="content-box-header">
-            Quick Shop Search
-          </div>
-          <div class="content-box-body border-top-gray">
-            <form action="{% url 'shop_search_results_page' %}" method="POST">
-              {% csrf_token %}
-              <input type="text" name="keyword" placeholder="Keyword">
-              <button type="submit">Search</button>
-            </form>
-          </div>
+        <aside id="sidebar" class="flex-item">
+            {% if request.user.is_authenticated %}
+                {% include 'includes/pet_box.html' %}
+                <section class="content-box mt10">
+                    <div class="content-box-header">
+                        Info
+                    </div>
+                    <div class="content-box-body">
+                        {{ request.user.profile.points }} points
+                    </div>
+                    <div class="content-box-body border-top-gray">
+                        <a href="{% url 'settings_page' %}" class="gray">Settings</a>
+                    </div>
+                    <div class="content-box-body border-top-gray">
+                        <a href="{% url 'logout' %}" class="gray">Log Out</a>
+                    </div>
+                    <div class="content-box-header">
+                        Quick Shop Search
+                    </div>
+                    <div class="content-box-body border-top-gray">
+                        <form action="{% url 'shop_search_results_page' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="keyword" placeholder="Keyword">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                </section>
+
+                <section class="content-box mt10">
+                    <div class="content-box-header">
+                        Daily Quests
+                    </div>
+                    <div class="content-box-body">
+                        <a href="{% url 'goddess_sun_page' %}">Sun Goddess</a> <span class="right gray">{{ request.user|get_quests:"sun" }}/5</span>
+                    </div>
+                    <div class="content-box-body border-top-gray">
+                        <a href="{% url 'goddess_commerce_page' %}">Goddess of Commerce</a> <span class="right gray">{{ request.user|get_quests:"commerce" }}/5</span>
+                    </div>
+                    <div class="content-box-body border-top-gray">
+                        <a href="{% url 'goddess_garden_page' %}">Goddess of Gardens</a> <span class="right gray">{{ request.user|get_quests:"garden" }}/5</span>
+                    </div>
+                    <div class="content-box-body border-top-gray">
+                        <a href="{% url 'goddess_neglect_page' %}">Goddess of Neglect</a> <span class="right gray">{{ request.user|get_quests:"neglect" }}/5</span>
+                    </div>
+                    <div class="content-box-body border-top-gray">
+                        <a href="{% url 'goddess_ocean_page' %}">Goddess of the Ocean</a> <span class="right gray">{{ request.user|get_quests:"ocean" }}/5</span>
+                    </div>
+                </section>
+            {% else %}
+            <section class="content-box">
+                <div class="content-box-header">
+                    Log In
+                </div>
+                <div class="content-box-body center">
+                    <form action="{% url 'login' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <i class="fa fa-user-o" aria-hidden="true"></i>
+                            <input type="text" name="username" />
+                        </div>
+                        <div class="input-group mt10">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            <input type="password" name="password" />
+                        </div>
+                        <button type="submit" class="mt10">Log In</button>
+                    </form>
+                </div>
+                <div class="content-box-body border-top-gray">
+                    New here? <a href="{% url 'register_page' %}">Create an account</a>.
+                </div>
+            </section>
+            {% endif %}
+        </aside>
+
+        <article id="content" class="flex-grow">
+            <section class="content-box">
+                {% if request.user.is_authenticated and request.user.profile.disable_header_images %}
+                <div style="display:none;">
+                {% endif %}
+
+                {% block content-box-image %}{% endblock %}
+
+                {% if request.user.is_authenticated and request.user.profile.disable_header_images %}
+                </div>
+                {% endif %}
+                <div class="content-box-body">
+                {% block content %}{% endblock %}
+                </div>
+            </section>
+        </article>
+
+    </main>
+
+    {% if request.user.is_authenticated %}
+    <div style="display:none">{{ request.user|update_online }}</div>
+    {% endif %}
+
+    <footer id="footer" class="center">
+        <small>
+        Primaria &copy; Audrey Serene {% now "Y" %}.
+        <a href="{% url 'rules_page' %}">Site Rules</a> |
+        <a href="{% url 'privacy_policy_page' %}">Privacy Policy</a> |
+        <a href="{% url 'colors_page' %}">Color Lookup</a> |
+        <a href="{% url 'users_online_page' %}">{{ 0|get_users_online }} Users Online</a>
+        </small>
+    </footer>
+
+    {% if request.user.is_authenticated and request.user.is_staff %}
+    <div id="admin-panel">
+        <a href="{% url 'admin:index' %}"><i class="fa fa-home"></i></a>
+    </div>
+    {% endif %}
+
+    {% if request.user.is_authenticated and request.user|login_bonus != None %}
+    <div class="remodal" data-remodal-id="login">
+        <div class="remodal-header">
+            <button data-remodal-action="close" class="remodal-close"></button>
+            Claim Your Daily Log In Bonus!
         </div>
-
-        <div class="content-box mt10">
-          <div class="content-box-header">
-            Daily Quests
-          </div>
-          <div class="content-box-body">
-            <a href="{% url 'goddess_sun_page' %}">Sun Goddess</a> <span class="right gray">{{ request.user|get_quests:"sun" }}/5</span>
-          </div>
-          <div class="content-box-body border-top-gray">
-            <a href="{% url 'goddess_commerce_page' %}">Goddess of Commerce</a> <span class="right gray">{{ request.user|get_quests:"commerce" }}/5</span>
-          </div>
-          <div class="content-box-body border-top-gray">
-            <a href="{% url 'goddess_garden_page' %}">Goddess of Gardens</a> <span class="right gray">{{ request.user|get_quests:"garden" }}/5</span>
-          </div>
-          <div class="content-box-body border-top-gray">
-            <a href="{% url 'goddess_neglect_page' %}">Goddess of Neglect</a> <span class="right gray">{{ request.user|get_quests:"neglect" }}/5</span>
-          </div>
-          <div class="content-box-body border-top-gray">
-            <a href="{% url 'goddess_ocean_page' %}">Goddess of the Ocean</a> <span class="right gray">{{ request.user|get_quests:"ocean" }}/5</span>
-          </div>
+        <div class="remodal-body">
+            <p>You have reached Day {{ user|login_bonus }} of logging in!</p>
+            <div class="flex">
+                <div class="flex-split center {% if user|login_bonus == 1 %}bg-blue{% endif %}" style="padding:10px 0">
+                    <img src="{% static 'img/place/icon/old/bank.png' %}" width="60%" /><br /><br />
+                    <span class="semibold">Day 1</span><br />
+                    <small>500 points</small>
+                </div>
+                <div class="flex-split center {% if user|login_bonus == 2 %}bg-blue{% endif %}" style="padding:10px 0">
+                    <img src="{% static 'img/items/organic food/bagel.png' %}" width="60%" /><br /><br />
+                    Day 2<br />
+                    <small>Random Food Item</small>
+                </div>
+                <div class="flex-split center {% if user|login_bonus == 3 %}bg-blue{% endif %}" style="padding:10px 0">
+                    <img src="{% static 'img/place/icon/old/bank.png' %}" width="60%" /><br /><br />
+                    <span class="semibold">Day 3</span><br />
+                    <small>1000 points</small>
+                </div>
+                <div class="flex-split center {% if user|login_bonus == 4 %}bg-blue{% endif %}" style="padding:10px 0">
+                    <img src="{% static 'img/items/crystal/small-sapphire-crystal-piece.png' %}" width="60%" /><br /><br />
+                    Day 4<br />
+                    <small>Random Crystal</small></div>
+                <div class="flex-split center {% if user|login_bonus == 5 %}bg-blue{% endif %}" style="padding:10px 0">
+                    <img src="{% static 'img/place/icon/old/bank.png' %}" width="60%" /><br /><br />
+                    <span class="semibold">Day 5</span><br />
+                    <small>1500 points</small>
+                </div>
+            </div>
+            <p><small class="gray">Note that if you keep a log in streak, you will not have to repeat Day 1 and will instead immediately go to Day 2.</small></p>
         </div>
-      </div>
-      {% else %}
-        <div class="content-box">
-          <div class="content-box-header">
-            Log In
-          </div>
-          <div class="content-box-body center">
-            <form action="{% url 'login' %}" method="POST">
-              {% csrf_token %}
-              <div class="input-group">
-                <i class="fa fa-user-o" aria-hidden="true"></i>
-                <input type="text" name="username" />
-              </div>
-              <div class="input-group mt10">
-                <i class="fa fa-eye" aria-hidden="true"></i>
-                <input type="password" name="password" />
-              </div>
-              <button type="submit" class="mt10">Log In</button>
-            </form>
-          </div>
-          <div class="content-box-body border-top-gray">
-            New here? <a href="{% url 'register_page' %}">Create an account</a>.
-          </div>
+        <div class="remodal-body border-top-gray">
+            <div class="right mb10">
+                <button data-remodal-action="cancel">Cancel</button>
+                <a href="{% url 'claim_login_bonus' %}"><button class="primary">Claim</button></a>
+            </div>
         </div>
-      </div>
-      {% endif %}
-
-    <div id="content" class="flex-grow">
-      <div class="content-box">
-        {% if request.user.is_authenticated and request.user.profile.disable_header_images %}
-          <div style="display:none;">
-        {% endif %}
-
-        {% block content-box-image %}{% endblock %}
-
-        {% if request.user.is_authenticated and request.user.profile.disable_header_images %}
-          </div>
-        {% endif %}
-        <div class="content-box-body">
-          {% block content %}{% endblock %}
-        </div>
-      </div>
     </div>
 
-  </div>
-
-  {% if request.user.is_authenticated %}
-  <div style="display:none">{{ request.user|update_online }}</div>
-  {% endif %}
-
-  <div id="footer" class="center">
-    <small>
-      Primaria &copy; Audrey Serene {% now "Y" %}.
-      <a href="{% url 'rules_page' %}">Site Rules</a> |
-      <a href="{% url 'privacy_policy_page' %}">Privacy Policy</a> |
-      <a href="{% url 'colors_page' %}">Color Lookup</a> |
-      <a href="{% url 'users_online_page' %}">{{ 0|get_users_online }} Users Online</a>
-    </small>
-  </div>
-
-  {% if request.user.is_authenticated and request.user.is_staff %}
-  <div id="admin-panel">
-    <a href="{% url 'admin:index' %}"><i class="fa fa-home"></i></a>
-  </div>
-  {% endif %}
-
-  {% if request.user.is_authenticated and request.user|login_bonus != None %}
-  <div class="remodal" data-remodal-id="login">
-    <div class="remodal-header">
-      <button data-remodal-action="close" class="remodal-close"></button>
-      Claim Your Daily Log In Bonus!
-    </div>
-    <div class="remodal-body">
-      <p>You have reached Day {{ user|login_bonus }} of logging in!</p>
-      <div class="flex">
-        <div class="flex-split center {% if user|login_bonus == 1 %}bg-blue{% endif %}" style="padding:10px 0">
-          <img src="{% static 'img/place/icon/old/bank.png' %}" width="60%" /><br /><br />
-          <span class="semibold">Day 1</span><br />
-          <small>500 points</small></div>
-        <div class="flex-split center {% if user|login_bonus == 2 %}bg-blue{% endif %}" style="padding:10px 0">
-          <img src="{% static 'img/items/organic food/bagel.png' %}" width="60%" /><br /><br />
-          Day 2<br />
-          <small>Random Food Item</small>
-        </div>
-        <div class="flex-split center {% if user|login_bonus == 3 %}bg-blue{% endif %}" style="padding:10px 0">
-          <img src="{% static 'img/place/icon/old/bank.png' %}" width="60%" /><br /><br />
-          <span class="semibold">Day 3</span><br />
-          <small>1000 points</small>
-        </div>
-        <div class="flex-split center {% if user|login_bonus == 4 %}bg-blue{% endif %}" style="padding:10px 0">
-          <img src="{% static 'img/items/crystal/small-sapphire-crystal-piece.png' %}" width="60%" /><br /><br />
-          Day 4<br />
-          <small>Random Crystal</small></div>
-        <div class="flex-split center {% if user|login_bonus == 5 %}bg-blue{% endif %}" style="padding:10px 0">
-          <img src="{% static 'img/place/icon/old/bank.png' %}" width="60%" /><br /><br />
-          <span class="semibold">Day 5</span><br />
-          <small>1500 points</small>
-        </div>
-      </div>
-      <p><small class="gray">Note that if you keep a log in streak, you will not have to repeat Day 1 and will instead immediately go to Day 2.</small></p>
-    </div>
-    <div class="remodal-body border-top-gray">
-        <div class="right mb10">
-          <button data-remodal-action="cancel">Cancel</button>
-          <a href="{% url 'claim_login_bonus' %}"><button class="primary">Claim</button></a>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    var inst = $('[data-remodal-id=login]').remodal();
-    inst.open();
-  </script>
-  {% endif %}
+    <script>
+        var inst = $('[data-remodal-id=login]').remodal();
+        inst.open();
+    </script>
+    {% endif %}
 
 </body>
 </html>

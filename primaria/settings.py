@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'world',
     'social',
     'goddess',
+    'utils',
 
     'psycopg2',
     'djcelery',
