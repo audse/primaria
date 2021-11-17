@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^settings/$', 'core.views.settings_page', name='settings_page'),
     url(r'^settings/password/$', 'core.views.change_password', name='change_password'),
     url(r'^settings/view/$', 'core.views.change_view_settings', name='change_view_settings'),
+    url(r'^settings/friend-requests/$', 'core.views.change_friend_request_settings', name='change_friend_request_settings'),
     url(r'^profile/(?P<username>[\w-]+)/block/$', 'core.views.block_user', name='block_user'),
     url(r'^profile/(?P<username>[\w-]+)/unblock/$', 'core.views.unblock_user', name='unblock_user'),
     url(r'^online/$', 'core.views.users_online_page', name='users_online_page'),

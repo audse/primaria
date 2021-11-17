@@ -64,6 +64,13 @@
 <div class="content-box-body border-top-gray">
 <h2 class="gray">Blocked Users</h2>
 
+<form action="{% url 'change_friend_request_settings' %}" method="POST" class="mt-4 mb-4">
+    {% csrf_token %}
+    <input type="checkbox" id="friend_request_settings" name="friend_request_settings" class="inline-block" {% if request.user.profile.disable_friend_requests %}checked{% endif %}>
+    <label for="friend_request_settings" class="inline-block ml-2">Block Incoming Friend Requests</label>
+    <button type="submit" class="subtle">Save</button>
+</form>
+
 <ul>
 {% for user in request.user.profile.blocked_users.all %}
   <li><a href="{% url 'profile_page' username=user.username %}">{{ user.username }}</a> <a href="{% url 'unblock_user' username=user.username %}"><button class="extrasmall delete">Unblock</button></a></li>

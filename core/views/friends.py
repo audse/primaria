@@ -11,7 +11,7 @@ from core.models import FriendRequest, Pet, Avatar, Profile
 from social.models import Badge, Message
 from shop.models import UserShop, Gallery
 from utils.error import handle_error, error_page
-from users import profile_page
+from users import profile_page, settings_page
 
 def friends_page(request):
 
@@ -144,3 +144,17 @@ def remove_friend(request, username):
     user_to_remove.profile.friends.remove(request.user)
 
     return redirect(friends_page)
+
+def change_friend_request_settings(request):
+    friend_request_settings = request.POST.get('friend_request_settings')
+
+    if not request.user.is_authenticated():
+        return handle_error(request, 'You must be logged in to view this page.')
+    
+    if not friend_request_settings:
+        friend_request_settings = False
+        
+    request.user.profile.disable_friend_requests = friend_request_settings
+    request.user.profile.save()
+
+    return redirect(settings_page)

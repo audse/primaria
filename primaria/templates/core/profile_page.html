@@ -10,7 +10,9 @@
 <div class="flex align-center mt-6 justify-between">
     <h1 class="block p-0">{{ user.username }}</h1>
     {% if user != request.user %}
-        {% if friend_status == 'none' %}
+        {% if user.profile.disable_friend_requests %}
+            <p class="gray">This user does not want to receive friend requests.</p>
+        {% elif friend_status == 'none' %}
             <a href="{% url 'send_friend_request' username=user.username %}">
                 <button type="button" class="light">Send friend request</button>
             </a>
