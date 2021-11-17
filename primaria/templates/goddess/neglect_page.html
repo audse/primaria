@@ -18,17 +18,19 @@
 
 {% if pet %}
 	{% if claims != None %}
-		<p>{{ claims.message }} Come back tomorrow with a healthy pet for another prize.</p>
+		<p style="padding: 2em 0.5em">
+            {{ claims.message }} Come back tomorrow with a healthy pet for another prize.
+        </p>
 	{% else %}
 		{% if maximum %}
-			<p>You are eligible for a gift from the Goddess of Neglect!</p>
-			<a href="{% url 'goddess_neglect_collect' %}"><button>Collect Gift</button></a>
+			<p style="padding: 2em 0.5em">You are eligible for a gift from the Goddess of Neglect!</p>
+			<a href="{% url 'goddess_neglect_collect' %}" class="padding-bottom: 2em"><button>Collect Gift</button></a>
 		{% else %}
-			<p>Please come back when your pet is <b>Fine</b> (or better) to receive something from the Goddess of Neglect.</p>
+			<p style="padding: 2em 0.5em">Please come back when your pet is <b>Fine</b> (or better) to receive something from the Goddess of Neglect.</p>
 		{% endif %}
 	{% endif %}
 {% else %}
-	<p>Please come back if you get a pet.</p>
+	<p style="padding: 2em 0.5em">Please come back if you get a pet.</p>
 {% endif %}
 
 </div>

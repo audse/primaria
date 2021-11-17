@@ -16,18 +16,28 @@
 	<th class="t-right">Price</th>
 </tr>
 
-{% for result in shops_with_keyword %}
-<tr class='clickable-row' data-href='{% url "user_shop_page" username=result.0.user.username %}'>
-	<td class="blue">
-		{% if result.0.name != None and result.0.name != "" %}
-			{{ result.0.name }}
-		{% else %}
-			{{ result.0.user.username }}'s Shop
-		{% endif %}
-	</td>
-	<td class="blue center">{{ result.1.name }}</td>
-	<td class="blue t-right">{{ result.2 }}</td>
-</tr>
+{% for result in search_results %}
+    {% if result.quantity %} <!-- The resulting shop is a world shop -->
+        <tr class="clickable-row" data-href="{% url 'shop_page' shop_url=result.shop.url %}">
+            <td class="blue">
+                {{ result.shop.name }}
+            </td>
+            <td class="blue text-center">{{ result.item.name }}</td>
+            <td class="blue t-right">{{ result.price }}</td>
+        </tr>
+    {% else %} <!-- The resulting shop is a user's shop -->
+        <tr class='clickable-row' data-href='{% url "user_shop_page" username=result.shop.user.username %}'>
+            <td class="blue">
+                {% if result.shop.name != None and result.shop.name != "" %}
+                    {{ result.shop.name }}
+                {% else %}
+                    {{ result.shop.user.username }}'s Shop
+                {% endif %}
+            </td>
+            <td class="blue center">{{ result.item.name }}</td>
+            <td class="blue t-right">{{ result.price }}</td>
+        </tr>
+    {% endif %}
 {% empty %}
 <tr>
 	<td colspan="3">No results returned.</td>

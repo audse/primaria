@@ -17,9 +17,9 @@
 	</tr>
 	{% for board in boards %}
 		<tr class="no-highlight">
-			<td class="">
+			<td style="padding-top:1em;padding-bottom:1em;">
 				<a href="{% url 'board_page' board=board.url %}">{{ board.name }}</a>
-				<p><small class="gray">{{ board.description }}</small></p>
+				<p class="p-0 m-0"><small class="gray">{{ board.description }}</small></p>
 			</td>
 			<td class="t-right">{{ board.last_topic|naturaltime }}</td>
 		</tr>

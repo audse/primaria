@@ -30,60 +30,92 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-weight: 600;
+  font-size: 2.25em;
+  padding-top: 1em;
 }
 
 h2 {
   font-weight: 600;
+  font-size: 1.75em;
+  padding-top: 0.5em;
 }
 
 p {
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
-button {
-  background: transparent;
-  border: 2px solid $blue;
-  color: $darkerblue;
-  border-radius: 40px;
-  font-size: .9em;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 10px 0;
-  text-transform: uppercase;
-  width: 100%;
+button, button.light, button.subtle {
+    background: transparent;
+    border: 1.25pt solid $blue;
+    color: $darkerblue;
+    border-radius: $border-radius;
+    font-size: 0.9em;
+    font-weight: 600;
+    letter-spacing: 0.5pt;
+    padding: 0.55em 1.5em;
+    transition: all 100ms;
+    width: fit-content;
+    height: fit-content;
 
-  &:hover:not(.remodal-close):not(.primary) {
-    background: $lightblue;
-  }
+    &:hover:not(.remodal-close):not(.primary) {
+        background: $lightblue;
+    }
+
+    &.primary:hover {
+        background: $darkerblue;
+    }
+}
+
+button.light {
+    background: $blue-100;
+    color: $blue-700;
+    border: transparent;
+    transition: background 100ms;
+
+    &:hover {
+        background: $blue-200 !important;
+    }
+}
+
+button.subtle {
+    background: transparent;
+    border: transparent;
+    transition: background 100ms;
+    color: $blue-300;
+
+    &:hover {
+        background: $blue-50 !important;
+    }
 }
 
 label {
-  display: block;
-  opacity: 0.7;
-  font-weight: 400;
-  margin: 5px 0;
+    display: block;
+    opacity: 0.7;
+    font-weight: 700;
+    margin: 5px 0;
 }
 
 input:not([type="radio"]) {
-  background: white;
-  border: 1px solid $gray;
-  border-radius: 40px;
-  color: $darkerblue;
-  font-size: 1em;
-  padding: 10px;
-  width: 100%;
+    background: $lightgray;
+    border: transparent;
+    border-radius: $border-radius;
+    color: $black;
+    font-size: 1em;
+    padding: 0.5em 1em;
+    max-width: 100%;
+    margin: 0;
+    transition: outline 50ms;
 
-  &:focus {
-    outline: 0;
-    border-color: $blue;
-  }
+    &:focus {
+        outline: 1pt solid $blue;
+    }
 }
 
 select {
   -webkit-appearance:none;
   background: white;
   border: 1px solid $blue;
-  border-radius: 40px;
+  border-radius: $border-radius;
   box-shadow: none;
   color: $darkerblue;
   font-size: 1em;
@@ -111,7 +143,7 @@ textarea {
   background: white;
   border: 1px solid $gray;
   border-radius: 5px;
-  color: $darkerblue;
+  color: $black;
   font-size: 1em;
   padding: 10px;
   width: 100%;

@@ -37,7 +37,8 @@
   .remodal .remodal-header {
     background: #538af6;
     color: white;
-    padding: 5px; }
+    padding: 1em;
+    position: relative; }
   .remodal .remodal-body {
     padding: 10px;
     text-align: left; }
@@ -65,8 +66,9 @@
 /* Close button */
 .remodal-close {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
+  transform: translateY(-50%);
   display: block;
   overflow: visible;
   width: 35px;
@@ -209,51 +211,75 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0; }
 
 h1 {
-  font-weight: 600; }
+  font-weight: 600;
+  font-size: 2.25em;
+  padding-top: 1em; }
 
 h2 {
-  font-weight: 600; }
+  font-weight: 600;
+  font-size: 1.75em;
+  padding-top: 0.5em; }
 
 p {
-  line-height: 1.6; }
+  line-height: 1.8; }
 
-button {
+button, button.light, button.subtle {
   background: transparent;
-  border: 2px solid #538af6;
+  border: 1.25pt solid #538af6;
   color: #4278e3;
-  border-radius: 40px;
-  font-size: .9em;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 10px 0;
-  text-transform: uppercase;
-  width: 100%; }
-  button:hover:not(.remodal-close):not(.primary) {
+  border-radius: 3pt;
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.5pt;
+  padding: 0.55em 1.5em;
+  transition: all 100ms;
+  width: fit-content;
+  height: fit-content; }
+  button:hover:not(.remodal-close):not(.primary), button.light:hover:not(.remodal-close):not(.primary), button.subtle:hover:not(.remodal-close):not(.primary) {
     background: #dae6fd; }
+  button.primary:hover, button.light.primary:hover, button.subtle.primary:hover {
+    background: #4278e3; }
+
+button.light {
+  background: #dae6fd;
+  color: #4278e3;
+  border: transparent;
+  transition: background 100ms; }
+  button.light:hover {
+    background: #cdddfd !important; }
+
+button.subtle {
+  background: transparent;
+  border: transparent;
+  transition: background 100ms;
+  color: #73a2ff; }
+  button.subtle:hover {
+    background: #eef3ff !important; }
 
 label {
   display: block;
   opacity: 0.7;
-  font-weight: 400;
+  font-weight: 700;
   margin: 5px 0; }
 
 input:not([type="radio"]) {
-  background: white;
-  border: 1px solid #bec3d0;
-  border-radius: 40px;
-  color: #4278e3;
+  background: #eff2f7;
+  border: transparent;
+  border-radius: 3pt;
+  color: #535976;
   font-size: 1em;
-  padding: 10px;
-  width: 100%; }
+  padding: 0.5em 1em;
+  max-width: 100%;
+  margin: 0;
+  transition: outline 50ms; }
   input:not([type="radio"]):focus {
-    outline: 0;
-    border-color: #538af6; }
+    outline: 1pt solid #538af6; }
 
 select {
   -webkit-appearance: none;
   background: white;
   border: 1px solid #538af6;
-  border-radius: 40px;
+  border-radius: 3pt;
   box-shadow: none;
   color: #4278e3;
   font-size: 1em;
@@ -269,7 +295,7 @@ textarea {
   background: white;
   border: 1px solid #bec3d0;
   border-radius: 5px;
-  color: #4278e3;
+  color: #535976;
   font-size: 1em;
   padding: 10px;
   width: 100%; }
@@ -355,15 +381,45 @@ tr:hover:not(.no-highlight) {
   line-height: 60px;
   padding: 0 20px; }
 
+.quick-links strong {
+  margin-right: 0.5em; }
+
+.quick-links a {
+  margin: 0 0.5em; }
+
+#user-dropdown {
+  display: none;
+  z-index: 100;
+  position: absolute;
+  right: 10pt;
+  top: 40pt;
+  background: white;
+  -webkit-box-shadow: 0px 2px 20px -8px #aeb3bf;
+  box-shadow: 0px 2px 20px -8px #aeb3bf;
+  border-radius: 3pt;
+  min-width: 300pt;
+  max-width: 100%;
+  padding: 1em; }
+
+#user-info {
+  position: relative;
+  display: inline-block; }
+
+#user-info:hover + #user-dropdown {
+  display: block; }
+
+#user-dropdown:hover {
+  display: block; }
+
 .center {
   text-align: center; }
 
 .quote {
-  border-left: 3px solid #bec3d0;
+  border-left: 2pt solid #bec3d0;
   padding-left: 10px; }
 
 .quote-important {
-  border-left: 3px solid #be4640;
+  border-left: 2pt solid #be4640;
   color: #be4640; }
 
 .lightblue {
@@ -501,10 +557,10 @@ table.deleted th {
   .content-box .content-box-header {
     background: #538af6;
     color: white;
-    padding: 10px;
+    padding: 8pt 1em;
     text-align: center; }
   .content-box .content-box-body {
-    padding: 10px; }
+    padding: 1em; }
 
 .border-top-gray {
   border-top: 1px solid #eff2f7; }
@@ -814,6 +870,207 @@ label.checkbox {
   .progress-indicator {
     font-size: 60%; } }
 
+.text-center {
+  text-align: center; }
+
+.w-full {
+  width: 100%; }
+
+.w-fit {
+  width: fit-content; }
+
+/*
+** SPACING
+*/
+.p-0 {
+  padding: 0; }
+
+.m-0 {
+  margin: 0; }
+
+.pl-1 {
+  padding-left: 0.25em; }
+
+.pl-2 {
+  padding-left: 0.5em; }
+
+.pl-3 {
+  padding-left: 0.75em; }
+
+.pl-4 {
+  padding-left: 1em; }
+
+.pl-5 {
+  padding-left: 1.5em; }
+
+.pl-6 {
+  padding-left: 2em; }
+
+.ml-1 {
+  margin-left: 0.25em; }
+
+.ml-2 {
+  margin-left: 0.5em; }
+
+.ml-3 {
+  margin-left: 0.75em; }
+
+.ml-4 {
+  margin-left: 1em; }
+
+.ml-5 {
+  margin-left: 1.5em; }
+
+.ml-6 {
+  margin-left: 2em; }
+
+.pr-1 {
+  padding-right: 0.25em; }
+
+.pr-2 {
+  padding-right: 0.5em; }
+
+.pr-3 {
+  padding-right: 0.75em; }
+
+.pr-4 {
+  padding-right: 1em; }
+
+.pr-5 {
+  padding-right: 1.5em; }
+
+.pr-6 {
+  padding-right: 2em; }
+
+.mr-1 {
+  margin-right: 0.25em; }
+
+.mr-2 {
+  margin-right: 0.5em; }
+
+.mr-3 {
+  margin-right: 0.75em; }
+
+.mr-4 {
+  margin-right: 1em; }
+
+.mr-5 {
+  margin-right: 1.5em; }
+
+.mr-6 {
+  margin-right: 2em; }
+
+.pt-1 {
+  padding-top: 0.25em; }
+
+.pt-2 {
+  padding-top: 0.5em; }
+
+.pt-3 {
+  padding-top: 0.75em; }
+
+.pt-4 {
+  padding-top: 1em; }
+
+.pt-5 {
+  padding-top: 1.5em; }
+
+.pt-6 {
+  padding-top: 2em; }
+
+.mt-1 {
+  margin-top: 0.25em; }
+
+.mt-2 {
+  margin-top: 0.5em; }
+
+.mt-3 {
+  margin-top: 0.75em; }
+
+.mt-4 {
+  margin-top: 1em; }
+
+.mt-5 {
+  margin-top: 1.5em; }
+
+.mt-6 {
+  margin-top: 2em; }
+
+.pb-1 {
+  padding-bottom: 0.25em; }
+
+.pb-2 {
+  padding-bottom: 0.5em; }
+
+.pb-3 {
+  padding-bottom: 0.75em; }
+
+.pb-4 {
+  padding-bottom: 1em; }
+
+.pb-5 {
+  padding-bottom: 1.5em; }
+
+.pb-6 {
+  padding-bottom: 2em; }
+
+.mb-1 {
+  margin-bottom: 0.25em; }
+
+.mb-2 {
+  margin-bottom: 0.5em; }
+
+.mb-3 {
+  margin-bottom: 0.75em; }
+
+.mb-4 {
+  margin-bottom: 1em; }
+
+.mb-5 {
+  margin-bottom: 1.5em; }
+
+.mb-6 {
+  margin-bottom: 2em; }
+
+.p-1 {
+  padding: 0.25em; }
+
+.p-2 {
+  padding: 0.5em; }
+
+.p-3 {
+  padding: 0.75em; }
+
+.p-4 {
+  padding: 1em; }
+
+.p-5 {
+  padding: 1.5em; }
+
+.p-6 {
+  padding: 2em; }
+
+.m-1 {
+  margin: 0.25em; }
+
+.m-2 {
+  margin: 0.5em; }
+
+.m-3 {
+  margin: 0.75em; }
+
+.m-4 {
+  margin: 1em; }
+
+.m-5 {
+  margin: 1.5em; }
+
+.m-6 {
+  margin: 2em; }
+
+/*
+** DISPLAY
+*/
 .block {
   display: block; }
 

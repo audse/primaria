@@ -420,8 +420,8 @@ input, textarea, select, .form-row p, form .button {
 textarea {
   background: white;
   border: 1px solid #bec3d0;
-  border-radius: 5px;
-  color: #4278e3;
+  border-radius: 3pt;
+  color: #3f434b;
   font-size: 1em;
   padding: 10px;
   width: 100%;
@@ -434,8 +434,8 @@ textarea {
 input:not([type="radio"]):not([type="submit"]) {
   background: white;
   border: 1px solid #bec3d0;
-  border-radius: 40px;
-  color: #4278e3;
+  border-radius: 3pt;
+  color: #3f434b;
   font-size: 1em;
   padding: 10px;
   width: 100%;
@@ -476,7 +476,7 @@ select {
   -webkit-appearance:none;
   background: white;
   border: 1px solid #538af6;
-  border-radius: 40px;
+  border-radius: 3pt;
   box-shadow: none;
   color: #4278e3;
   font-size: 14px;
@@ -514,14 +514,14 @@ select[multiple] {
     color: #fff;
     cursor: pointer;*/
     background: transparent;
-    border: 2px solid #538af6;
+    border: 1.25pt solid #538af6;
     color: #4278e3;
-    border-radius: 40px;
+    border-radius: 3pt;
     font-size: .9em;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-weight: 600;
+    letter-spacing: 0.25pt;
     padding: 10px 20px;
-    text-transform: uppercase;
+    transition: all 100ms;
     /*width: 100%;*/
 }
 
@@ -543,9 +543,10 @@ a.button {
 .button.default, input[type=submit].default, .submit-row input.default {
     float: right;
     border: none;
-    font-weight: 400;
+    font-weight: 600;
     background: #538af6;
     color: white;
+    text-transform: capitalize;
 }
 
 .button.default:active, input[type=submit].default:active,
@@ -643,7 +644,7 @@ ul.messagelist li.error {
     margin: 0 0 10px 0;
     color: #ba2121;
     border: 1px solid #ba2121;
-    border-radius: 4px;
+    border-radius: 3pt;
     background-color: #fff;
     background-position: 5px 12px;
 }
@@ -1007,7 +1008,7 @@ table#change-history tbody th {
 
 .delete-confirmation form input[type="submit"] {
     background: #ba2121;
-    border-radius: 4px;
+    border-radius: 3pt;
     padding: 10px 15px;
     color: #fff;
 }
@@ -1024,7 +1025,7 @@ table#change-history tbody th {
     height: 15px;
     line-height: 15px;
     background: #ddd;
-    border-radius: 4px;
+    border-radius: 3pt;
     padding: 10px 15px;
     color: #333;
     margin: 0 0 0 10px;

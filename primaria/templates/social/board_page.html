@@ -36,7 +36,7 @@
 		<tr class="no-highlight">
 			<td class="center sticky">{% if topic.locked %}<i class="fa fa-lock"></i>{% endif %}</td>
 			<td><a href="{% url 'profile_page' username=topic.user.username %}" {% if topic.user.is_superuser %}class="red semibold"{% endif %}>
-					{% if topic.user.is_superuser %}(staff) {% endif %}{{ topic.user.username}}
+                {% if topic.user.is_superuser %}(staff) {% endif %}{{ topic.user.username}}
 			</a></td>
 			<td class="center sticky"><a href="{% url 'topic_page' topic=topic.slug %}">(Sticky) {{ topic.title }}</a></td>
 			<td class="center sticky">{{ topic.replies }}</td>
@@ -47,8 +47,8 @@
 		<tr class="no-highlight">
 			<td class="center">{% if topic.locked %}<i class="fa fa-lock"></i>{% endif %}</td>
 			<td><a href="{% url 'profile_page' username=topic.user.username %}"{% if topic.user.is_superuser %}class="red semibold"{% endif %}>
-					{% if topic.user.is_superuser %}(staff) {% endif %}{{ topic.user.username}}
-			</a></td>
+                {% if topic.user.is_superuser %}(staff) {% endif %}{{ topic.user.username}}
+            </a></td>
 			<td class="center"><a href="{% url 'topic_page' topic=topic.slug %}">{{ topic.title }}</a></td>
 			<td class="center">{{ topic.replies }}</td>
 			<td class="t-right">{{ topic.last_reply|naturaltime }}</td>

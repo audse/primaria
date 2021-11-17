@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} - Friends{% endblock %}
+
+{% block content %}
+
+<h1>Friends</h1>
+
+<section class="mt-4">
+    {% for friend in friends %}
+        <a href="{% url 'profile_page' username=friend.username %}">{{ friend.username }}</a>
+    {% empty %}
+        <p>You don't have any friends. Go out and meet someone, maybe try <a href="{% url 'boards_page' %}">the boards</a>?</p>
+    {% endfor %}
+</section>
+
+</div>
+<div class="content-box-body border-top-gray">
+
+<h2 class="gray">Pending Friend Requests</h2>
+<section class="flex pt-4">
+
+    {% for request in pending_friend_requests %}
+        <article class="inventory-box m10">
+            <strong>
+                <a href="{% url 'profile_page' username=request.sending_user.username %}">{{ request.sending_user.username }}</a>
+            </strong>
+            <a href="{% url 'accept_friend_request' username=request.sending_user.username %}">
+                <button type="button" class="light w-full mt-4">Accept</button>
+            </a>
+            <a href="{% url 'reject_friend_request' username=request.sending_user.username %}">
+                <button type="button" class="subtle w-full mt-1">Reject</button>
+            </a>
+        </article>
+    {% empty %}
+        <p class="gray">No pending friend requests at this time.</p>
+    {% endfor %}
+
+</section>
+
+</div>
+
+<div class="content-box-body border-top-gray">
+
+<h2 class="gray">Sent Friend Requests</h2>
+<p>You have sent friend requests to these users. You'll receive a message whenever they accept (or reject) your request.</p>
+<section class="pt-4">
+    {% for request in sent_friend_requests %}
+        <article>
+            <a href="{% url 'profile_page' username=request.receiving_user.username %}">{{ request.receiving_user }}</a>
+        </article>
+    {% empty %}
+        <p class="gray">No sent friend requests.</p>
+    {% endfor %}
+</section>
+
+</div>
+
+{% endblock %}

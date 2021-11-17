@@ -7,7 +7,24 @@
 {% load humanize %}
 {% load static %}
 
-<h1 class="mt10">{{ user.username }}'s Profile</h1>
+<div class="flex align-center mt-6 justify-between">
+    <h1 class="block p-0">{{ user.username }}</h1>
+    {% if user != request.user %}
+        {% if friend_status == 'none' %}
+            <a href="{% url 'send_friend_request' username=user.username %}">
+                <button type="button" class="light">Send friend request</button>
+            </a>
+        {% elif friend_status == 'sent' %}
+            <a href="{% url 'friends_page' %}">You sent a friend request</a>
+        {% elif friend_status == 'pending' %}
+            <a href="{% url 'friends_page' %}">Sent you a friend request</a>
+        {% elif friend_status == 'friends' %}
+            <a href="{% url 'remove_friend' username=user.username %}">
+                <button type="button" class="subtle">Remove friend</button>
+            </a>
+        {% endif %}
+    {% endif %}
+</div>
 <br />
 <div class="flex">
   <div class="flex-shrink m10 center bg-blue paddington">
@@ -16,16 +33,18 @@
     <span style="opacity:0.7">{{ user.profile.avatars.all.count }} / {{ avatar_count }} unlocked</span>
   </div>
   <div class="flex-grow mt10">
-    <h2 class="gray">Bio</h2>
+        <h2 class="gray p-0 pl-1">Bio</h2>
+        {% if request.user == user %}
+            <button data-remodal-target="modal-bio" class="subtle p-2 w-fit">Edit</button>
+        {% endif %}
     <div class="quote m10">
       {% if user.profile.bio %}
-      <p>{{ user.profile.bio|linebreaks }}</p>
+        <p>{{ user.profile.bio|linebreaks }}</p>
       {% else %}
-      <p>This user has not entered a bio.</p>
+        <p>This user has not entered a bio.</p>
       {% endif %}
 
       {% if request.user == user %}
-        <a data-remodal-target="modal-bio"><button class="small">Edit Bio</button></a>
         <div class="remodal" data-remodal-id="modal-bio">
           <div class="remodal-header">
             <button data-remodal-action="close" class="remodal-close"></button>

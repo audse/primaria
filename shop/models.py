@@ -53,8 +53,9 @@ class Shop(models.Model):
 
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     items = models.ManyToManyField('Item', through='Stock', blank=True)
-    prices = models.CharField(max_length=140, blank=True, null=True)
-    quantities = models.CharField(max_length=140, blank=True, null=True)
+    
+    min_items = models.IntegerField(default=3)
+    max_items = models.IntegerField(default=18)
 
     restock = models.IntegerField() # 24 = per hour, 1 = per day, etc
 
@@ -79,10 +80,6 @@ class BankAccount(models.Model):
     def __str__(self):
         return self.user.username + "'s Account"
 
-# class Interest(models.Model):
-#     user = models.ForeignKey('auth.User')
-#     amount = models.IntegerField(default=0)
-
 class Gallery(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=140, blank=True, null=True)
@@ -101,11 +98,20 @@ class UserShop(models.Model):
     space = models.IntegerField(default=5)
     upgrade_cost = models.IntegerField(default=500)
 
-    items = models.TextField(blank=True, null=True) # Format: item_url.price,item_url.price, etc 
     shop_till = models.IntegerField(default=0)
+    stock = models.ManyToManyField('Item', through='UserShopStock', blank=True)
 
     def __str__(self):
         return self.user.username + "'s Shop"
+
+class UserShopStock(models.Model):
+    shop = models.ForeignKey('UserShop', on_delete=models.CASCADE)
+    item = models.ForeignKey('Item', on_delete=models.CASCADE)
+
+    price = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.shop.user.username + "'s Shop \"" + self.shop.name + "\": " + self.item.name
 
 class Trade(models.Model):
     original_trade = models.ForeignKey('self', related_name="original", blank=True, null=True, on_delete=models.CASCADE)

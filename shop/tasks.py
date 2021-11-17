@@ -14,7 +14,7 @@ def restock():
     for shop in shops:
         shop.items.clear()
         
-        num_items = randint(5, 18)
+        num_items = randint(shop.min_items, shop.max_items)
         items_in_category = Item.objects.filter(category=shop.category, rarity__lte=3) | Item.objects.filter(second_category=shop.category, rarity__lte=3)
         items_in_shop = items_in_category.order_by('?')[:num_items]
         

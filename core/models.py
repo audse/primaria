@@ -14,7 +14,10 @@ class Profile(models.Model):
     last_online = models.DateTimeField(default=timezone.now)
 
     warnings = models.TextField(blank=True, null=True, help_text="Please note the date, time, and a short description of each infraction.")
-    blocked_users = models.ManyToManyField('auth.User', blank=True, related_name="blocked_users")
+    blocked_users = models.ManyToManyField('auth.User', blank=True, related_name="blocked_users_profiles")
+    
+    friends = models.ManyToManyField('auth.User', blank=True, related_name="friends_profiles")
+    disable_friend_requests = models.BooleanField(default=False)
 
     box_size = models.IntegerField(default=10)
 
@@ -48,6 +51,15 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class FriendRequest(models.Model):
+    sending_user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="sending_friend_request")
+    receiving_user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="receiving_friend_request")
+
+    note = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.sending_user.username + "'s request to " + self.receiving_user.username
 
 class Animal(models.Model):
     name = models.CharField(max_length=64)

@@ -47,3 +47,40 @@
   line-height: 60px;
   padding: 0 20px;
 }
+
+.quick-links {
+    strong {
+        margin-right: 0.5em;
+    }
+    a {
+        margin: 0 0.5em;
+    }
+}
+
+#user-dropdown {
+    display: none;
+    z-index: 100;
+    position: absolute;
+    right: 10pt;
+    top: 40pt;
+    background: white;
+    -webkit-box-shadow: 0px 2px 20px -8px $darkergray; 
+    box-shadow: 0px 2px 20px -8px $darkergray;
+    border-radius: $border-radius;
+    min-width: 300pt;
+    max-width: 100%;
+    padding: 1em;
+}
+
+#user-info {
+    position: relative;
+    display: inline-block;
+}
+
+#user-info:hover + #user-dropdown {
+    display: block;
+}
+
+#user-dropdown:hover {
+    display: block;
+}

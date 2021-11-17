@@ -4,7 +4,7 @@ from core.models import Pet, Avatar
 from social.models import Message
 from world.models import DailyClaim
 from shop.models import Category, Item, Inventory
-from core.views import error_page
+from utils.error import error_page
 
 from .models import Quest
 

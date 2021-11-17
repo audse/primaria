@@ -50,7 +50,8 @@
   .remodal-header {
     background: $blue;
     color: white;
-    padding: 5px;
+    padding: 1em;
+    position: relative;
   }
 
   .remodal-body {
@@ -90,8 +91,9 @@
 
 .remodal-close {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
+  transform: translateY(-50%);
 
   display: block;
   overflow: visible;

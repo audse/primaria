@@ -9,11 +9,11 @@
 
 <h1>Crystal Quarry</h1>
 <p>Take your pets dowsing and get a chance to find a rare crystal! These crystals are very pretty and may be found to have magical qualities... Once per hour, come here to test your skills and try to get a crystal.</p>
-<p>Each attempt will cost you 250 points.</p>
+<p>Each attempt will cost you <strong>200</strong> points.</p>
 
 {% if request.user.profile.dowsing_rod > 0 %}
 	{% if crystal_claim == None %}
-{% if request.user.profile.points >= 250 %}
+{% if request.user.profile.points >= 200 %}
 	<div class="flex" style="width:50%;margin: 0 auto;">
 		<div class="flex-split" style="margin: 2px;">
 			<a href="{% url 'dowse' %}">
@@ -82,7 +82,7 @@
 <div class="content-box-body border-top-gray">
 
 	<h2 class="gray">Buy Rod</h2>
-<p>You currently do not have a dowsing rod. You may purchase one for 10,000 points. This will not count towards your total inventory count.</p>
+<p>You currently do not have a dowsing rod. You may purchase one for <strong>10,000</strong> points. This will not count towards your total inventory count.</p>
 <div class="flex-wrap mt10" style="justify-content: center;">
   <div class="inventory-box">
     <img src="{% static 'img/place/quarry/basic-rod.png' %}" width="100%" />
@@ -97,7 +97,7 @@
 </div>
 <div class="content-box-body border-top-gray">
 	<h2 class="gray">Upgrade Rod</h2>
-	<p>A higher quality dowsing rod will give you a better chance of having luck when dowsing. It will cost you 20,000 points to upgrade from a Basic Rod to a Better Rod.</p>
+	<p>A higher quality dowsing rod will give you a better chance of having luck when dowsing. It will cost you <strong>20,000</strong> points to upgrade from a Basic Rod to a Better Rod.</p>
 	<div class="flex-wrap mt10" style="justify-content: center;">
 	  <div class="inventory-box mr10">
 	    <img src="{% static 'img/place/quarry/basic-rod.png' %}" width="100%" />
@@ -118,7 +118,7 @@
 </div>
 <div class="content-box-body border-top-gray">
 	<h2 class="gray">Upgrade Rod</h2>
-	<p>A higher quality dowsing rod will give you a better chance of having luck when dowsing. It will cost you 50,000 points to upgrade from a Better Rod to a Best Rod.</p>
+	<p>A higher quality dowsing rod will give you a better chance of having luck when dowsing. It will cost you <strong>50,000</strong> points to upgrade from a Better Rod to a Best Rod.</p>
 	<div class="flex-wrap mt10" style="justify-content: center;">
 	  <div class="inventory-box mr10">
 	    <img src="{% static 'img/place/quarry/better-rod.png' %}" width="100%" />

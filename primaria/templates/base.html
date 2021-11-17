@@ -22,6 +22,7 @@
 
     <script src="https://use.fontawesome.com/41617813a4.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
     <script src="{% static 'js/remodal.js' %}"></script>
 </head>
 <body onLoad="init();">
@@ -36,7 +37,8 @@
             {% if request.user.is_authenticated %}
                 <a href="{% url 'games_page' %}" class="gray">games</a>
                 <a href="{% url 'inventory_page' %}" class="gray">inventory</a>
-                <a href="{% url 'profile_page' username=request.user.username %}">@{{ request.user.username }}</a>
+                <a href="{% url 'profile_page' username=request.user.username %}" id="user-info">@{{ request.user.username }}</a>
+                {% include 'includes/user_dropdown.html' %}
                 <a href="{% url 'messages_page' %}"><span class="badge {% if request.user|get_messages != 0 %}badge-primary{% endif %}">{{ request.user|get_messages }}</span></a>
             {% endif %}
         </section>
@@ -58,16 +60,21 @@
                         <a href="{% url 'settings_page' %}" class="gray">Settings</a>
                     </div>
                     <div class="content-box-body border-top-gray">
+                        <a href="{% url 'friends_page' %}" class="gray">Friends</a>
+                    </div>
+                    <div class="content-box-body border-top-gray">
                         <a href="{% url 'logout' %}" class="gray">Log Out</a>
                     </div>
+                </section>
+                <section class="content-box mt10">
                     <div class="content-box-header">
                         Quick Shop Search
                     </div>
                     <div class="content-box-body border-top-gray">
-                        <form action="{% url 'shop_search_results_page' %}" method="POST">
+                        <form action="{% url 'shop_search_results_page' %}" method="POST" class="flex">
                             {% csrf_token %}
                             <input type="text" name="keyword" placeholder="Keyword">
-                            <button type="submit">Search</button>
+                            <button type="submit" class="subtle ml-1">Search</button>
                         </form>
                     </div>
                 </section>
@@ -119,7 +126,7 @@
         </aside>
 
         <article id="content" class="flex-grow">
-            <section class="content-box">
+            <section class="content-box" style="padding-bottom: 8pt">
                 {% if request.user.is_authenticated and request.user.profile.disable_header_images %}
                 <div style="display:none;">
                 {% endif %}
@@ -129,7 +136,7 @@
                 {% if request.user.is_authenticated and request.user.profile.disable_header_images %}
                 </div>
                 {% endif %}
-                <div class="content-box-body">
+                <div id="content-block" class="content-box-body">
                 {% block content %}{% endblock %}
                 </div>
             </section>
@@ -204,6 +211,7 @@
     <script>
         var inst = $('[data-remodal-id=login]').remodal();
         inst.open();
+
     </script>
     {% endif %}
 

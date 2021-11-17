@@ -9,36 +9,21 @@
 {% include 'includes/suburb_links.html' %}
 
 {% if shop != None %}
-	<h1>{% if shop.name != None and shop.name != "" %}
-		Your Shop: <small>{{ shop.name }}</small>
-	{% else %}
-		Your Shop
-	{% endif %} <span class="gray">({{ shop_items|length }}/{{ shop.space }})</span>
-  </h1>
-  <p><a href="#" data-remodal-target="rename-modal">Rename?</a></p>
+    <a href="#" data-remodal-target="rename-modal" class="block pt-4 pb-2">Rename</a>
+	<h1 class="p-0">
+        {% if shop.name != None and shop.name != "" %}
+            Your Shop: <small>{{ shop.name }}</small>
+        {% else %}
+            Your Shop
+        {% endif %} <small class="gray">({{ shop_items|length }}/{{ shop.space }})</small>
+    </h1>
 	<p>Your user shop is where you can put items up for sale that other users can find and buy. You can only list a certain amount of items for sale before you have to upgrade, however.</p>
 
-	<button data-remodal-target="add-item">Add Item</button>
+	<button data-remodal-target="add-item" class="primary">Add Item</button>
 
 </div>
-<div class="content-box-body border-top-gray">
 
-	<form action="{% url 'withdraw_shop_till' %}" method="POST">
-		{% csrf_token %}
-		<div class="flex">
-			<div class="flex-shrink m10">
-				<h2 class="gray">Shop Till: <br /><small>{{ shop.shop_till }} points</small></h2>
-			</div>
-			<div class="flex-split m10">
-				<input type="text" name="withdraw_amount" />
-			</div>
-			<div class="flex-split m10">
-				<button type="submit">Withdraw</button>
-			</div>
-		</div>
-	</form>
-
-	<div class="remodal" data-remodal-id="add-item">
+<div class="remodal" data-remodal-id="add-item">
     <div class="remodal-header">
       <button data-remodal-action="close" class="remodal-close"></button>
       Add Item
@@ -64,14 +49,13 @@
       </div>
       <div class="remodal-body border-top-gray">
           <div class="right mb10">
-            <button data-remodal-action="cancel">Cancel</button>
+            {% comment %} <button data-remodal-action="cancel">Cancel</button> {% endcomment %}
             <button type="submit" class="primary">Add</button>
           </div>
       </div>
     </form>
-  </div>
-
 </div>
+
 <div class="content-box-body border-top-gray">
 <h2 class="gray">Items</h2>
 <br />
@@ -79,28 +63,36 @@
 
 {% for item in shop_items %}
   <div class="inventory-box m10">
-  	<h3 class="semibold">{{ item.0.name }}</h3><br />
-    <img src="{% static 'img/items/' %}{{ item.0.category }}/{{ item.0.url }}.png" width="60%" />
+  	<h3 class="semibold">{{ item.item.name }}</h3><br />
+    <img src="{% static 'img/items/' %}{{ item.item.category }}/{{ item.item.url }}.png" width="60%" />
     <br />
     <form action="{% url 'edit_price' %}" method="POST" style="display:inline;margin:0;">
     	{% csrf_token %}
-    	<input type="text" name="price" value="{{ item.1 }}">
-    	<input type="hidden" name="item" value="{{ item.0.pk }}">
-    	<button type="submit" class="primary">Edit Price</button>
+    	<input type="text" name="price" value="{{ item.price }}">
+    	<input type="hidden" name="item" value="{{ item.pk }}">
+    	<button type="submit" class="light w-full">Save Price</button>
     </form>
     <form action="{% url 'remove_from_shop' %}" method="POST" style="display:inline;margin:0;">
     	{% csrf_token %}
-      <input type="hidden" name="item" value="{{ item.0.pk }}">
-      <input type="hidden" name="index" value="{{ forloop.counter0 }}">
-    	<button type="submit" class="secondary">Remove</button>
+      <input type="hidden" name="item" value="{{ item.pk }}">
+    	<button type="submit" class="subtle w-full">Remove</button>
     </form>
   </div>
 {% endfor %}
 
 </div>
+</div>
+<div class="content-box-body border-top-gray">
+    <h2 class="gray block mb-1">Shop Till: <small>{{ shop.shop_till }} points</small></h2>
+	<form action="{% url 'withdraw_shop_till' %}" method="POST" class="flex align-center">
+		{% csrf_token %}
+        <input type="text" name="withdraw_amount" />
+        <button type="submit">Withdraw</button>
+	</form>
 
 </div>
 <div class="content-box-body border-top-gray">
+    <h2 class="gray">Shop Upgrade</h2>
 	<p>Your shop is currently size {{ shop.space }}. To get more space, you will need to upgrade. Your next upgrade will cost {{ shop.upgrade_cost }} points and give you 5 more spaces.</p>
   	<a href="{% url 'upgrade_shop' %}"><button>Upgrade</button></a>
 
@@ -112,9 +104,9 @@
     <form action="{% url 'rename_shop' %}" method="POST">
       {% csrf_token %}
       <div class="remodal-body">
-        <label>New Name</label>
-        <input type="text" name="new_shop_name" value="{{ shop.name }}" />
-        <small class="gray">This can be whatever you want, at a maximum of 140 characters.</small>
+        <label for="new_shop_name" class="block">New Name</label>
+        <input type="text" name="new_shop_name" value="{{ shop.name }}" class="block" />
+        <small class="block mt-2 gray">This can be whatever you want, at a maximum of 140 characters.</small>
       </div>
       <div class="remodal-body border-top-gray">
         <div class="right mb10">
@@ -124,6 +116,7 @@
       </div>
     </form>
   </div>
+  
 
 
 {% else %}

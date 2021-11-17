@@ -12,36 +12,39 @@
 
 <div class="flex-wrap">
 {% for item in items %}
-<div class="inventory-box m10">
-  {% if item.item.usable %}<a data-remodal-target="modal-{{ item.pk }}">{% endif %}
-    <img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
-    <br /><small class="semibold">{{ item.item.name }}</small>
-  {% if item.item.usable %}</a>{% endif %}
-</div>
+    <div class="inventory-box m10">
+    {% if item.item.usable %}<a data-remodal-target="modal-{{ item.pk }}">{% endif %}
+        <img src="{% static 'img/items/' %}{{ item.item.category.name }}/{{ item.item.url }}.png" width="60%" />
+        <br /><small class="semibold">{{ item.item.name }}</small>
+    {% if item.item.usable %}</a>{% endif %}
+    </div>
 
-{% if item.item.usable %}
-<div class="remodal" data-remodal-id="modal-{{ item.pk }}">
-  <div class="remodal-header">
-    <button data-remodal-action="close" class="remodal-close"></button>
-      Use {{ item.item.name }} on your pet?
-  </div>
-  <div class="remodal-body">
-    <p>
-      This item will be gone after use.
-    </p>
-  </div>
-  <div class="remodal-body border-top-gray">
-    <form action="{% url 'use_item' %}" method="POST">
-      {% csrf_token %}
-      <input type="hidden" name="inventory_pk" value="{{ item.pk }}" />
+    {% if item.item.usable %}
+    <div class="remodal" data-remodal-id="modal-{{ item.pk }}">
+    <div class="remodal-header">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        Use {{ item.item.name }}?
+    </div>
+    <div class="remodal-body">
+        <p class="gray text-center">
+            &ldquo; {{ item.item.description }} &rdquo;
+        </p>
+        <p>
+        This item will be gone after use.
+        </p>
+    </div>
+    <div class="remodal-body border-top-gray">
+        <form action="{% url 'use_item' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="inventory_pk" value="{{ item.pk }}" />
 
-      <div class="right mb10">
-        <button data-remodal-action="cancel">Cancel</button>
-        <button type="submit" class="primary">OK</button>
-      </div>
-    </form>
-  </div>
-</div>
+        <div class="right mb10">
+            <button data-remodal-action="cancel">Cancel</button>
+            <button type="submit" class="primary">OK</button>
+        </div>
+        </form>
+    </div>
+    </div>
 {% endif %}
 
 {% endfor %}
