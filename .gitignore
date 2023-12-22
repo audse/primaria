@@ -1,6 +1,4 @@
 *.pyc
-/venv/
-**/migrations
 celerybeat-schedule.db
 celery1.log
 db.sqlite3
@@ -9,3 +7,4 @@ run.py
 **/.DS_Store
 .DS_Store
 celerybeat.pid
+.envrc

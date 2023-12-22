@@ -16,44 +16,49 @@
 - [ ] Online trading card game
 
 ## Local Installation
-- Make sure you have Python2 & pip installed
 
-### Create Python2 Virtualenv
-- `python2 -m virtualenv venv`
-- Add variables to beginning of `venv/bin/activate`:
-    - `export SECRET_KEY='your_secret_key_here`
-    - `export DB_NAME='your_database_name_here`
-    - `export DB_USER='your_database_username_here`
-    - `export DB_PASS='your_database_password_here`
-    - `export DB_HOST='your_database_hostname_here` (e.g. localhost)
+The instructions focus on M1 MacOS. You may have to modify instructions for other platforms.
 
-#### Start Virtualenv
-- `source venv/bin/activate`
+### Requirements
+- Python 2.7.18
+- Postgres
+- Pip
+- `pyenv`
+- `pyenv-virtualenv`
+- `direnv`
+- `rabbitmq`
 
-### Install Dependencies
-- `brew install rabbitmq` (macOS)
-- `pip install django==1.9.6`
-- `pip install setuptools==44.1.1`
-- `pip install anyjson==0.3.3`
-- `pip install celery==3.1.25`
-- `pip install psycopg2-binary` (macOS)
-- `pip install django-celery==3.2.1`
-- `pip install django-compressor==2.0`
-- `pip install django-sass-processor==0.5.3`
+### Create Python2 Env
+- `pyenv virtualenv 2.7.18 primaria-env`
+
+#### Start Env
+- `pyenv activate primaria-env`
 
 ### Create Database
 - Create `primaria` database in Postgres
-- Alter `venv/bin/activate` with your own database details
+
+### Add Database Secrets to Env
+1. Create `.envrc`
+2. Add variables to `.envrc`:
+```bash
+export SECRET_KEY='your_secret_key_here' # you can generate one
+export DB_NAME='your_database_name_here'
+export DB_USER='your_database_username_here'
+export DB_PASS='your_database_password_here'
+export DB_HOST='your_database_hostname_here' # e.g. localhost
+```
+3. Restart your terminal
+
+### Install Dependencies
+- `pip install -r requirements.txt`
 
 ### Migrate Database
 - `python manage.py migrate`
 
 ### Load DB Data
-- `python manage.py makemigrations`
-- `python manage.py migrate`
 - `python manage.py loaddata db.json`
 
-### Start Celery Workers
+### Start Workers
 - `brew services start rabbitmq`
 - `python manage.py celery worker`
 - `python manage.py celery beat`
