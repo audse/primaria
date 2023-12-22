@@ -6,6 +6,11 @@ from django.contrib.auth.models import User
 from .models import Shop, Item, Stock, Category, BankAccount
 from random import randint
 
+@celery.signals.worker_ready.connect
+def at_start(sender, **k):
+    with sender.app.connection() as conn:
+         sender.app.send_task('shop.tasks.restock', connection=conn)
+
 @celery.decorators.periodic_task(run_every=datetime.timedelta(minutes=10))
 def restock():
     print("Restocking shops...")
