@@ -9,27 +9,55 @@ import django.utils.timezone
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('shop', '__first__'),
+        ("shop", "__first__"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Quest',
+            name="Quest",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('goddess', models.CharField(max_length=140)),
-                ('completed', models.BooleanField(default=False)),
-                ('cancelled', models.BooleanField(default=False)),
-                ('reward_points', models.IntegerField(blank=True, null=True)),
-                ('date', models.DateTimeField(default=django.utils.timezone.now)),
-                ('requested_item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='requested_item', to='shop.Item')),
-                ('reward_item', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='shop.Item')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("goddess", models.CharField(max_length=140)),
+                ("completed", models.BooleanField(default=False)),
+                ("cancelled", models.BooleanField(default=False)),
+                ("reward_points", models.IntegerField(blank=True, null=True)),
+                ("date", models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "requested_item",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="requested_item",
+                        to="shop.Item",
+                    ),
+                ),
+                (
+                    "reward_item",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="shop.Item",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
