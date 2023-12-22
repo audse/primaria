@@ -9,7 +9,6 @@ import django.utils.timezone
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,148 +17,319 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='BankAccount',
+            name="BankAccount",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('level', models.IntegerField(default=1)),
-                ('balance', models.IntegerField(default=0)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("level", models.IntegerField(default=1)),
+                ("balance", models.IntegerField(default=0)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30)),
             ],
         ),
         migrations.CreateModel(
-            name='Gallery',
+            name="Gallery",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=140, null=True)),
-                ('space', models.IntegerField(default=5)),
-                ('upgrade_cost', models.IntegerField(default=500)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=140, null=True)),
+                ("space", models.IntegerField(default=5)),
+                ("upgrade_cost", models.IntegerField(default=500)),
             ],
         ),
         migrations.CreateModel(
-            name='Inventory',
+            name="Inventory",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('gallery', models.BooleanField(default=False)),
-                ('box', models.BooleanField(default=False)),
-                ('pending', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("gallery", models.BooleanField(default=False)),
+                ("box", models.BooleanField(default=False)),
+                ("pending", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='Item',
+            name="Item",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=140)),
-                ('url', models.CharField(max_length=140)),
-                ('description', models.TextField()),
-                ('price_class', models.IntegerField()),
-                ('rarity', models.IntegerField(default=1)),
-                ('hunger', models.IntegerField(default=0)),
-                ('wellness', models.IntegerField(default=0)),
-                ('happiness', models.IntegerField(default=0)),
-                ('usable', models.BooleanField(default=True)),
-                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='shop.Category')),
-                ('second_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='second_category', to='shop.Category')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=140)),
+                ("url", models.CharField(max_length=140)),
+                ("description", models.TextField()),
+                ("price_class", models.IntegerField()),
+                ("rarity", models.IntegerField(default=1)),
+                ("hunger", models.IntegerField(default=0)),
+                ("wellness", models.IntegerField(default=0)),
+                ("happiness", models.IntegerField(default=0)),
+                ("usable", models.BooleanField(default=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="shop.Category",
+                    ),
+                ),
+                (
+                    "second_category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="second_category",
+                        to="shop.Category",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Shop',
+            name="Shop",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=140)),
-                ('url', models.CharField(max_length=30)),
-                ('description', models.TextField()),
-                ('location', models.CharField(max_length=140)),
-                ('min_items', models.IntegerField(default=3)),
-                ('max_items', models.IntegerField(default=18)),
-                ('restock', models.IntegerField()),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.Category')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=140)),
+                ("url", models.CharField(max_length=30)),
+                ("description", models.TextField()),
+                ("location", models.CharField(max_length=140)),
+                ("min_items", models.IntegerField(default=3)),
+                ("max_items", models.IntegerField(default=18)),
+                ("restock", models.IntegerField()),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="shop.Category"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Stock',
+            name="Stock",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('price', models.IntegerField()),
-                ('quantity', models.IntegerField()),
-                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.Item')),
-                ('shop', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.Shop')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("price", models.IntegerField()),
+                ("quantity", models.IntegerField()),
+                (
+                    "item",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="shop.Item"
+                    ),
+                ),
+                (
+                    "shop",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="shop.Shop"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Trade',
+            name="Trade",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('message', models.CharField(blank=True, max_length=140, null=True)),
-                ('date', models.DateTimeField(default=django.utils.timezone.now)),
-                ('items', models.ManyToManyField(blank=True, related_name='items', to='shop.Inventory')),
-                ('original_trade', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='original', to='shop.Trade')),
-                ('sending_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='trade_sending_user', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("message", models.CharField(blank=True, max_length=140, null=True)),
+                ("date", models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "items",
+                    models.ManyToManyField(
+                        blank=True, related_name="items", to="shop.Inventory"
+                    ),
+                ),
+                (
+                    "original_trade",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="original",
+                        to="shop.Trade",
+                    ),
+                ),
+                (
+                    "sending_user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="trade_sending_user",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='UserShop',
+            name="UserShop",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=140, null=True)),
-                ('space', models.IntegerField(default=5)),
-                ('upgrade_cost', models.IntegerField(default=500)),
-                ('shop_till', models.IntegerField(default=0)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=140, null=True)),
+                ("space", models.IntegerField(default=5)),
+                ("upgrade_cost", models.IntegerField(default=500)),
+                ("shop_till", models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
-            name='UserShopStock',
+            name="UserShopStock",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('price', models.IntegerField(blank=True, null=True)),
-                ('item', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.Item')),
-                ('shop', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.UserShop')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("price", models.IntegerField(blank=True, null=True)),
+                (
+                    "item",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="shop.Item"
+                    ),
+                ),
+                (
+                    "shop",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="shop.UserShop"
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='usershop',
-            name='stock',
-            field=models.ManyToManyField(blank=True, through='shop.UserShopStock', to='shop.Item'),
+            model_name="usershop",
+            name="stock",
+            field=models.ManyToManyField(
+                blank=True, through="shop.UserShopStock", to="shop.Item"
+            ),
         ),
         migrations.AddField(
-            model_name='usershop',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="usershop",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='shop',
-            name='items',
-            field=models.ManyToManyField(blank=True, through='shop.Stock', to='shop.Item'),
+            model_name="shop",
+            name="items",
+            field=models.ManyToManyField(
+                blank=True, through="shop.Stock", to="shop.Item"
+            ),
         ),
         migrations.AddField(
-            model_name='inventory',
-            name='item',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='shop.Item'),
+            model_name="inventory",
+            name="item",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="shop.Item",
+            ),
         ),
         migrations.AddField(
-            model_name='inventory',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="inventory",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='gallery',
-            name='cards',
-            field=models.ManyToManyField(blank=True, related_name='cards', to='shop.Item'),
+            model_name="gallery",
+            name="cards",
+            field=models.ManyToManyField(
+                blank=True, related_name="cards", to="shop.Item"
+            ),
         ),
         migrations.AddField(
-            model_name='gallery',
-            name='plush',
-            field=models.ManyToManyField(blank=True, related_name='plush', to='shop.Item'),
+            model_name="gallery",
+            name="plush",
+            field=models.ManyToManyField(
+                blank=True, related_name="plush", to="shop.Item"
+            ),
         ),
         migrations.AddField(
-            model_name='gallery',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="gallery",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]
