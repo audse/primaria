@@ -1,9 +1,6 @@
 import datetime
 import celery
-from celery.task.schedules import crontab
-
-from django.contrib.auth.models import User
-from .models import Shop, Item, Stock, Category, BankAccount
+from .models import Shop, Item, Stock
 from random import randint
 
 

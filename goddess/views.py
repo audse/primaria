@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect
-
 from core.models import Pet, Avatar
 from social.models import Message
 from world.models import DailyClaim
 from shop.models import Category, Item, Inventory
 from utils.error import error_page
-
 from .models import Quest
-
 from datetime import datetime
 import random
 

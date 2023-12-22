@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
-
 from datetime import datetime
-
 from ..models import DailyClaim
 from shop.models import Shop, Item, Inventory
 from utils.error import error_page

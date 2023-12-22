@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
-
 from ..models import Category, Inventory
 from core.models import Animal, Pet
-
 import random
-
 from utils import avatars
-from utils.error import handle_error, require_login, error_page
+from utils.error import error_page
 
 
 def inventory_page(request):

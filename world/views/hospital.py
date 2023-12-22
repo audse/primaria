@@ -1,8 +1,4 @@
 from django.shortcuts import render, redirect
-
-from datetime import datetime
-import random
-
 from ..models import MedicinePickup
 from shop.models import Item, Category, Inventory
 from core.models import Pet

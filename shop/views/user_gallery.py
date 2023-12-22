@@ -1,14 +1,9 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
-
-
 from ..models import Category, Item, Inventory, Gallery
 from social.models import Message, Badge
 from core.models import Pet, Avatar
-
-from utils.error import handle_error, require_login, error_page
+from utils.error import error_page
 
 
 def gallery_page(request):

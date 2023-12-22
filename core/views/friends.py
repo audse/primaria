@@ -1,20 +1,9 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.models import User
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import authenticate
-from django.contrib.auth.password_validation import (
-    validate_password,
-    password_validators_help_text_html,
-)
-from datetime import datetime
-from datetime import timedelta
-
-from core.models import FriendRequest, Pet, Avatar, Profile
-from social.models import Badge, Message
-from shop.models import UserShop, Gallery
-from utils.error import handle_error, error_page
-from users import profile_page, settings_page
+from core.models import FriendRequest
+from social.models import Message
+from utils.error import handle_error
+from users import settings_page
 
 
 def friends_page(request):

@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-
 from core.models import Pet
 from utils.error import error_page
 from core.views.pets import successful_create_pet_page

@@ -1,11 +1,8 @@
 from django.shortcuts import render, redirect
-
 from django.core.paginator import Paginator
-
 from core.views import error_page
 from social.models import Message, Board, Topic, Reply
 from core.models import Pet, Avatar
-
 import random
 from django.utils import timezone
 

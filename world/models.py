@@ -3,8 +3,6 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 
-from shop.models import Item
-
 
 class Score(models.Model):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE)

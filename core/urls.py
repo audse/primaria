@@ -1,7 +1,5 @@
-from django.conf.urls import url, include
-from django.contrib import admin
+from django.conf.urls import url
 
-from core import views
 from utils.error import error_page
 
 urlpatterns = [

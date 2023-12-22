@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
-
 from ..models import Inventory
-
-from utils.error import handle_error, require_login, error_page
+from utils.error import error_page
 
 
 def safety_deposit_box_page(request):

@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
-
 import random
-
 from shop.models import Item, Category, Inventory
 from social.models import Message
 from core.models import Avatar
 from utils.error import error_page
-
 from shop.views.shop import shop_page
 from goddess.views import goddess_commerce_page
 

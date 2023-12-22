@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from social.models import Board, Topic
 
 

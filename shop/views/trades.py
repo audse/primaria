@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
-
 from django.core.paginator import Paginator
-
 from ..models import Category, Inventory, Trade
 from social.models import Message
 from core.models import Avatar
-
-from utils.error import handle_error, require_login, error_page
+from utils.error import error_page
 
 
 def trading_post_page(request):

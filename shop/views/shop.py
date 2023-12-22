@@ -1,11 +1,6 @@
 from django.shortcuts import render, redirect
-
-from ..models import Item, Inventory, Shop, Stock, UserShop, UserShopStock
-
-from operator import itemgetter
-import random
+from ..models import Item, Inventory, Shop, Stock, UserShopStock
 from itertools import chain
-
 from utils import avatars
 from utils.error import handle_error, require_login, error_page
 

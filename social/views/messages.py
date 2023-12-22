@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.models import User
-
 from core.views import error_page, profile_page
 from social.models import Message
 

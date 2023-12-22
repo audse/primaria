@@ -1,7 +1,4 @@
-from django.conf.urls import url, include
-from django.contrib import admin
-
-from . import views
+from django.conf.urls import url
 
 urlpatterns = [
     url(r"^messages/$", "social.views.messages_page", name="messages_page"),

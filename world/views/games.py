@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
-
 from datetime import datetime
-
 from ..models import Score
 from shop.models import Item, Inventory
 from social.models import Message, Badge

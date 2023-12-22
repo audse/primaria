@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
-
 from core.models import Pet, Animal, Avatar
 from social.models import Message
-
 from utils.error import handle_error, error_page
 
 

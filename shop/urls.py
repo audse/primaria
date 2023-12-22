@@ -1,7 +1,4 @@
-from django.conf.urls import url, include
-from django.contrib import admin
-
-from . import views
+from django.conf.urls import url
 
 urlpatterns = [
     url(r"^inventory/$", "shop.views.inventory_page", name="inventory_page"),

@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
@@ -9,7 +8,6 @@ from django.contrib.auth.password_validation import (
 )
 from datetime import datetime
 from datetime import timedelta
-
 from core.models import FriendRequest, Pet, Avatar, Profile
 from social.models import Badge, Message
 from shop.models import UserShop, Gallery

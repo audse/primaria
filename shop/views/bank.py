@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
-
 from ..models import BankAccount
 from social.models import Message
 from world.models import DailyClaim
 from core.models import Avatar
 from datetime import datetime
-
-from utils.error import handle_error, require_login, error_page
+from utils.error import error_page
 
 
 def compound_interest(principal, rate, times_per_year, years):

@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
-
 from datetime import datetime
 import random
-
 from ..models import DailyClaim
 from shop.models import Item, Category, Inventory
 from social.models import Message

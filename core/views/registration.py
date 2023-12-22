@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import (
     validate_password,
     password_validators_help_text_html,
 )
-
 from core.models import Avatar
 from social.models import Message
 from utils.error import error_page

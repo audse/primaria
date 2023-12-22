@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -7,12 +6,10 @@ from django.contrib.auth import authenticate
 from datetime import datetime
 from datetime import timedelta
 import random
-
 from shop.models import Item, Category, Inventory
 from world.models import DailyClaim
-
 from core.views.static import home_page
-from utils.error import handle_error, error_page
+from utils.error import error_page
 
 
 def login_page(request):

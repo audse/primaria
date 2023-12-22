@@ -1,8 +1,6 @@
 import datetime
 import celery
-from celery.task.schedules import crontab
 
-from django.contrib.auth.models import User
 from social.models import Message
 from .models import Pet
 from random import randint
