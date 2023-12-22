@@ -10479,8 +10479,6 @@
       "description": "Full of organic fruits and vegetables, sure to keep your pets well nourished and healthy, even though everything seems to have a very slight coating of dirt.",
       "location": "suburbs",
       "category": 4,
-      "prices": "",
-      "quantities": "",
       "restock": 1
     }
   },
@@ -10493,8 +10491,6 @@
       "description": "Oh, you're looking for books? You've come to the right place! We are going out of business soon so all books are half price!",
       "location": "suburbs",
       "category": 3,
-      "prices": "",
-      "quantities": "",
       "restock": 3
     }
   },
@@ -10507,8 +10503,6 @@
       "description": "Create the life you were born to live. Ancient fixes proven to cure the mind, body, and spirit. The healing power of nature can get you past any sickness.",
       "location": "reservoir",
       "category": 6,
-      "prices": "",
-      "quantities": "",
       "restock": 1
     }
   },
@@ -10521,8 +10515,6 @@
       "description": "Give your pet new life. Purify and perfect all imperfections. Potions guaranteed to have desirable effects on all pets, young and old.",
       "location": "caves",
       "category": 7,
-      "prices": "",
-      "quantities": "",
       "restock": 1
     }
   },
@@ -10535,8 +10527,6 @@
       "description": "Find your new furry friend at Shop Plush (TM)!",
       "location": "city",
       "category": 10,
-      "prices": "",
-      "quantities": "",
       "restock": 1
     }
   },
@@ -10549,8 +10539,6 @@
       "description": "Your one-stop-shop for any foods that are \"guaranteed\" to be good and good for you! No refunds!",
       "location": "city",
       "category": 12,
-      "prices": "",
-      "quantities": "",
       "restock": 1
     }
   },
@@ -10563,8 +10551,6 @@
       "description": "What? No, we don't have... Oh, you're just looking for cards? Yeah, uh, we have those. Yeah. Cards. For playing.",
       "location": "caves",
       "category": 13,
-      "prices": "",
-      "quantities": "",
       "restock": 1
     }
   },
@@ -10577,8 +10563,6 @@
       "description": "Do you need trinkets? Of course you do! How else will people know you visited somewhere if you don't own constant reminders of distant memories?",
       "location": "beach",
       "category": 25,
-      "prices": "",
-      "quantities": "",
       "restock": 1
     }
   },
