@@ -27,7 +27,7 @@ def world_page(request):
 def dump_page(request):
     success = request.session.pop("success", False)
     dump_items = Inventory.objects.filter(user=None).order_by("?")[:18]
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         inventory = Inventory.objects.filter(
             user=request.user, box=False, pending=False
         )
@@ -41,7 +41,7 @@ def dump_page(request):
 
 
 def take_from_dump(request, pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         item = Inventory.objects.filter(user=None, pk=pk).first()
         if item:
             item.user = request.user
@@ -60,7 +60,7 @@ def take_from_dump(request, pk):
 
 
 def dump_item(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pk = request.POST.get("item")
         try:
             pk = int(pk)
@@ -84,7 +84,7 @@ def dump_item(request):
 
 
 def vending_machine_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         vend_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -105,7 +105,7 @@ def vending_machine_page(request):
 
 
 def vending_machine(request, pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         vend_claim = DailyClaim.objects.filter(
             user=request.user,

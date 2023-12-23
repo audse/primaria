@@ -27,26 +27,19 @@
 The instructions focus on M1 MacOS. You may have to modify instructions for other platforms.
 
 ### Requirements
-- Python 2.7.18
+- Python 3.9
 - Postgres
 - Pip
-- `pyenv`
-- `pyenv-virtualenv`
-- `direnv`
 - `rabbitmq`
 
 ### Create Python2 Env
-- `pyenv virtualenv 2.7.18 primaria-env`
-
-#### Start Env
-- `pyenv activate primaria-env`
+- `python -m virtualenv env`
 
 ### Create Database
 - Create `primaria` database in Postgres
 
 ### Add Database Secrets to Env
-1. Create `.envrc`
-2. Add variables to `.envrc`:
+- Add variables to `env/bin/activate`:
 ```bash
 export SECRET_KEY='your_secret_key_here' # you can generate one
 export DB_NAME='your_database_name_here'
@@ -54,7 +47,9 @@ export DB_USER='your_database_username_here'
 export DB_PASS='your_database_password_here'
 export DB_HOST='your_database_hostname_here' # e.g. localhost
 ```
-3. Restart your terminal
+
+#### Start Env
+- `source env/bin/activate`
 
 ### Install Dependencies
 - `pip install -r requirements.txt`
@@ -67,8 +62,8 @@ export DB_HOST='your_database_hostname_here' # e.g. localhost
 
 ### Start Workers
 - `brew services start rabbitmq`
-- `python manage.py celery worker`
-- `python manage.py celery beat`
+- `celery -A primaria worker -l INFO`
+- `celery -A primaria beat`
 
 ### Start Server
 - `python manage.py createsuperuser` (optional)

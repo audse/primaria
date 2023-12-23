@@ -10,7 +10,7 @@ import random
 
 
 def goddess_neglect_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         today = datetime.today()
         claims = DailyClaim.objects.filter(
@@ -55,7 +55,7 @@ def goddess_neglect_page(request):
 
 
 def goddess_sun_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
 
         unfinished_quest = Quest.objects.filter(
@@ -84,7 +84,7 @@ def goddess_sun_page(request):
 
 
 def goddess_garden_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
 
         unfinished_quest = Quest.objects.filter(
@@ -113,7 +113,7 @@ def goddess_garden_page(request):
 
 
 def goddess_ocean_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
 
         unfinished_quest = Quest.objects.filter(
@@ -142,7 +142,7 @@ def goddess_ocean_page(request):
 
 
 def goddess_commerce_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
 
         unfinished_quest = Quest.objects.filter(
@@ -184,7 +184,7 @@ def goddess_commerce_page(request):
 
 
 def goddess_neglect_collect(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         if pet:
             today = datetime.today()
@@ -389,7 +389,7 @@ def goddess_neglect_collect(request):
 
 
 def start_goddess_quest(request, goddess):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         unfinished_quests = Quest.objects.filter(
             user=request.user, goddess=goddess, completed=False
@@ -532,7 +532,7 @@ def start_goddess_quest(request, goddess):
 
 
 def complete_goddess_quest(request, goddess):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         quest = Quest.objects.filter(
             user=request.user, goddess=goddess, completed=False
         ).first()
@@ -600,7 +600,7 @@ def complete_goddess_quest(request, goddess):
 
 
 def cancel_goddess_quest(request, goddess):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         quest = Quest.objects.filter(
             user=request.user, goddess=goddess, completed=False
         ).first()

@@ -9,7 +9,7 @@ from goddess.views import goddess_commerce_page
 
 
 def restricted_area_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         mystery_card = Item.objects.get(url="mystery-card")
         mystery_card = Inventory.objects.filter(
             user=request.user, item=mystery_card, box=False, pending=False
@@ -42,7 +42,7 @@ def restricted_area_page(request):
 
 
 def update_card(request, crystal):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         mystery_card = Item.objects.get(url="mystery-card")
         mystery_card = Inventory.objects.filter(
             user=request.user, item=mystery_card
@@ -82,7 +82,7 @@ def update_card(request, crystal):
 
 
 def activate_card(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         deactivated_card = Item.objects.get(url="deactivated-bank-card")
         deactivated_card = Inventory.objects.filter(
             item=deactivated_card, user=request.user, box=False, pending=False
@@ -110,7 +110,7 @@ def activate_card(request):
 
 
 def restricted_machine(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         activated_card = Item.objects.get(url="activated-area-card")
         activated_card = Inventory.objects.filter(
             user=request.user, item=activated_card, box=False, pending=False

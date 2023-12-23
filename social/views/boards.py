@@ -99,7 +99,7 @@ def topic_page(request, topic):
 
 
 def change_avatar(request, avatar):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         try:
             avatar = Avatar.objects.get(url=avatar)
         except:
@@ -119,7 +119,7 @@ def change_avatar(request, avatar):
 
 
 def post_topic(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         board = request.POST.get("board")
         title = request.POST.get("title")
         message = request.POST.get("message")
@@ -161,7 +161,7 @@ def post_topic(request):
 
 
 def reply_to_topic(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         topic = request.POST.get("topic")
         message = request.POST.get("message")
         if topic:
@@ -228,7 +228,7 @@ def reply_to_topic(request):
 
 
 def lock_topic(request, topic):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         topic = Topic.objects.filter(slug=topic).first()
         topic.locked = True
         topic.save()
@@ -239,7 +239,7 @@ def lock_topic(request, topic):
 
 
 def unlock_topic(request, topic):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         topic = Topic.objects.filter(slug=topic).first()
         topic.locked = False
         topic.save()
@@ -250,7 +250,7 @@ def unlock_topic(request, topic):
 
 
 def delete_topic(request, topic):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         topic = Topic.objects.filter(slug=topic).first()
         topic.deleted = True
         topic.save()
@@ -266,7 +266,7 @@ def delete_topic(request, topic):
 
 
 def undelete_topic(request, topic):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         topic = Topic.objects.filter(slug=topic).first()
         topic.deleted = False
         topic.save()
@@ -277,7 +277,7 @@ def undelete_topic(request, topic):
 
 
 def sticky_topic(request, topic):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         topic = Topic.objects.filter(slug=topic).first()
         topic.sticky = True
         topic.save()
@@ -288,7 +288,7 @@ def sticky_topic(request, topic):
 
 
 def unsticky_topic(request, topic):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         topic = Topic.objects.filter(slug=topic).first()
         topic.sticky = False
         topic.save()
@@ -299,7 +299,7 @@ def unsticky_topic(request, topic):
 
 
 def delete_reply(request):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         reply = request.POST.get("reply")
         deleted_reason = request.POST.get("deleted_reason")
         reply = Reply.objects.filter(pk=reply).first()
@@ -320,7 +320,7 @@ def delete_reply(request):
 
 
 def undelete_reply(request, reply):
-    if request.user.is_authenticated() and request.user.is_staff:
+    if request.user.is_authenticated and request.user.is_staff:
         reply = Reply.objects.filter(pk=reply).first()
         reply.deleted = False
         reply.deleted_reason = None

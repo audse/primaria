@@ -13,7 +13,7 @@ from utils.error import error_page
 
 
 def login_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         request.session["error"] = "You are already logged in."
         return redirect(error_page)
     else:
@@ -22,7 +22,7 @@ def login_page(request):
 
 
 def login(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         request.session["error"] = "You are already logged in."
         return redirect(error_page)
     else:
@@ -56,7 +56,7 @@ def logout(request):
 
 
 def claim_login_bonus(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         claim = DailyClaim.objects.filter(
             user=request.user,
@@ -195,7 +195,7 @@ def claim_login_bonus(request):
 
 
 def claimed_login_bonus_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         claim = DailyClaim.objects.filter(
             user=request.user,

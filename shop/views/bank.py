@@ -17,7 +17,7 @@ def compound_interest(principal, rate, times_per_year, years):
 
 
 def bank_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         bank_account = BankAccount.objects.filter(user=request.user).first()
         interest = DailyClaim.objects.filter(
@@ -58,7 +58,7 @@ def bank_page(request):
 
 
 def open_bank_account_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         check_for_bank_account = BankAccount.objects.filter(user=request.user).count()
         if check_for_bank_account == 0:
             error = request.session.pop("error", False)
@@ -72,7 +72,7 @@ def open_bank_account_page(request):
 
 
 def open_bank_account(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         check_for_bank_account = BankAccount.objects.filter(user=request.user).count()
         if check_for_bank_account == 0:
             level = int(request.POST.get("level"))
@@ -135,7 +135,7 @@ def open_bank_account(request):
 
 
 def deposit(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         bank_account = BankAccount.objects.filter(user=request.user).first()
         if bank_account:
             deposit = request.POST.get("amount")
@@ -182,7 +182,7 @@ def deposit(request):
 
 
 def withdraw(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         bank_account = BankAccount.objects.filter(user=request.user).first()
         if bank_account:
             withdraw = request.POST.get("amount")
@@ -219,7 +219,7 @@ def withdraw(request):
 
 
 def collect_interest(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         bank_account = BankAccount.objects.filter(user=request.user).first()
         if bank_account:
             today = datetime.today()
@@ -269,7 +269,7 @@ def collect_interest(request):
 
 
 def upgrade_bank_account(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         bank_account = BankAccount.objects.filter(user=request.user).first()
         if bank_account:
             can_upgrade = False

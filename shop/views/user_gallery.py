@@ -7,7 +7,7 @@ from utils.error import error_page
 
 
 def gallery_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         gallery = Gallery.objects.filter(user=request.user).first()
         if gallery:
             plush_category = Category.objects.get(name="plush")
@@ -83,7 +83,7 @@ def user_gallery_page(request, username):
 
 
 def open_gallery_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         gallery = Gallery.objects.filter(user=request.user).first()
         if gallery is None:
             return render(request, "shop/open_gallery_page.html")
@@ -96,7 +96,7 @@ def open_gallery_page(request):
 
 
 def open_gallery(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         gallery = Gallery.objects.filter(user=request.user).first()
         if gallery is None:
             if request.user.profile.points >= 500:
@@ -120,7 +120,7 @@ def open_gallery(request):
 
 
 def add_gallery_item(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         gallery = Gallery.objects.filter(user=request.user).first()
         if gallery:
             item = request.POST.get("item")
@@ -260,7 +260,7 @@ def add_gallery_item(request):
 
 
 def upgrade_gallery(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         gallery = Gallery.objects.filter(user=request.user).first()
         if gallery:
             if request.user.profile.points >= gallery.upgrade_cost:
@@ -285,7 +285,7 @@ def upgrade_gallery(request):
 
 
 def rename_gallery(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         gallery = Gallery.objects.filter(user=request.user).first()
         if gallery:
             new_gallery_name = request.POST.get("new_gallery_name")

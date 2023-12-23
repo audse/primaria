@@ -60,7 +60,7 @@ def profile_page(request, username):
 
 
 def edit_bio(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user = User.objects.filter(username=request.user.username).first()
         if user:
             bio = request.POST.get("bio")
@@ -76,7 +76,7 @@ def edit_bio(request):
 
 
 def settings_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         confirm = request.session.pop("confirm", False)
         help_text = password_validators_help_text_html()
 
@@ -91,7 +91,7 @@ def settings_page(request):
 
 
 def change_password(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         new_password = request.POST.get("new_password")
         confirm_new_password = request.POST.get("confirm_new_password")
         if new_password == confirm_new_password:
@@ -122,7 +122,7 @@ def change_password(request):
 
 
 def change_view_settings(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         disable_headers = request.POST.get("disable_headers")
         night_mode = request.POST.get("night_mode")
         if disable_headers:
@@ -143,7 +143,7 @@ def change_view_settings(request):
 def block_user(request, username):
     user = User.objects.filter(username=username).first()
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return (request, "You must be logged in to view this page.")
     if user is None:
         return handle_error(request, "No user with that username was found.")
@@ -159,7 +159,7 @@ def block_user(request, username):
 def unblock_user(request, username):
     user = User.objects.filter(username=username).first()
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
     if user is None:
         return handle_error(request, "No user with that username was found.")

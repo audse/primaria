@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "goddess",
     "utils",
     "psycopg2",
-    "djcelery",
     "sass_processor",
     "django.contrib.humanize",
     "django.contrib.admin",
@@ -50,13 +49,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -143,19 +141,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-import djcelery
-
-djcelery.setup_loader()
-
 STATIC_ROOT = os.path.join(BASE_DIR, "primaria/static/")
 STATIC_URL = "/static/"
 
 BROKER_URL = "amqp://"
-# BROKER_URL = 'django://'
+CELERY_BROKER_URL = "amqp://"
+CELERY_IMPORTS = ["core.tasks", "shop.tasks"]
 
 CELERY_ACCEPT_CONTENT = ["json", "pickle", "application/text"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-
-CELERY_RESULT_BACKEND = "djcelery.backends.database:DatabaseBackend"
-CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"

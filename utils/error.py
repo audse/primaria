@@ -14,7 +14,7 @@ def handle_error(request, message):
 
 
 def require_login(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return render(
             request,
             "core/error_page.html",

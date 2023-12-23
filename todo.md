@@ -7,8 +7,6 @@
 - Split up models further
 - Remove jQuery dependency
 - Remove Remodal dependency
-- Upgrade to newest Python version
-- Upgrade to newest Django version
 - Model managers
 
 ### Design

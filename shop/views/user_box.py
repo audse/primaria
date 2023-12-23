@@ -4,7 +4,7 @@ from utils.error import error_page
 
 
 def safety_deposit_box_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         inventory_items = Inventory.objects.filter(
             user=request.user, box=False, pending=False
         )
@@ -20,7 +20,7 @@ def safety_deposit_box_page(request):
 
 
 def add_box_item(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         item = request.POST.get("item")
         item = Inventory.objects.filter(
             user=request.user, box=False, pending=False, pk=item
@@ -45,7 +45,7 @@ def add_box_item(request):
 
 
 def remove_box_item(request, item):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         item = Inventory.objects.filter(user=request.user, pk=item).first()
         if item:
             inventory_items = Inventory.objects.filter(
@@ -69,7 +69,7 @@ def remove_box_item(request, item):
 
 
 def upgrade_box(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.profile.points >= 1000:
             request.user.profile.subtract_points(1000)
             request.user.profile.box_size += 5

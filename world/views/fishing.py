@@ -9,7 +9,7 @@ from utils.error import error_page
 
 
 def fishing_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         fish_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -38,7 +38,7 @@ def fishing_page(request):
 
 
 def purchase_rod(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.profile.points >= 5000:
             if request.user.profile.fishing_rod < 1:
                 request.user.profile.subtract_points(5000)
@@ -58,7 +58,7 @@ def purchase_rod(request):
 
 
 def upgrade_rod(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.profile.fishing_rod == 1:
             points = 10000
         elif request.user.profile.fishing_rod == 2:
@@ -85,7 +85,7 @@ def upgrade_rod(request):
 
 
 def purchase_bait(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         amount = request.POST.get("amount")
         try:
             amount = int(amount)
@@ -109,7 +109,7 @@ def purchase_bait(request):
 
 
 def fish(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         fish_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -233,7 +233,7 @@ def fish(request):
 
 
 def sell_fish(request, pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         fishing_category = Category.objects.filter(name="fishing")
         fish = Inventory.objects.filter(
             user=request.user,

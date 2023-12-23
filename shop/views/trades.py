@@ -7,7 +7,7 @@ from utils.error import error_page
 
 
 def trading_post_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         all_open_trades = Trade.objects.filter(original_trade=None).order_by("-date")
         paginator = Paginator(all_open_trades, 10)
         page = request.GET.get("page")
@@ -30,7 +30,7 @@ def trading_post_page(request):
 
 
 def open_trade_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         inventory = Inventory.objects.filter(
             user=request.user, box=False, pending=False
         )
@@ -41,7 +41,7 @@ def open_trade_page(request):
 
 
 def open_trade(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         items = request.POST.get("items")
         message = request.POST.get("message")
         if items:
@@ -80,7 +80,7 @@ def open_trade(request):
 
 
 def your_trades_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         your_trades = Trade.objects.filter(
             sending_user=request.user, original_trade=None
         ).order_by("-date")
@@ -103,7 +103,7 @@ def your_trades_page(request):
 
 
 def make_offer_page(request, pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         original = Trade.objects.filter(pk=pk).first()
         if original:
             inventory = Inventory.objects.filter(
@@ -123,7 +123,7 @@ def make_offer_page(request, pk):
 
 
 def make_offer(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         original = int(request.POST.get("original"))
         original = Trade.objects.filter(pk=original).first()
         if original:
@@ -179,7 +179,7 @@ def make_offer(request):
 
 
 def accept_offer(request, original_pk, offer_pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         original_trade = Trade.objects.filter(
             sending_user=request.user, pk=original_pk
         ).first()
@@ -263,7 +263,7 @@ def accept_offer(request, original_pk, offer_pk):
 
 
 def cancel_trade(request, trade_pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         trade = Trade.objects.filter(
             sending_user=request.user, pk=trade_pk, original_trade=None
         ).first()

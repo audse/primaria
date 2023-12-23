@@ -16,7 +16,7 @@ def pound_page(request):
 
 
 def adopt_from_pound(request, adopt):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         try:
             pet = Pet.objects.get(user=request.user)
         except:
@@ -45,7 +45,7 @@ def adopt_from_pound(request, adopt):
 
 
 def give_up_pet(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.get(user=request.user).first()
         if pet:
             pet.user = None

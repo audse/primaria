@@ -1,75 +1,76 @@
-from django.conf.urls import url
+from django.urls import re_path
+from . import views
 
 urlpatterns = [
-    url(r"^messages/$", "social.views.messages_page", name="messages_page"),
-    url(
+    re_path(r"^messages/$", views.messages_page, name="messages_page"),
+    re_path(
         r"^messages/read/(?P<pk>[0-9]+)/$",
-        "social.views.mark_message_as_read",
+        views.mark_message_as_read,
         name="mark_message_as_read",
     ),
-    url(
+    re_path(
         r"^messages/unread/(?P<pk>[0-9]+)/$",
-        "social.views.mark_message_as_unread",
+        views.mark_message_as_unread,
         name="mark_message_as_unread",
     ),
-    url(r"^messages/send/$", "social.views.send_message", name="send_message"),
-    url(
+    re_path(r"^messages/send/$", views.send_message, name="send_message"),
+    re_path(
         r"^messages/delete/(?P<pk>[0-9]+)/$",
-        "social.views.delete_message",
+        views.delete_message,
         name="delete_message",
     ),
-    url(r"^boards/$", "social.views.boards_page", name="boards_page"),
-    url(r"^boards/(?P<board>[\w-]+)/$", "social.views.board_page", name="board_page"),
-    url(
+    re_path(r"^boards/$", views.boards_page, name="boards_page"),
+    re_path(r"^boards/(?P<board>[\w-]+)/$", views.board_page, name="board_page"),
+    re_path(
         r"^boards/topic/(?P<topic>[\w-]+)/$",
-        "social.views.topic_page",
+        views.topic_page,
         name="topic_page",
     ),
-    url(
+    re_path(
         r"^boards/avatar/(?P<avatar>[\w-]+)/$",
-        "social.views.change_avatar",
+        views.change_avatar,
         name="change_avatar",
     ),
-    url(r"^boards/post/processing/$", "social.views.post_topic", name="post_topic"),
-    url(
+    re_path(r"^boards/post/processing/$", views.post_topic, name="post_topic"),
+    re_path(
         r"^boards/reply/processing/$",
-        "social.views.reply_to_topic",
+        views.reply_to_topic,
         name="reply_to_topic",
     ),
-    url(
+    re_path(
         r"^boards/topic/(?P<topic>[\w-]+)/lock/$",
-        "social.views.lock_topic",
+        views.lock_topic,
         name="lock_topic",
     ),
-    url(
+    re_path(
         r"^boards/topic/(?P<topic>[\w-]+)/unlock/$",
-        "social.views.unlock_topic",
+        views.unlock_topic,
         name="unlock_topic",
     ),
-    url(
+    re_path(
         r"^boards/topic/(?P<topic>[\w-]+)/delete/$",
-        "social.views.delete_topic",
+        views.delete_topic,
         name="delete_topic",
     ),
-    url(
+    re_path(
         r"^boards/topic/(?P<topic>[\w-]+)/undelete/$",
-        "social.views.undelete_topic",
+        views.undelete_topic,
         name="undelete_topic",
     ),
-    url(
+    re_path(
         r"^boards/topic/(?P<topic>[\w-]+)/sticky/$",
-        "social.views.sticky_topic",
+        views.sticky_topic,
         name="sticky_topic",
     ),
-    url(
+    re_path(
         r"^boards/topic/(?P<topic>[\w-]+)/unsticky/$",
-        "social.views.unsticky_topic",
+        views.unsticky_topic,
         name="unsticky_topic",
     ),
-    url(r"^boards/reply/delete/$", "social.views.delete_reply", name="delete_reply"),
-    url(
+    re_path(r"^boards/reply/delete/$", views.delete_reply, name="delete_reply"),
+    re_path(
         r"^boards/reply/(?P<reply>[0-9]+)/undelete/$",
-        "social.views.undelete_reply",
+        views.undelete_reply,
         name="undelete_reply",
     ),
 ]

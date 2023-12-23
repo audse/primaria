@@ -1,13 +1,10 @@
-import datetime
-import celery
-
 from social.models import Message
 from .models import Pet
 from random import randint
+from celery import shared_task
 
 
-# @celery.decorators.periodic_task(run_every=crontab(hour=13, minute=17))
-@celery.decorators.periodic_task(run_every=datetime.timedelta(hours=1))
+@shared_task
 def decrease_pet_stats():
     print("Decreasing pet stats...")
     for pet in Pet.objects.all():

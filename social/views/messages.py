@@ -5,7 +5,7 @@ from social.models import Message
 
 
 def messages_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         sent_messages = Message.objects.filter(
             sending_user=request.user, deleted_by_sender=False
         ).order_by("-date")
@@ -24,7 +24,7 @@ def messages_page(request):
 
 
 def mark_message_as_read(request, pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         message = Message.objects.filter(pk=pk).first()
         if message:
             if request.user == message.receiving_user:
@@ -45,7 +45,7 @@ def mark_message_as_read(request, pk):
 
 
 def mark_message_as_unread(request, pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         message = Message.objects.filter(pk=pk).first()
         if message:
             if request.user == message.receiving_user:
@@ -66,7 +66,7 @@ def mark_message_as_unread(request, pk):
 
 
 def send_message(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         receiving_user = request.POST.get("receiving_user")
         subject = request.POST.get("subject")
         text = request.POST.get("text")
@@ -113,7 +113,7 @@ def send_message(request):
 
 
 def delete_message(request, pk):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         message = Message.objects.filter(pk=pk).first()
         if message:
             if request.user == message.receiving_user:

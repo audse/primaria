@@ -5,7 +5,7 @@ from utils.error import error_page
 
 
 def your_shop_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         user_items = Inventory.objects.filter(
             user=request.user, box=False, pending=False
@@ -25,7 +25,7 @@ def your_shop_page(request):
 
 
 def open_shop_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop == None:
             return render(request, "shop/open_shop_page.html")
@@ -38,7 +38,7 @@ def open_shop_page(request):
 
 
 def open_shop(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop is None:
             if request.user.profile.points >= 500:
@@ -62,7 +62,7 @@ def open_shop(request):
 
 
 def add_shop_item(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop:
             item = request.POST.get("item")
@@ -106,7 +106,7 @@ def add_shop_item(request):
 
 
 def edit_price(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop:
             price = request.POST.get("price")
@@ -138,7 +138,7 @@ def edit_price(request):
 
 
 def remove_from_shop(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop:
             if shop.items:
@@ -175,7 +175,7 @@ def remove_from_shop(request):
 
 
 def withdraw_shop_till(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop:
             withdraw_amount = request.POST.get("withdraw_amount")
@@ -204,7 +204,7 @@ def withdraw_shop_till(request):
 
 
 def upgrade_shop(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop:
             if request.user.profile.points >= shop.upgrade_cost:
@@ -250,7 +250,7 @@ def user_shop_page(request, username):
 
 
 def purchase_from_user_shop(request, username):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user = User.objects.filter(username=username).first()
         if user:
             shop = UserShop.objects.filter(user=user).first()
@@ -303,7 +303,7 @@ def purchase_from_user_shop(request, username):
 
 
 def rename_shop(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         shop = UserShop.objects.filter(user=request.user).first()
         if shop:
             new_shop_name = request.POST.get("new_shop_name")

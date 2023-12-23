@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 from core.models import FriendRequest
 from social.models import Message
 from utils.error import handle_error
-from users import settings_page
+from .users import settings_page
 
 
 def friends_page(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
 
     pending_friend_requests = FriendRequest.objects.filter(receiving_user=request.user)
@@ -29,7 +29,7 @@ def send_friend_request(request, username):
     receiving_user = User.objects.filter(username=username).first()
     note = request.POST.get("note")
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
     if receiving_user is None:
         return handle_error(request, "No user with that username was found.")
@@ -87,7 +87,7 @@ def accept_friend_request(request, username):
         sending_user__username=username, receiving_user__username=request.user.username
     ).first()
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
     if requesting_user is None:
         return handle_error(request, "No user with that username was found.")
@@ -114,7 +114,7 @@ def reject_friend_request(request, username):
         sending_user__username=username, receiving_user__username=request.user.username
     ).first()
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
     if requesting_user is None:
         return handle_error(request, "No user with that username was found.")
@@ -136,7 +136,7 @@ def reject_friend_request(request, username):
 def remove_friend(request, username):
     user_to_remove = User.objects.filter(username=username).first()
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
     if user_to_remove is None:
         return handle_error(request, "No user with that username was found.")
@@ -150,7 +150,7 @@ def remove_friend(request, username):
 def change_friend_request_settings(request):
     friend_request_settings = request.POST.get("friend_request_settings")
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
 
     if not friend_request_settings:

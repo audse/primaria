@@ -10,7 +10,7 @@ from utils.error import error_page
 
 
 def register_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         request.session["error"] = "You are already registered."
         return redirect(error_page)
     else:
@@ -28,7 +28,7 @@ def successful_register_page(request):
 
 
 def register(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         request.session["error"] = "You are already registered."
         return redirect(error_page)
     else:

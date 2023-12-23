@@ -13,7 +13,7 @@ def games_page(request):
 
 def blackjack_page(request):
     today = datetime.today()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         scores_sent = Score.objects.filter(
             user=request.user,
             game="blackjack",
@@ -28,7 +28,7 @@ def blackjack_page(request):
 
 def tictactoe_page(request):
     today = datetime.today()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         scores_sent = Score.objects.filter(
             user=request.user,
             game="tictactoe",
@@ -43,7 +43,7 @@ def tictactoe_page(request):
 
 def pyramids_page(request):
     today = datetime.today()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         scores_sent = Score.objects.filter(
             user=request.user,
             game="pyramids",
@@ -58,7 +58,7 @@ def pyramids_page(request):
 
 def wheel_serendipity_page(request):
     today = datetime.today()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         score = Score.objects.filter(
             user=request.user,
             game="serendipity",
@@ -73,7 +73,7 @@ def wheel_serendipity_page(request):
 
 def wheel_plush_page(request):
     today = datetime.today()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         score = Score.objects.filter(
             user=request.user,
             game="plush",
@@ -87,7 +87,7 @@ def wheel_plush_page(request):
 
 
 def send_score(request, game):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.POST.get("score") == "success":
             today = datetime.today()
             scores_sent = Score.objects.filter(

@@ -6,7 +6,7 @@ from utils.error import error_page
 
 
 def hospital_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         medicine = MedicinePickup.objects.filter(user=request.user).first()
     else:
@@ -18,7 +18,7 @@ def hospital_page(request):
 
 
 def make_hospital_appointment(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         if pet:
             if pet.wellness < 3:
@@ -59,7 +59,7 @@ def make_hospital_appointment(request):
 
 
 def pickup_hospital_medicine(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         if pet:
             medicine = MedicinePickup.objects.filter(user=request.user).first()

@@ -7,7 +7,7 @@ from utils.error import error_page
 
 
 def inventory_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         items = Inventory.objects.filter(user=request.user, box=False, pending=False)
         item_count = items.count()
 
@@ -26,7 +26,7 @@ def inventory_page(request):
 
 
 def use_item(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         inventory_pk = request.POST.get("inventory_pk")
         inventory = Inventory.objects.filter(
             user=request.user, box=False, pending=False, pk=inventory_pk

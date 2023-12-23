@@ -1,2 +1,2 @@
-from boards import *
-from messages import *
+from .boards import *
+from .messages import *

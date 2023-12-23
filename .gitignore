@@ -8,3 +8,4 @@ run.py
 .DS_Store
 celerybeat.pid
 .envrc
+env/

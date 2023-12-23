@@ -50,7 +50,7 @@ def create_pet_step_3(request, animal):
 
 
 def create_pet(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         handle_error(request, "You must be logged in to view this page.")
 
     pet = Pet.objects.filter(user=request.user).first()
@@ -108,7 +108,7 @@ def successful_create_pet_page(request):
 
 
 def change_pet_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         if pet:
             # AVATARS
@@ -214,7 +214,7 @@ def change_pet(request):
     requested_string = "%s %s," % (requested_color, requested_animal_name)
     requested_animal = Animal.objects.filter(name=requested_animal_name).first()
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return handle_error(request, "You must be logged in to view this page.")
     if not current_pet:
         return handle_error(request, "You must have a pet to view this page.")

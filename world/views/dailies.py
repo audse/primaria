@@ -10,7 +10,7 @@ from utils.error import error_page
 
 def garden_page(request):
     today = datetime.today()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         claim = DailyClaim.objects.filter(
             user=request.user,
             daily_type="garden",
@@ -25,7 +25,7 @@ def garden_page(request):
 
 def garden_gather(request):
     today = datetime.today()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         claims = DailyClaim.objects.filter(
             user=request.user,
             daily_type="garden",
@@ -135,7 +135,7 @@ def garden_gather(request):
 
 
 def almighty_meatloaf_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         loaf_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -152,7 +152,7 @@ def almighty_meatloaf_page(request):
 
 
 def take_from_meatloaf(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         loaf_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -231,7 +231,7 @@ def take_from_meatloaf(request):
 
 
 def trails_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         today = datetime.today()
         trails_claim = DailyClaim.objects.filter(
@@ -250,7 +250,7 @@ def trails_page(request):
 
 
 def trails(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         pet = Pet.objects.filter(user=request.user).first()
         if pet:
             today = datetime.today()
@@ -334,7 +334,7 @@ def trails(request):
 
 
 def apple_orchard_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         orchard_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -351,7 +351,7 @@ def apple_orchard_page(request):
 
 
 def apple_orchard(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         orchard_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -404,7 +404,7 @@ def apple_orchard(request):
 
 
 def day_old_stock_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         dayold_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -421,7 +421,7 @@ def day_old_stock_page(request):
 
 
 def day_old_stock(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         dayold_claim = DailyClaim.objects.filter(
             user=request.user,

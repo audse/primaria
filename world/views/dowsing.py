@@ -7,7 +7,7 @@ from utils.error import error_page
 
 
 def quarry_page(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         crystal_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -72,7 +72,7 @@ def quarry_page(request):
 
 
 def purchase_dowsing_rod(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.profile.points >= 10000:
             if request.user.profile.dowsing_rod < 1:
                 request.user.profile.subtract_points(10000)
@@ -93,7 +93,7 @@ def purchase_dowsing_rod(request):
 
 
 def upgrade_dowsing_rod(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.profile.dowsing_rod == 1:
             points = 20000
         elif request.user.profile.dowsing_rod == 2:
@@ -120,7 +120,7 @@ def upgrade_dowsing_rod(request):
 
 
 def dowse(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         today = datetime.today()
         crystal_claim = DailyClaim.objects.filter(
             user=request.user,
@@ -237,7 +237,7 @@ def dowse(request):
 
 
 def trade_crystals(request, crystal):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if (
             crystal == "amethyst"
             or crystal == "aquamarine"

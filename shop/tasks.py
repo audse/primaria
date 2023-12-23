@@ -1,16 +1,9 @@
-import datetime
-import celery
 from .models import Shop, Item, Stock
 from random import randint
+from celery import shared_task
 
 
-@celery.signals.worker_ready.connect
-def at_start(sender, **k):
-    with sender.app.connection() as conn:
-        sender.app.send_task("shop.tasks.restock", connection=conn)
-
-
-@celery.decorators.periodic_task(run_every=datetime.timedelta(minutes=10))
+@shared_task
 def restock():
     print("Restocking shops...")
     shops = Shop.objects.all()
